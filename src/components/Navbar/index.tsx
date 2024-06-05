@@ -14,13 +14,16 @@ import SearchIcon from '@mui/icons-material/Search'
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswerOutlined'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined'
 import ArticleIcon from '@mui/icons-material/ArticleOutlined'
+import NotificationsIcon from '@mui/icons-material/Notifications'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
-import { useState } from 'react'
+import { AuthenticateType } from '@/pages/Authenticate/type'
+import { useContext } from 'react'
+import { AuthContext } from '@/contexts/AuthContext'
 
 const pages = [
   { title: 'Thương Hiệu', href: '/' },
-  { title: 'Đồng Hồ', href: '/' },
-  { title: 'Thẩm định', href: '/expertise/online-form' }
+  { title: 'Đồng Hồ Nam', href: '/' },
+  { title: 'Đồng Hồ Nữ', href: '/' }
 ]
 
 const Search = styled('div')(({ theme }) => ({
@@ -58,7 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '30ch'
+      width: '20ch'
     }
   },
   '& .MuiInputBase-input::placeholder': {
@@ -74,14 +77,14 @@ const StyledLogo = styled('img')({
 })
 
 const Navbar = () => {
-  const [user, setUser] = useState(null)
+  const { user } = useContext(AuthContext)
 
   return (
     <AppBar
       position="fixed"
       sx={{
         backgroundColor: '#4E4E4E',
-        maxHeight: '80px',
+        padding: '10px 0',
         width: '100%'
       }}
     >
@@ -92,7 +95,7 @@ const Navbar = () => {
           justifyContent: 'space-between'
         }}
       >
-        <Box marginLeft={8}>
+        <Box marginLeft={4}>
           <StyledLogo src={Logo} alt="logo" />
         </Box>
         <Box>
@@ -101,9 +104,9 @@ const Navbar = () => {
               key={page.title}
               sx={{
                 textTransform: 'none',
-                marginLeft: 2,
                 fontSize: '16px',
-                fontWeight: '600'
+                fontWeight: '600',
+                width: 'fit-content'
               }}
               color="inherit"
               href={page.href}
@@ -125,12 +128,15 @@ const Navbar = () => {
         </Box>
         <Box>
           <Button color="inherit">
+            <NotificationsIcon fontSize="large" />
+          </Button>
+          <Button color="inherit">
             <QuestionAnswerIcon fontSize="large" />
           </Button>
           <Button color="inherit">
             <ShoppingCartIcon fontSize="large" />
           </Button>
-          <Button color="inherit">
+          <Button color="inherit" href="/post/manage">
             <ArticleIcon fontSize="large" />
           </Button>
         </Box>
@@ -145,12 +151,16 @@ const Navbar = () => {
                   fontSize: '16px'
                 }}
               >
-                Thang Ngu
+                {user.name}
               </Typography>
               <ExpandMoreOutlinedIcon />
             </Button>
           ) : (
-            <Button color="primary" variant="contained" href={'/authenticate'}>
+            <Button
+              color="primary"
+              variant="contained"
+              href={`/authenticate/${AuthenticateType.Login}`}
+            >
               <Typography
                 sx={{
                   textTransform: 'none',

@@ -33,7 +33,7 @@ const InformationSide: FC<InformationSideProps> = () => {
   })
 
   return (
-    <Box>
+    <Box component={'div'}>
       <SelectInput
         label="Thương hiệu"
         placeholder="Chọn thương hiệu"
@@ -50,11 +50,13 @@ const InformationSide: FC<InformationSideProps> = () => {
         fontWeight={'600'}
         fontSize={'24px'}
         gutterBottom
+        component={'div'}
       >
         Thông tin chi tiết
       </Typography>
       <Typography
         textAlign={'left'}
+        component={'div'}
         fontWeight={'600'}
         fontSize={'18px'}
         gutterBottom

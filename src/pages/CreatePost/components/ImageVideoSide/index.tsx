@@ -15,7 +15,7 @@ const ImageVideoSide: FC<ImageVideoSideProps> = () => {
         <Grid item xs={12}>
           <Box
             sx={{
-              border: '2px dashed #000',
+              border: '2px dashed #D9D9D9',
               borderRadius: 2,
               padding: 3,
               textAlign: 'center',
@@ -32,9 +32,9 @@ const ImageVideoSide: FC<ImageVideoSideProps> = () => {
         <Grid item xs={12}>
           <Box
             sx={{
-              border: '2px dashed #000',
-              borderRadius: 2,
+              border: '2px dashed #D9D9D9',
               padding: 3,
+              borderRadius: 2,
               textAlign: 'center',
               bgcolor: '#f5f5f5',
               cursor: 'pointer'

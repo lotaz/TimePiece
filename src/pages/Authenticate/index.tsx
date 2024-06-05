@@ -2,20 +2,27 @@ import { Box } from '@mui/material'
 import LoginForm from './components/LoginForm'
 import { useState } from 'react'
 import RegistrationForm from './components/RegistrationForm'
+import { useLoaderData } from 'react-router-dom'
+import { AuthenticateType } from './type'
 
-interface AuthenticatePageProps {}
+const AuthenticatePage = () => {
+  const data = useLoaderData()
+  const { type } = data as { type: AuthenticateType }
+  const [authenticateType, setAuthenticateType] = useState(type || 'login')
 
-const AuthenticatePage = (props: AuthenticatePageProps) => {
-  const [authenticateType, setAuthenticateType] = useState('login')
   return (
     <Box component={'div'}>
       {authenticateType === 'login' ? (
         <LoginForm
-          handleChangeFormType={() => setAuthenticateType('register')}
+          handleChangeFormType={() =>
+            setAuthenticateType(AuthenticateType.Register)
+          }
         />
       ) : (
         <RegistrationForm
-          handleChangeFormType={() => setAuthenticateType('login')}
+          handleChangeFormType={() =>
+            setAuthenticateType(AuthenticateType.Login)
+          }
         />
       )}
     </Box>
