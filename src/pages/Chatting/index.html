@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giao Diện Chat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="left-panel">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Tìm kiếm...">
+            </div>
+            <div class="user-list">
+                <div class="user-item">
+                    <img src="https://via.placeholder.com/40" alt="Avatar" class="avatar">
+                    <div class="user-details">
+                        <div class="user-name">Người Dùng 1</div>
+                        <div class="last-message">Tin nhắn cuối cùng...</div>
+                    </div>
+                </div>
+                <div class="user-item">
+                    <img src="https://via.placeholder.com/40" alt="Avatar" class="avatar">
+                    <div class="user-details">
+                        <div class="user-name">Người Dùng 2</div>
+                        <div class="last-message">Tin nhắn cuối cùng...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="chat-header">
+                <img src="https://via.placeholder.com/40" alt="Avatar" class="avatar">
+                <div class="chat-details">
+                    <div class="chat-title">Tên Người Dùng</div>
+                </div>
+                <button class="control-button" title="Tùy chọn">&#x22EE;</button>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <div class="message received">
+                    <p>Chào bạn, tôi có thể giúp gì cho bạn?</p>
+                    <span class="time">10:30 AM</span>
+                </div>
+                <div class="message sent">
+                    <p>Tôi muốn biết thêm thông tin về sản phẩm này.</p>
+                    <span class="time">10:31 AM</span>
+                </div>
+            </div>
+            <div class="chat-footer">
+                <button id="attach-file-button" title="Đính kèm tệp">&#x1F4CE;</button>
+                <button id="attach-video-button" title="Đính kèm video">&#x1F3A5;</button>
+                <input type="text" id="message-input" placeholder="Nhập tin nhắn...">
+                <button id="send-button">Gửi</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
