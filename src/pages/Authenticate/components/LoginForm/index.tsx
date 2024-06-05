@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import {
   Box,
   Button,
@@ -8,27 +7,33 @@ import {
   Link
 } from '@mui/material'
 import { Google as GoogleIcon } from '@mui/icons-material'
+import { useFormik } from 'formik'
+import { useContext } from 'react'
+import { AuthContext } from '@/contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 interface LoginFormProps {
   handleChangeFormType: () => void
 }
 
 const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const { login } = useContext(AuthContext)
+  const navigate = useNavigate()
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
-  }
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value)
-  }
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    // Handle form submission logic here
-  }
+  const form = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    onSubmit: (values) => {
+      login({
+        email: values.email,
+        name: 'Thang Ngol',
+        role: 'buyer'
+      })
+      navigate('/')
+    }
+  })
 
   return (
     <Container maxWidth="xs">
@@ -36,7 +41,7 @@ const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
         <Typography variant="h5" component="h1" gutterBottom>
           Đăng nhập tài khoản
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={form.handleSubmit} sx={{ mt: 1 }}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -47,8 +52,8 @@ const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
             name="email"
             autoComplete="email"
             autoFocus
-            value={email}
-            onChange={handleEmailChange}
+            value={form.values.email}
+            onChange={form.handleChange}
           />
           <TextField
             variant="outlined"
@@ -60,8 +65,8 @@ const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
             type="password"
             id="password"
             autoComplete="current-password"
-            value={password}
-            onChange={handlePasswordChange}
+            value={form.values.password}
+            onChange={form.handleChange}
           />
           <Link
             href="#"

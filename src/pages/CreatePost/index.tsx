@@ -21,7 +21,7 @@ const CreatePostPage = () => {
           gutterBottom
           textAlign={'left'}
         >
-          Hình ảnh và video sản phầm
+          Hình ảnh và video sản phẩm
         </Typography>
         <Grid container spacing={6} justifyContent={'center'}>
           <Grid item xs={12} md={5}>

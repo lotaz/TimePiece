@@ -40,6 +40,7 @@ const SelectInput: FC<SelectInputProps> = ({
       <TextField
         fullWidth={fullWidth}
         name={name}
+        label={label}
         select
         onChange={onChange}
         value={value}

@@ -1,6 +1,7 @@
 import { Container, styled } from '@mui/material'
 import Navbar from '../Navbar'
 import Footer from '../Footer'
+import { AuthProvider } from '@/contexts/AuthContext'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -17,13 +18,14 @@ const StyledLayout = styled(`div`)`
 
 const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
   return (
-    <div>
+    <AuthProvider>
       <Navbar />
       <StyledLayout>
         <Container>{children}</Container>
       </StyledLayout>
       <Footer />
-    </div>
+    </AuthProvider>
   )
 }
+
 export default Layout

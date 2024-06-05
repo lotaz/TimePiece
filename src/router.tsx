@@ -5,6 +5,8 @@ import UserPage from './pages/Authenticate'
 import ExpertisePage from './pages/Expertise'
 import CreatePostPage from './pages/CreatePost'
 import AuthenticatePage from './pages/Authenticate'
+import ManagePostPage from './pages/ManagePost'
+import { AuthenticateType } from './pages/Authenticate/type'
 
 const router = createBrowserRouter([
   {
@@ -55,17 +57,39 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: 'watch',
+    path: 'post',
     children: [
       {
-        path: 'create-post',
+        path: 'create',
         element: <CreatePostPage />
+      },
+      {
+        path: 'manage',
+        element: <ManagePostPage />,
+        loader: async () => {
+          return { data: 'manage' }
+        }
       }
     ]
   },
   {
     path: 'authenticate',
-    element: <AuthenticatePage />
+    children: [
+      {
+        path: 'login',
+        element: <AuthenticatePage />,
+        loader: async () => {
+          return { type: AuthenticateType.Login }
+        }
+      },
+      {
+        path: 'register',
+        element: <AuthenticatePage />,
+        loader: async () => {
+          return { type: AuthenticateType.Register }
+        }
+      }
+    ]
   }
 ])
 export default router
