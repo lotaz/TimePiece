@@ -10,11 +10,11 @@ import {
 } from '@mui/material'
 import ImageUpload from './components/UploadFile'
 
-interface ExpertisePageProps {}
+interface CreateExpertisePageProps {}
 
 const names = ['10', '20', '30']
 
-const ExpertisePage = (props: ExpertisePageProps) => {
+const CreateExpertisePage = (props: CreateExpertisePageProps) => {
   console.log(props)
   return (
     <Layout>
@@ -450,4 +450,4 @@ const ExpertisePage = (props: ExpertisePageProps) => {
   )
 }
 
-export default ExpertisePage
+export default CreateExpertisePage

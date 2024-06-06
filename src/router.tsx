@@ -1,12 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom'
-import HomePage from './pages/Home'
-import ItemDetailPage from './pages/ItemDetail'
-import UserPage from './pages/Authenticate'
-import ExpertisePage from './pages/Expertise'
-import CreatePostPage from './pages/CreatePost'
-import AuthenticatePage from './pages/Authenticate'
-import ManagePostPage from './pages/ManagePost'
-import { AuthenticateType } from './pages/Authenticate/type'
+
+import ItemDetailPage from './pages/user/ItemDetail'
+import CreatePostPage from './pages/user/CreatePost'
+import ManagePostPage from './pages/user/ManagePost'
+import { AuthenticateType } from './pages/authen/Authenticate/type'
+import AuthenticatePage from './pages/authen/Authenticate'
+import PaymentPage from './pages/user/Payment'
+import CreateExpertisePage from './pages/user/CreateExpertise'
+import HomePage from './pages/user/Home'
+import RequestAppraiserPage from './pages/appraiser/RequestAppraiser'
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
           // For example: const itemData = await fetchItemDetails(id);
           return { id } // Return the data that the component needs
         }
+      },
+      {
+        path: 'payment',
+        element: <PaymentPage />
       }
     ]
   },
@@ -33,7 +39,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: ':id',
-        element: <UserPage />,
+        element: <div>User Profile</div>,
         loader: async ({ params }) => {
           const { id } = params
           // Fetch user details using the id
@@ -52,7 +58,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'online-form',
-        element: <ExpertisePage />
+        element: <CreateExpertisePage />
       }
     ]
   },
@@ -88,6 +94,15 @@ const router = createBrowserRouter([
         loader: async () => {
           return { type: AuthenticateType.Register }
         }
+      }
+    ]
+  },
+  {
+    path: 'appraiser',
+    children: [
+      {
+        path: '',
+        element: <RequestAppraiserPage />
       }
     ]
   }

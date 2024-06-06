@@ -10,7 +10,6 @@ import { Google as GoogleIcon } from '@mui/icons-material'
 import { useFormik } from 'formik'
 import { useContext } from 'react'
 import { AuthContext } from '@/contexts/AuthContext'
-import { useNavigate } from 'react-router-dom'
 
 interface LoginFormProps {
   handleChangeFormType: () => void
@@ -18,7 +17,6 @@ interface LoginFormProps {
 
 const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
   const { login } = useContext(AuthContext)
-  const navigate = useNavigate()
 
   const form = useFormik({
     initialValues: {
@@ -29,9 +27,8 @@ const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
       login({
         email: values.email,
         name: 'Thang Ngol',
-        role: 'buyer'
+        role: 'appraiser'
       })
-      navigate('/')
     }
   })
 

@@ -1,7 +1,9 @@
 import { Container, styled } from '@mui/material'
 import Navbar from '../Navbar'
 import Footer from '../Footer'
-import { AuthProvider } from '@/contexts/AuthContext'
+import { AuthProvider, User } from '@/contexts/AuthContext'
+import AppraiserNavbar from '../AppraiserNavbar'
+import { useEffect, useState } from 'react'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -17,13 +19,24 @@ const StyledLayout = styled(`div`)`
 `
 
 const Layout: React.FC<LayoutProps> = ({ children }: LayoutProps) => {
+  const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    const user = localStorage.getItem('user')
+    if (user) {
+      setUser(JSON.parse(user))
+    }
+  }, [])
+
   return (
     <AuthProvider>
-      <Navbar />
-      <StyledLayout>
-        <Container>{children}</Container>
-      </StyledLayout>
-      <Footer />
+      <>
+        {user?.role === 'appraiser' ? <AppraiserNavbar /> : <Navbar />}
+        <StyledLayout>
+          <Container>{children}</Container>
+        </StyledLayout>
+        <Footer />
+      </>
     </AuthProvider>
   )
 }
