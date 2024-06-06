@@ -4,6 +4,7 @@ import { useState } from 'react'
 import RegistrationForm from './components/RegistrationForm'
 import { useLoaderData } from 'react-router-dom'
 import { AuthenticateType } from './type'
+import Layout from '@/components/Layout'
 
 const AuthenticatePage = () => {
   const data = useLoaderData()
@@ -11,21 +12,23 @@ const AuthenticatePage = () => {
   const [authenticateType, setAuthenticateType] = useState(type || 'login')
 
   return (
-    <Box component={'div'}>
-      {authenticateType === 'login' ? (
-        <LoginForm
-          handleChangeFormType={() =>
-            setAuthenticateType(AuthenticateType.Register)
-          }
-        />
-      ) : (
-        <RegistrationForm
-          handleChangeFormType={() =>
-            setAuthenticateType(AuthenticateType.Login)
-          }
-        />
-      )}
-    </Box>
+    <Layout>
+      <Box component={'div'}>
+        {authenticateType === 'login' ? (
+          <LoginForm
+            handleChangeFormType={() =>
+              setAuthenticateType(AuthenticateType.Register)
+            }
+          />
+        ) : (
+          <RegistrationForm
+            handleChangeFormType={() =>
+              setAuthenticateType(AuthenticateType.Login)
+            }
+          />
+        )}
+      </Box>
+    </Layout>
   )
 }
 

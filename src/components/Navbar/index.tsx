@@ -16,9 +16,9 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined'
 import ArticleIcon from '@mui/icons-material/ArticleOutlined'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
-import { AuthenticateType } from '@/pages/Authenticate/type'
-import { useContext } from 'react'
-import { AuthContext } from '@/contexts/AuthContext'
+import { AuthenticateType } from '@/pages/authen/Authenticate/type'
+import { useState } from 'react'
+import UserMenu from '../UserMenu'
 
 const pages = [
   { title: 'Thương Hiệu', href: '/' },
@@ -72,12 +72,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   }
 }))
 
-const StyledLogo = styled('img')({
-  height: '46px'
-})
-
 const Navbar = () => {
-  const { user } = useContext(AuthContext)
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
 
   return (
     <AppBar
@@ -95,8 +101,16 @@ const Navbar = () => {
           justifyContent: 'space-between'
         }}
       >
-        <Box marginLeft={4}>
-          <StyledLogo src={Logo} alt="logo" />
+        <Box
+          marginLeft={2}
+          component={'button'}
+          bgcolor={'transparent'}
+          border={'none'}
+          onClick={() => {
+            window.location.href = '/'
+          }}
+        >
+          <img src={Logo} alt="logo" height={'46px'} />
         </Box>
         <Box>
           {pages.map((page) => (
@@ -104,7 +118,7 @@ const Navbar = () => {
               key={page.title}
               sx={{
                 textTransform: 'none',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontWeight: '600',
                 width: 'fit-content'
               }}
@@ -142,19 +156,28 @@ const Navbar = () => {
         </Box>
         <Box marginRight={10}>
           {user ? (
-            <Button color="inherit">
-              <Avatar>TN</Avatar>
-              <Typography
-                marginLeft={2}
-                sx={{
-                  textTransform: 'none',
-                  fontSize: '16px'
-                }}
-              >
-                {user.name}
-              </Typography>
-              <ExpandMoreOutlinedIcon />
-            </Button>
+            <Box>
+              <Button color="inherit" onClick={handleMenuOpen}>
+                <Avatar>TN</Avatar>
+                <Typography
+                  marginLeft={2}
+                  sx={{
+                    textTransform: 'none',
+                    fontSize: '16px'
+                  }}
+                >
+                  {user.name}
+                </Typography>
+                <ExpandMoreOutlinedIcon />
+              </Button>
+              <UserMenu
+                anchorEl={anchorEl}
+                isOpen={Boolean(anchorEl)}
+                setOpen={(value) =>
+                  value ? setAnchorEl(anchorEl) : handleMenuClose()
+                }
+              />
+            </Box>
           ) : (
             <Button
               color="primary"
