@@ -1,7 +1,7 @@
-import Banner from '@/pages/Home/components/Banner'
 import Layout from '@/components/Layout'
 import ListCards from './components/ListCards'
 import { Box } from '@mui/material'
+import Banner from './components/Banner'
 
 const HomePage = () => {
   return (

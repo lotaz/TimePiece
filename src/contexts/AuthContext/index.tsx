@@ -1,8 +1,9 @@
-import { PropsWithChildren, createContext } from 'react'
+import { PropsWithChildren, createContext, useCallback, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type Props = PropsWithChildren
 
-type User = {
+export type User = {
   name: string
   role: string
   email: string
@@ -21,19 +22,29 @@ const AuthContext = createContext<IAuthContext>({
 })
 
 const AuthProvider = ({ children }: Props) => {
-  const login = (user: User | null) => {
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user))
-    } else {
-      localStorage.removeItem('user')
-    }
-  }
+  const [user, setUser] = useState<User | null>(null)
+  const navigate = useNavigate()
+
+  const login = useCallback(
+    (user: User | null) => {
+      console.log(user)
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user))
+        if (user.role === 'appraiser') {
+          navigate('/appraiser')
+        } else {
+          navigate('/')
+        }
+      } else {
+        localStorage.removeItem('user')
+      }
+    },
+    [navigate]
+  )
 
   const logout = () => {
     localStorage.removeItem('user')
   }
-
-  const user = JSON.parse(localStorage.getItem('user') || 'null')
 
   return (
     <AuthContext.Provider value={{ login, logout, user }}>
