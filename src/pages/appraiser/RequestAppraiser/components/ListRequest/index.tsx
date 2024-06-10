@@ -1,11 +1,13 @@
 import React from 'react'
 import { Box, Typography, Paper, Grid, Pagination } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 interface Request {
   date: string
   code: string
   brand: string
   status: string
+  id: number
 }
 
 interface ListRequestProps {
@@ -21,13 +23,25 @@ const ListRequest: React.FC<ListRequestProps> = ({
   totalPages,
   onPageChange
 }) => {
+  const navigate = useNavigate()
+
   return (
-    <Box p={2}>
+    <Box p={4}>
       {requests.map((request, index) => (
         <Paper
           key={index}
           elevation={1}
           style={{ padding: '16px', marginBottom: '16px' }}
+          sx={{
+            cursor: 'pointer',
+            '&:hover': {
+              backgroundColor: '#f5f5f5',
+              transition: '0.3s',
+              scale: { x: 1.05, y: 1.05 }
+            }
+          }}
+          component={'div'}
+          onClick={() => navigate(`/appraiser/${request.id}`)}
         >
           <Grid container spacing={2}>
             <Grid

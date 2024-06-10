@@ -1,14 +1,15 @@
 import { createBrowserRouter } from 'react-router-dom'
-
-import ItemDetailPage from './pages/user/ItemDetail'
-import CreatePostPage from './pages/user/CreatePost'
-import ManagePostPage from './pages/user/ManagePost'
-import { AuthenticateType } from './pages/authen/Authenticate/type'
-import AuthenticatePage from './pages/authen/Authenticate'
-import PaymentPage from './pages/user/Payment'
-import CreateExpertisePage from './pages/user/CreateExpertise'
-import HomePage from './pages/user/Home'
 import RequestAppraiserPage from './pages/appraiser/RequestAppraiser'
+import AuthenticatePage from './pages/authentication/Authenticate'
+import { AuthenticateType } from './pages/authentication/Authenticate/type'
+import CreateExpertisePage from './pages/item/CreateExpertise'
+import CreatePostPage from './pages/item/CreatePost'
+import HomePage from './pages/item/Home'
+import ItemDetailPage from './pages/item/ItemDetail'
+import ManagePostPage from './pages/item/ManagePost'
+import PaymentPage from './pages/item/Payment'
+import CreateAppraisalPaperPage from './pages/appraiser/CreateAppraisalPaper'
+import ViewAppraisalFormPage from './pages/appraiser/ViewAppraisalForm'
 
 const router = createBrowserRouter([
   {
@@ -23,9 +24,8 @@ const router = createBrowserRouter([
         element: <ItemDetailPage />,
         loader: async ({ params }) => {
           const { id } = params
-          // Fetch item details using the id
-          // For example: const itemData = await fetchItemDetails(id);
-          return { id } // Return the data that the component needs
+
+          return { id }
         }
       },
       {
@@ -42,9 +42,8 @@ const router = createBrowserRouter([
         element: <div>User Profile</div>,
         loader: async ({ params }) => {
           const { id } = params
-          // Fetch user details using the id
-          // For example: const userData = await fetchUserDetails(id);
-          return { id } // Return the data that the component needs
+
+          return { id }
         }
       }
     ]
@@ -54,7 +53,7 @@ const router = createBrowserRouter([
     element: <div>404 Not Found</div>
   },
   {
-    path: 'expertise',
+    path: 'appraisal',
     children: [
       {
         path: 'online-form',
@@ -101,8 +100,16 @@ const router = createBrowserRouter([
     path: 'appraiser',
     children: [
       {
-        path: '',
+        path: 'dashboard',
         element: <RequestAppraiserPage />
+      },
+      {
+        path: 'create-appraisal-paper',
+        element: <CreateAppraisalPaperPage />
+      },
+      {
+        path: ':id',
+        element: <ViewAppraisalFormPage />
       }
     ]
   }

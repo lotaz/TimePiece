@@ -16,14 +16,14 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined'
 import ArticleIcon from '@mui/icons-material/ArticleOutlined'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
-import { AuthenticateType } from '@/pages/authen/Authenticate/type'
+import { AuthenticateType } from '@/pages/authentication/Authenticate/type'
 import { useState } from 'react'
 import UserMenu from '../UserMenu'
 
 const pages = [
   { title: 'Thương Hiệu', href: '/' },
-  { title: 'Đồng Hồ Nam', href: '/' },
-  { title: 'Đồng Hồ Nữ', href: '/' }
+  { title: 'Đồng Hồ', href: '/' },
+  { title: 'Thẩm Định', href: '/appraisal/online-form' }
 ]
 
 const Search = styled('div')(({ theme }) => ({
@@ -61,7 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '20ch'
+      width: '14vw'
     }
   },
   '& .MuiInputBase-input::placeholder': {
@@ -90,7 +90,6 @@ const Navbar = () => {
       position="fixed"
       sx={{
         backgroundColor: '#4E4E4E',
-        padding: '10px 0',
         width: '100%'
       }}
     >
@@ -102,7 +101,7 @@ const Navbar = () => {
         }}
       >
         <Box
-          marginLeft={2}
+          marginLeft={6}
           component={'button'}
           bgcolor={'transparent'}
           border={'none'}
@@ -120,7 +119,8 @@ const Navbar = () => {
                 textTransform: 'none',
                 fontSize: '14px',
                 fontWeight: '600',
-                width: 'fit-content'
+                width: 'fit-content',
+                marginLeft: '10px'
               }}
               color="inherit"
               href={page.href}
