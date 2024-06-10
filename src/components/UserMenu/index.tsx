@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, MenuItem, Box, Divider, Typography } from '@mui/material'
+import { Menu, MenuItem, Box, Typography } from '@mui/material'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import ListAltIcon from '@mui/icons-material/ListAlt'
 import SettingsIcon from '@mui/icons-material/Settings'
@@ -19,8 +19,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
   return (
     <Menu
       anchorEl={anchorEl}
+      variant="menu"
       open={isOpen}
-      sx={{ marginTop: 8 }}
+      sx={{ marginTop: 8, paddingTop: 0 }}
       onClose={handleClose}
       anchorOrigin={{
         vertical: 'top',
@@ -30,8 +31,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
         vertical: 'top',
         horizontal: 'right'
       }}
+      MenuListProps={{
+        disablePadding: true
+      }}
     >
-      <Box px={2} py={1}>
+      <Box px={2} py={1} bgcolor={'#E6E6E6'}>
         <Typography variant="subtitle1" color="textSecondary">
           Quản lý đơn hàng
         </Typography>
@@ -44,8 +48,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
         <ListAltIcon style={{ marginRight: 16 }} />
         Đơn đơn bán
       </MenuItem>
-      <Divider />
-      <Box px={2} py={1}>
+      <Box px={2} py={1} bgcolor={'#E6E6E6'}>
         <Typography variant="subtitle1" color="textSecondary">
           Quản lý tài khoản
         </Typography>
@@ -53,6 +56,16 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
       <MenuItem onClick={handleClose}>
         <SettingsIcon style={{ marginRight: 16 }} />
         Cài đặt tài khoản
+      </MenuItem>
+
+      <Box px={2} py={1} bgcolor={'#E6E6E6'}>
+        <Typography variant="subtitle1" color="textSecondary">
+          Quản lý đơn thẩm định
+        </Typography>
+      </Box>
+      <MenuItem onClick={handleClose}>
+        <SettingsIcon style={{ marginRight: 16 }} />
+        Lịch sử thẩm định
       </MenuItem>
       <MenuItem onClick={handleClose}>
         <ExitToAppIcon style={{ marginRight: 16 }} />

@@ -4,9 +4,10 @@ import { useState } from 'react'
 import Logo from '@/assets/app-logo.png'
 
 const pages = [
-  { title: 'Yêu cầu thẩm định', href: '/' },
+  { title: 'Yêu cầu thẩm định', href: '/appraiser' },
   { title: 'Lịch sử thẩm định', href: '/' },
   { title: 'Tin nhắn', href: '/' },
+  { title: 'Tạo giấy thẩm định', href: '/appraiser/create-appraisal-paper' },
   { title: 'Tài khoản', href: '/' }
 ]
 
@@ -61,6 +62,7 @@ const AppraiserNavbar = () => {
                 sx={{
                   textTransform: 'none',
                   fontSize: '14px',
+                  marginLeft: '20px',
                   fontWeight: '600',
                   width: 'fit-content'
                 }}
