@@ -1,15 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom'
+import ItemDetailPage from './pages/item/ItemDetail'
+import CreatePostPage from './pages/item/CreatePost'
+import ManagePostPage from './pages/item/ManagePost'
+import CreateExpertisePage from './pages/item/CreateExpertise'
 import RequestAppraiserPage from './pages/appraiser/RequestAppraiser'
 import AuthenticatePage from './pages/authentication/Authenticate'
 import { AuthenticateType } from './pages/authentication/Authenticate/type'
-import CreateExpertisePage from './pages/item/CreateExpertise'
-import CreatePostPage from './pages/item/CreatePost'
 import HomePage from './pages/item/Home'
-import ItemDetailPage from './pages/item/ItemDetail'
-import ManagePostPage from './pages/item/ManagePost'
 import PaymentPage from './pages/item/Payment'
-import CreateAppraisalPaperPage from './pages/appraiser/CreateAppraisalPaper'
-import ViewAppraisalFormPage from './pages/appraiser/ViewAppraisalForm'
 
 const router = createBrowserRouter([
   {
@@ -53,7 +51,7 @@ const router = createBrowserRouter([
     element: <div>404 Not Found</div>
   },
   {
-    path: 'appraisal',
+    path: 'expertise',
     children: [
       {
         path: 'online-form',
@@ -100,16 +98,8 @@ const router = createBrowserRouter([
     path: 'appraiser',
     children: [
       {
-        path: 'dashboard',
+        path: '',
         element: <RequestAppraiserPage />
-      },
-      {
-        path: 'create-appraisal-paper',
-        element: <CreateAppraisalPaperPage />
-      },
-      {
-        path: ':id',
-        element: <ViewAppraisalFormPage />
       }
     ]
   }
