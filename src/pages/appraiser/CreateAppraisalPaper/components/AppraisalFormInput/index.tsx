@@ -1,5 +1,4 @@
 import { Box, FormHelperText, InputLabel, TextField } from '@mui/material'
-import { useState } from 'react'
 
 interface AppraisalFormInputProps {
   value: string
@@ -23,7 +22,6 @@ const AppraisalFormInput: React.FC<AppraisalFormInputProps> = ({
       sx={{
         display: 'flex',
         flexDirection: 'row',
-
         marginBottom: 2
       }}
     >

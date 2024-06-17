@@ -8,6 +8,9 @@ import AuthenticatePage from './pages/authentication/Authenticate'
 import { AuthenticateType } from './pages/authentication/Authenticate/type'
 import HomePage from './pages/item/Home'
 import PaymentPage from './pages/item/Payment'
+import CreateAppraisalPaperPage from './pages/appraiser/CreateAppraisalPaper'
+import ViewAppraisalFormPage from './pages/appraiser/ViewAppraisalForm'
+import UserInfo from './pages/user/UserInfo'
 
 const router = createBrowserRouter([
   {
@@ -36,8 +39,8 @@ const router = createBrowserRouter([
     path: 'user',
     children: [
       {
-        path: ':id',
-        element: <div>User Profile</div>,
+        path: 'info',
+        element: <UserInfo />,
         loader: async ({ params }) => {
           const { id } = params
 
@@ -51,7 +54,7 @@ const router = createBrowserRouter([
     element: <div>404 Not Found</div>
   },
   {
-    path: 'expertise',
+    path: 'appraisal',
     children: [
       {
         path: 'online-form',
@@ -98,8 +101,16 @@ const router = createBrowserRouter([
     path: 'appraiser',
     children: [
       {
-        path: '',
+        path: 'dashboard',
         element: <RequestAppraiserPage />
+      },
+      {
+        path: ':id',
+        element: <ViewAppraisalFormPage />
+      },
+      {
+        path: 'create-appraisal-paper',
+        element: <CreateAppraisalPaperPage />
       }
     ]
   }

@@ -19,6 +19,7 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 import { AuthenticateType } from '@/pages/authentication/Authenticate/type'
 import { useState } from 'react'
 import UserMenu from '../UserMenu'
+import { useUserStore } from '@/stores/userStore'
 
 const pages = [
   { title: 'Thương Hiệu', href: '/' },
@@ -73,7 +74,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const Navbar = () => {
-  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const { user } = useUserStore()
+  const token = localStorage.getItem('token')
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -84,6 +86,8 @@ const Navbar = () => {
   const handleMenuClose = () => {
     setAnchorEl(null)
   }
+
+  const hasAuth = user || token
 
   return (
     <AppBar
@@ -155,7 +159,7 @@ const Navbar = () => {
           </Button>
         </Box>
         <Box marginRight={10}>
-          {user ? (
+          {hasAuth ? (
             <Box>
               <Button color="inherit" onClick={handleMenuOpen}>
                 <Avatar>TN</Avatar>
@@ -166,7 +170,7 @@ const Navbar = () => {
                     fontSize: '16px'
                   }}
                 >
-                  {user.name}
+                  {user?.name}
                 </Typography>
                 <ExpandMoreOutlinedIcon />
               </Button>

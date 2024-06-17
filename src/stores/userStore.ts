@@ -1,21 +1,26 @@
+import { Role } from '@/common/type'
 import { create } from 'zustand'
 
-interface User {}
-
-type AuthStore = {
-  token: string
-  setToken: (token: string) => void
-  clearToken: () => void
+interface User {
+  userid: number
+  role: Role | string
+  name: string
 }
 
-export const useAuthStore = create<AuthStore>((set) => {
+type UseStore = {
+  user: User | null
+  setUser: (user: User) => void
+  clearUser: () => void
+}
+
+export const useUserStore = create<UseStore>((set) => {
   return {
-    token: '',
-    setToken: (token: string) => {
-      set({ token })
+    user: null,
+    setUser: (user: User) => {
+      set({ user })
     },
-    clearToken: () => {
-      set({ token: '' })
+    clearUser: () => {
+      set({ user: null })
     }
   }
 })
