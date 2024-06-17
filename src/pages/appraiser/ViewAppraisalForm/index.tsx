@@ -54,7 +54,7 @@ const ViewAppraisalFormPage = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: 2,
+            padding: 4,
             borderRadius: 1
           }}
         >
@@ -63,7 +63,7 @@ const ViewAppraisalFormPage = () => {
             sx={{ display: 'flex', alignItems: 'center', textAlign: 'left' }}
           >
             <Avatar
-              src="path_to_avatar_image.jpg" // replace with the actual path to the avatar image
+              src="path_to_avatar_image.jpg" //
               alt="Thắng Nguyễn"
               sx={{ width: 56, height: 56, marginRight: 2 }}
             />
@@ -131,7 +131,7 @@ const ViewAppraisalFormPage = () => {
           title={'Xác nhận hoàn tất yêu cầu'}
           description={'Bạn có chắc chắn muốn hoàn yêu cầu thẩm định này ?'}
         />
-        <Box marginTop={2} bgcolor={'#fff'} padding={4}>
+        <Box marginTop={2} bgcolor={'#fff'} padding={8}>
           <Box>
             <Typography
               component={'div'}

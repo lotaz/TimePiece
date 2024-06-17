@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { useFormik } from 'formik'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete'
 import jsPDF from 'jspdf'
 import AppraisalFormInput from '../AppraisalFormInput'
@@ -144,7 +144,7 @@ const CreateAppraisalPaper = ({
         onSubmit={form.handleSubmit}
         marginTop={20}
         bgcolor={'#fff'}
-        marginX={10}
+        marginX={20}
         marginBottom={10}
       >
         <Box marginTop={4} component={'div'} marginX={20}>
