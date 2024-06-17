@@ -2,7 +2,7 @@ import { Box, Container } from '@mui/material'
 import LoginForm from './components/LoginForm'
 import { useState } from 'react'
 import RegistrationForm from './components/RegistrationForm'
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 import { AuthenticateType } from './type'
 import CommonLayout from '@/components/Layout/CommonLayout'
 import bg from '@/assets/authenBg.png'
@@ -11,6 +11,7 @@ const AuthenticatePage = () => {
   const data = useLoaderData()
   const { type } = data as { type: AuthenticateType }
   const [authenticateType, setAuthenticateType] = useState(type || 'login')
+  const navigate = useNavigate()
 
   return (
     <CommonLayout>
@@ -39,15 +40,17 @@ const AuthenticatePage = () => {
         >
           {authenticateType === 'login' ? (
             <LoginForm
-              handleChangeFormType={() =>
+              handleChangeFormType={() => {
                 setAuthenticateType(AuthenticateType.Register)
-              }
+                navigate('/authenticate/register')
+              }}
             />
           ) : (
             <RegistrationForm
-              handleChangeFormType={() =>
+              handleChangeFormType={() => {
                 setAuthenticateType(AuthenticateType.Login)
-              }
+                navigate('/authenticate/login')
+              }}
             />
           )}
         </Box>

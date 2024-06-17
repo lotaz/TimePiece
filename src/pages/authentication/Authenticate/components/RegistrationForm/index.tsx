@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import { isEmpty } from 'lodash'
 import { signup } from '@/services/authService'
 import { useFormik } from 'formik'
+import { AxiosError } from 'axios'
 
 interface RegistrationFormProps {
   handleChangeFormType: () => void
@@ -21,7 +22,7 @@ interface RegistrationFormProps {
 
 const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
   const navigate = useNavigate()
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null | undefined>(null)
 
   const form = useFormik({
     initialValues: {
@@ -34,13 +35,42 @@ const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
       gender: ''
     },
     onSubmit: async (values) => {
-      console.log(values)
-      // try {
-      //   const data = await signup(values)
-      //   navigate('/authenticate/login')
-      // } catch (error) {
-      //   setError('Email hoặc mật khẩu không chính xác')
-      // }
+      try {
+        const data = await signup(values)
+        console.log(data)
+        navigate('/authenticate/login')
+      } catch (error) {
+        let errorMessage = 'Đã có lỗi xảy ra'
+        if (error instanceof AxiosError) {
+          errorMessage = error.response?.data
+        }
+        setError(errorMessage)
+      }
+    },
+    validate: (values) => {
+      const errors: Record<string, string> = {}
+      if (!values.email) {
+        errors.email = 'Email không được để trống'
+      }
+      if (!values.phone) {
+        errors.phone = 'Số điện thoại không được để trống'
+      }
+      if (!values.password) {
+        errors.password = 'Mật khẩu không được để trống'
+      }
+      if (!values.confirmPassword) {
+        errors.confirmPassword = 'Nhập lại mật khẩu không được để trống'
+      }
+      if (values.password !== values.confirmPassword) {
+        errors.confirmPassword = 'Mật khẩu không khớp'
+      }
+      if (!values.fullName) {
+        errors.fullName = 'Họ và tên không được để trống'
+      }
+      if (!values.dob) {
+        errors.dob = 'Ngày sinh không được để trống'
+      }
+      return errors
     }
   })
 
@@ -180,6 +210,9 @@ const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
               </TextField>
             </Grid>
           </Grid>
+          <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+            {error}
+          </Typography>
           <Button
             type="submit"
             fullWidth
@@ -193,7 +226,14 @@ const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
               isEmpty(form.values.fullName) ||
               isEmpty(form.values.dob) ||
               isEmpty(form.values.phone) ||
-              isEmpty(form.values.gender)
+              isEmpty(form.values.gender) ||
+              !!form.isSubmitting ||
+              !!form.errors.email ||
+              !!form.errors.phone ||
+              !!form.errors.password ||
+              !!form.errors.confirmPassword ||
+              !!form.errors.fullName ||
+              !!form.errors.dob
             }
           >
             Xác nhận
