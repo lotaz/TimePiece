@@ -9,12 +9,28 @@ import {
 } from '@mui/material'
 import ImageUpload from './components/UploadFile'
 import UserLayout from '@/components/Layout/UserLayout'
+import { useFormik } from 'formik'
 
 interface CreateExpertisePageProps {}
 
 const names = ['10', '20', '30']
 
 const CreateExpertisePage = (props: CreateExpertisePageProps) => {
+  const form = useFormik({
+    initialValues: {
+      fullName: '',
+      email: '',
+      phone: '',
+      brand: '',
+      reference: '',
+      age: '',
+      price: '',
+      note: ''
+    },
+    onSubmit: (values) => {
+      console.log(values)
+    }
+  })
   return (
     <UserLayout>
       <Box
@@ -154,14 +170,6 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                           Không
                         </Button>
                       </Grid>
-                      <Grid item xs={2} alignContent={'flex-end'}>
-                        <CheckCircle
-                          sx={{
-                            color: '#434343',
-                            fontSize: '32px'
-                          }}
-                        />
-                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -198,14 +206,6 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                         >
                           Không
                         </Button>
-                      </Grid>
-                      <Grid item xs={2} alignContent={'flex-end'}>
-                        <CheckCircle
-                          sx={{
-                            color: '#434343',
-                            fontSize: '32px'
-                          }}
-                        />
                       </Grid>
                     </Grid>
                   </Grid>
@@ -249,14 +249,6 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                           Không
                         </Button>
                       </Grid>
-                      <Grid item xs={2} alignContent={'flex-end'}>
-                        <CheckCircle
-                          sx={{
-                            color: '#434343',
-                            fontSize: '32px'
-                          }}
-                        />
-                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -298,14 +290,6 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                         >
                           Không
                         </Button>
-                      </Grid>
-                      <Grid item xs={2} alignContent={'flex-end'}>
-                        <CheckCircle
-                          sx={{
-                            color: '#434343',
-                            fontSize: '32px'
-                          }}
-                        />
                       </Grid>
                     </Grid>
                   </Grid>

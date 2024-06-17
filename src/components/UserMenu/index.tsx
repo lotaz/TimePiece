@@ -4,6 +4,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import ListAltIcon from '@mui/icons-material/ListAlt'
 import SettingsIcon from '@mui/icons-material/Settings'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import { useNavigate } from 'react-router-dom'
 
 interface UserMenuProps {
   anchorEl: null | HTMLElement
@@ -12,6 +13,7 @@ interface UserMenuProps {
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
+  const navigate = useNavigate()
   const handleClose = () => {
     setOpen(false)
   }
@@ -46,14 +48,19 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
       </MenuItem>
       <MenuItem onClick={handleClose}>
         <ListAltIcon style={{ marginRight: 16 }} />
-        Đơn đơn bán
+        Đơn bán
       </MenuItem>
       <Box px={2} py={1} bgcolor={'#E6E6E6'}>
         <Typography variant="subtitle1" color="textSecondary">
           Quản lý tài khoản
         </Typography>
       </Box>
-      <MenuItem onClick={handleClose}>
+      <MenuItem
+        onClick={() => {
+          navigate('/user/info')
+          handleClose()
+        }}
+      >
         <SettingsIcon style={{ marginRight: 16 }} />
         Cài đặt tài khoản
       </MenuItem>

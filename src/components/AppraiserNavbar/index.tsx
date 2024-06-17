@@ -2,9 +2,11 @@ import { AppBar, Avatar, Box, Button, Toolbar, Typography } from '@mui/material'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 import { useState } from 'react'
 import Logo from '@/assets/app-logo.png'
+import { useUserStore } from '@/stores/userStore'
+import UserMenu from '../UserMenu'
 
 const pages = [
-  { title: 'Yêu cầu thẩm định', href: '/appraiser' },
+  { title: 'Yêu cầu thẩm định', href: '/appraiser/dashboard' },
   { title: 'Lịch sử thẩm định', href: '/' },
   { title: 'Tin nhắn', href: '/' },
   { title: 'Tạo giấy thẩm định', href: '/appraiser/create-appraisal-paper' },
@@ -12,9 +14,8 @@ const pages = [
 ]
 
 const AppraiserNavbar = () => {
-  const user = localStorage.getItem('user')
-    ? JSON.parse(localStorage.getItem('user')!)
-    : null
+  const { user } = useUserStore()
+  const token = localStorage.getItem('token')
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -89,13 +90,13 @@ const AppraiserNavbar = () => {
               </Typography>
               <ExpandMoreOutlinedIcon />
             </Button>
-            {/* <UserMenu
-                anchorEl={anchorEl}
-                isOpen={Boolean(anchorEl)}
-                setOpen={(value) =>
-                  value ? setAnchorEl(anchorEl) : handleMenuClose()
-                }
-              /> */}
+            <UserMenu
+              anchorEl={anchorEl}
+              isOpen={Boolean(anchorEl)}
+              setOpen={(value) =>
+                value ? setAnchorEl(anchorEl) : handleMenuClose()
+              }
+            />
           </Box>
         </Box>
       </Toolbar>
