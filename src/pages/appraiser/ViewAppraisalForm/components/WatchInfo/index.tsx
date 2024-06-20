@@ -1,8 +1,8 @@
-import { Box, Grid, Typography, Button, TextField } from '@mui/material'
+import YesNoSelection from '@/components/Controls/YesNoSelection'
+import { Box, Grid, Typography, TextField } from '@mui/material'
+import { ChangeEvent } from 'react'
 
-interface WatchInfoProps {}
-
-const WatchInfo: React.FC<WatchInfoProps> = () => {
+const WatchInfo = () => {
   return (
     <Box component={'div'} marginTop={'10px'} marginLeft={20}>
       <Grid container spacing={6} gap={1}>
@@ -17,34 +17,13 @@ const WatchInfo: React.FC<WatchInfoProps> = () => {
           </Typography>
         </Grid>
         <Grid item xs={12} md={5}>
-          <Grid container spacing={12}>
-            <Grid item xs={3}>
-              <Button
-                sx={{
-                  paddingX: '35px',
-                  color: '#434343',
-                  borderColor: '#434343'
-                }}
-                size="large"
-                variant="outlined"
-              >
-                Có
-              </Button>
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                sx={{
-                  paddingX: '20px',
-                  color: '#434343',
-                  borderColor: '#434343'
-                }}
-                size="large"
-                variant="outlined"
-              >
-                Không
-              </Button>
-            </Grid>
-          </Grid>
+          <YesNoSelection
+            name={''}
+            value={''}
+            onChange={function (event: ChangeEvent<HTMLInputElement>): void {
+              throw new Error('Function not implemented.')
+            }}
+          />
         </Grid>
       </Grid>
       <Grid container spacing={6} gap={1} marginTop={1}>
@@ -54,34 +33,13 @@ const WatchInfo: React.FC<WatchInfoProps> = () => {
           </Typography>
         </Grid>
         <Grid item xs={12} md={5}>
-          <Grid container spacing={12}>
-            <Grid item xs={3}>
-              <Button
-                sx={{
-                  paddingX: '35px',
-                  color: '#434343',
-                  borderColor: '#434343'
-                }}
-                size="large"
-                variant="outlined"
-              >
-                Có
-              </Button>
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                sx={{
-                  paddingX: '20px',
-                  color: '#434343',
-                  borderColor: '#434343'
-                }}
-                size="large"
-                variant="outlined"
-              >
-                Không
-              </Button>
-            </Grid>
-          </Grid>
+          <YesNoSelection
+            name={''}
+            value={''}
+            onChange={function (event: ChangeEvent<HTMLInputElement>): void {
+              throw new Error('Function not implemented.')
+            }}
+          />
         </Grid>
       </Grid>
       <Grid container spacing={6} gap={1} marginTop={1}>
@@ -96,34 +54,13 @@ const WatchInfo: React.FC<WatchInfoProps> = () => {
           </Typography>
         </Grid>
         <Grid item xs={12} md={5}>
-          <Grid container spacing={12}>
-            <Grid item xs={3}>
-              <Button
-                sx={{
-                  paddingX: '35px',
-                  color: '#434343',
-                  borderColor: '#434343'
-                }}
-                size="large"
-                variant="outlined"
-              >
-                Có
-              </Button>
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                sx={{
-                  paddingX: '20px',
-                  color: '#434343',
-                  borderColor: '#434343'
-                }}
-                size="large"
-                variant="outlined"
-              >
-                Không
-              </Button>
-            </Grid>
-          </Grid>
+          <YesNoSelection
+            name={''}
+            value={''}
+            onChange={function (event: ChangeEvent<HTMLInputElement>): void {
+              throw new Error('Function not implemented.')
+            }}
+          />
         </Grid>
       </Grid>
       <Grid container spacing={6} gap={1} marginTop={1}>
@@ -138,34 +75,13 @@ const WatchInfo: React.FC<WatchInfoProps> = () => {
           </Typography>
         </Grid>
         <Grid item xs={12} md={5}>
-          <Grid container spacing={12}>
-            <Grid item xs={3}>
-              <Button
-                sx={{
-                  paddingX: '35px',
-                  color: '#434343',
-                  borderColor: '#434343'
-                }}
-                size="large"
-                variant="outlined"
-              >
-                Có
-              </Button>
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                sx={{
-                  paddingX: '20px',
-                  color: '#434343',
-                  borderColor: '#434343'
-                }}
-                size="large"
-                variant="outlined"
-              >
-                Không
-              </Button>
-            </Grid>
-          </Grid>
+          <YesNoSelection
+            name={''}
+            value={''}
+            onChange={function (event: ChangeEvent<HTMLInputElement>): void {
+              throw new Error('Function not implemented.')
+            }}
+          />
         </Grid>
       </Grid>
       <Grid container spacing={4} marginTop={1}>

@@ -1,21 +1,22 @@
 import axiosClient from '@/configs/axiosClient'
 import { AppPath } from './utils'
+import { convertYesNoToBoolean } from '@/common/utils'
 
 export interface CreateAppraisalRequest {
   name: string
   email: string
-  phoneNumber: string
-  hasOriginalBox: boolean
-  hasPapersOrWarranty: boolean
-  hasPurchaseReceipt: boolean
-  areThereAnyStickers: boolean
-  age: number
-  region: string
-  desiredPrice: number
-  description: string
+  phone: string
+  hasBox: string
+  hasWarranty: string
+  hasInvoice: string
+  hasLabel: string
+  age: string
+  wanaPrice: string
+  note: string
   brand: string
-  referenceCode: string
-  imageFiles: unknown[]
+  reference: string
+  images: File[]
+  location: string
 }
 
 const createAppraisalRequest = async (req: CreateAppraisalRequest) => {
@@ -23,18 +24,24 @@ const createAppraisalRequest = async (req: CreateAppraisalRequest) => {
     const form = new FormData()
     form.append('name', `${req.name}`)
     form.append('email', `${req.email}`)
-    form.append('phoneNumber', `${req.phoneNumber}`)
-    form.append('hasOriginalBox', `${req.hasOriginalBox}`)
-    form.append('hasPapersOrWarranty', `${req.hasPapersOrWarranty}`)
-    form.append('hasPurchaseReceipt', `${req.hasPurchaseReceipt}`)
-    form.append('areThereAnyStickers', `${req.areThereAnyStickers}`)
+    form.append('phoneNumber', `${req.phone}`)
+    form.append('hasOriginalBox', `${convertYesNoToBoolean(req.hasBox)}`)
+    form.append(
+      'hasPapersOrWarranty',
+      `${convertYesNoToBoolean(req.hasWarranty)}`
+    )
+    form.append(
+      'hasPurchaseReceipt',
+      `${convertYesNoToBoolean(req.hasInvoice)}`
+    )
+    form.append('areThereAnyStickers', `${convertYesNoToBoolean(req.hasLabel)}`)
     form.append('age', `${req.age}`)
-    form.append('region', `${req.region}`)
-    form.append('desiredPrice', `${req.desiredPrice}`)
-    form.append('description', `${req.description}`)
+    form.append('region', `${req.location}`)
+    form.append('desiredPrice', `${req.wanaPrice}`)
+    form.append('description', `${req.note}`)
     form.append('brand', `${req.brand}`)
-    form.append('referenceCode', `${req.referenceCode}`)
-    form.append('imageFiles', `${req.imageFiles}`)
+    form.append('referenceCode', `${req.reference}`)
+    form.append('imageFiles', `${req.images}`)
 
     const response = await axiosClient.post(AppPath.CREATE_APPRAISAL_REQUEST)
 

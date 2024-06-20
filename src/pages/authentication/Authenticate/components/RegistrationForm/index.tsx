@@ -37,8 +37,7 @@ const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
     onSubmit: async (values) => {
       try {
         const data = await signup(values)
-        console.log(data)
-        navigate('/authenticate/login')
+        handleChangeFormType()
       } catch (error) {
         let errorMessage = 'Đã có lỗi xảy ra'
         if (error instanceof AxiosError) {

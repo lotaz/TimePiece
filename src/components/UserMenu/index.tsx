@@ -25,6 +25,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
       open={isOpen}
       sx={{ marginTop: 8, paddingTop: 0 }}
       onClose={handleClose}
+      slot="menu"
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right'
@@ -64,7 +65,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
         <SettingsIcon style={{ marginRight: 16 }} />
         Cài đặt tài khoản
       </MenuItem>
-
       <Box px={2} py={1} bgcolor={'#E6E6E6'}>
         <Typography variant="subtitle1" color="textSecondary">
           Quản lý đơn thẩm định
@@ -74,7 +74,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
         <SettingsIcon style={{ marginRight: 16 }} />
         Lịch sử thẩm định
       </MenuItem>
-      <MenuItem onClick={handleClose}>
+      <MenuItem
+        onClick={() => {
+          localStorage.removeItem('token')
+          handleClose()
+        }}
+      >
         <ExitToAppIcon style={{ marginRight: 16 }} />
         Đăng xuất
       </MenuItem>
