@@ -1,17 +1,25 @@
-import { useState } from 'react'
 import { Box, Button, Typography, IconButton, Avatar } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import { useState } from 'react'
 
-const ImageUpload = () => {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
-
+interface ImageUploadProps {
+  onFileChange: (files: File[]) => void
+  files: File[]
+}
+const ImageUpload = ({ onFileChange, files }: ImageUploadProps) => {
+  const [file, setFile] = useState(files)
   const handleFileChange = (event) => {
-    const files = Array.from(event.target.files)
-    setSelectedFiles((prevFiles: File[]) => [...prevFiles, ...files] as File[])
+    setFile([...file, ...event.target.files])
+    const { files } = event.target
+    if (files.length > 0) {
+      onFileChange(Array.from(files))
+    }
   }
 
   const handleRemoveFile = (index) => {
-    setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index))
+    const newFiles = file.filter((_, i) => i !== index)
+    setFile(newFiles)
+    onFileChange(newFiles)
   }
 
   return (
@@ -26,6 +34,7 @@ const ImageUpload = () => {
           multiple
           style={{ display: 'none' }}
           onChange={handleFileChange}
+          name="images"
         />
         <label htmlFor="upload-image" style={{ flex: 1 }}>
           <Button variant="outlined" component="span" fullWidth>
@@ -33,9 +42,9 @@ const ImageUpload = () => {
           </Button>
         </label>
       </Box>
-      {selectedFiles.length > 0 && (
+      {file.length > 0 && (
         <Box sx={{ marginTop: 2 }}>
-          {selectedFiles.map((file, index) => (
+          {file.map((file, index) => (
             <Box
               key={index}
               sx={{

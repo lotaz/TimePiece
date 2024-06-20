@@ -1,4 +1,3 @@
-import { CheckCircle } from '@mui/icons-material'
 import {
   Box,
   Button,
@@ -10,25 +9,39 @@ import {
 import ImageUpload from './components/UploadFile'
 import UserLayout from '@/components/Layout/UserLayout'
 import { useFormik } from 'formik'
-
-interface CreateExpertisePageProps {}
+import YesNoSelection from '@/components/Controls/YesNoSelection'
+import { ChangeEvent } from 'react'
+import { createAppraisalRequest } from '@/services/appraisalRequestService'
 
 const names = ['10', '20', '30']
 
-const CreateExpertisePage = (props: CreateExpertisePageProps) => {
+const location = ['Bắc', 'Trung', 'Nam']
+
+const CreateExpertisePage = () => {
   const form = useFormik({
     initialValues: {
-      fullName: '',
+      name: '',
       email: '',
       phone: '',
       brand: '',
       reference: '',
+      hasBox: '',
+      hasWarranty: '',
+      hasInvoice: '',
+      hasLabel: '',
       age: '',
-      price: '',
-      note: ''
+      wanaPrice: '',
+      note: '',
+      images: [],
+      location: ''
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values)
+      try {
+        await createAppraisalRequest(form.values)
+      } catch (error) {
+        console.log(error)
+      }
     }
   })
   return (
@@ -76,23 +89,43 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                   <TextField
                     placeholder="Họ và tên"
                     variant="outlined"
+                    value={form.values.name}
+                    onChange={form.handleChange}
+                    onBlur={form.handleBlur}
+                    name="name"
                     fullWidth
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <TextField placeholder="Email" variant="outlined" fullWidth />
+                  <TextField
+                    placeholder="Email"
+                    variant="outlined"
+                    fullWidth
+                    value={form.values.email}
+                    onChange={form.handleChange}
+                    onBlur={form.handleBlur}
+                    name="email"
+                  />
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <TextField
                     placeholder="Số điện thoại"
                     variant="outlined"
+                    value={form.values.phone}
+                    onChange={form.handleChange}
+                    name="phone"
+                    onBlur={form.handleBlur}
                     fullWidth
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <TextField
-                    placeholder="THương hiệu đồng hồ"
+                    placeholder="Thương hiệu đồng hồ"
                     variant="outlined"
+                    value={form.values.brand}
+                    onChange={form.handleChange}
+                    onBlur={form.handleBlur}
+                    name="brand"
                     fullWidth
                   />
                 </Grid>
@@ -101,6 +134,10 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                     placeholder="Số tham chiếu"
                     variant="outlined"
                     fullWidth
+                    value={form.values.reference}
+                    onChange={form.handleChange}
+                    name="reference"
+                    onBlur={form.handleBlur}
                   />
                 </Grid>
               </Grid>
@@ -143,34 +180,13 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={5}>
-                    <Grid container spacing={12}>
-                      <Grid item xs={3}>
-                        <Button
-                          sx={{
-                            paddingX: '35px',
-                            color: '#434343',
-                            borderColor: '#434343'
-                          }}
-                          size="large"
-                          variant="outlined"
-                        >
-                          Có
-                        </Button>
-                      </Grid>
-                      <Grid item xs={3}>
-                        <Button
-                          sx={{
-                            paddingX: '20px',
-                            color: '#434343',
-                            borderColor: '#434343'
-                          }}
-                          size="large"
-                          variant="outlined"
-                        >
-                          Không
-                        </Button>
-                      </Grid>
-                    </Grid>
+                    <YesNoSelection
+                      value={form.values.hasBox}
+                      name={'hasBox'}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        form.setFieldValue('hasBox', e.target.value)
+                      }}
+                    />
                   </Grid>
                 </Grid>
                 <Grid container spacing={6} gap={1} marginTop={1}>
@@ -180,34 +196,13 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={5}>
-                    <Grid container spacing={12}>
-                      <Grid item xs={3}>
-                        <Button
-                          sx={{
-                            paddingX: '35px',
-                            color: '#434343',
-                            borderColor: '#434343'
-                          }}
-                          size="large"
-                          variant="outlined"
-                        >
-                          Có
-                        </Button>
-                      </Grid>
-                      <Grid item xs={3}>
-                        <Button
-                          sx={{
-                            paddingX: '20px',
-                            color: '#434343',
-                            borderColor: '#434343'
-                          }}
-                          size="large"
-                          variant="outlined"
-                        >
-                          Không
-                        </Button>
-                      </Grid>
-                    </Grid>
+                    <YesNoSelection
+                      value={form.values.hasWarranty}
+                      name={'hasWarranty'}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        form.setFieldValue('hasWarranty', e.target.value)
+                      }}
+                    />
                   </Grid>
                 </Grid>
                 <Grid container spacing={6} gap={1} marginTop={1}>
@@ -222,34 +217,13 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={5}>
-                    <Grid container spacing={12}>
-                      <Grid item xs={3}>
-                        <Button
-                          sx={{
-                            paddingX: '35px',
-                            color: '#434343',
-                            borderColor: '#434343'
-                          }}
-                          size="large"
-                          variant="outlined"
-                        >
-                          Có
-                        </Button>
-                      </Grid>
-                      <Grid item xs={3}>
-                        <Button
-                          sx={{
-                            paddingX: '20px',
-                            color: '#434343',
-                            borderColor: '#434343'
-                          }}
-                          size="large"
-                          variant="outlined"
-                        >
-                          Không
-                        </Button>
-                      </Grid>
-                    </Grid>
+                    <YesNoSelection
+                      value={form.values.hasInvoice}
+                      name={'hasInvoice'}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        form.setFieldValue('hasInvoice', e.target.value)
+                      }}
+                    />
                   </Grid>
                 </Grid>
                 <Grid container spacing={6} gap={1} marginTop={1}>
@@ -264,34 +238,13 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={5}>
-                    <Grid container spacing={12}>
-                      <Grid item xs={3}>
-                        <Button
-                          sx={{
-                            paddingX: '35px',
-                            color: '#434343',
-                            borderColor: '#434343'
-                          }}
-                          size="large"
-                          variant="outlined"
-                        >
-                          Có
-                        </Button>
-                      </Grid>
-                      <Grid item xs={3}>
-                        <Button
-                          sx={{
-                            paddingX: '20px',
-                            color: '#434343',
-                            borderColor: '#434343'
-                          }}
-                          size="large"
-                          variant="outlined"
-                        >
-                          Không
-                        </Button>
-                      </Grid>
-                    </Grid>
+                    <YesNoSelection
+                      value={form.values.hasLabel}
+                      name={'hasLabel'}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        form.setFieldValue('hasLabel', e.target.value)
+                      }}
+                    />
                   </Grid>
                 </Grid>
                 <Grid container spacing={4} marginTop={1}>
@@ -305,7 +258,14 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                       Đồng hồ của bạn bao nhiêu tuổi
                     </Typography>
                   </Grid>
-                  <Grid item xs={12} md={4}>
+                  <Grid
+                    item
+                    xs={12}
+                    md={4}
+                    sx={{
+                      marginLeft: '50px'
+                    }}
+                  >
                     <TextField
                       variant="outlined"
                       margin="normal"
@@ -313,12 +273,55 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                       fullWidth
                       id="gender"
                       label="Tuổi của đồng hồ"
-                      name="gender"
+                      name="age"
                       select
+                      value={form.values.age}
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
                     >
                       {names.map((name) => (
                         <MenuItem key={name} value={name}>
                           {name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={4} marginTop={1}>
+                  <Grid item xs={12} md={6}>
+                    <Typography
+                      textAlign={'left'}
+                      fontSize={18}
+                      marginTop={1}
+                      marginLeft={4}
+                    >
+                      Khu vực
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    md={4}
+                    sx={{
+                      marginLeft: '50px'
+                    }}
+                  >
+                    <TextField
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="gender"
+                      label="Khu vực"
+                      name="age"
+                      select
+                      value={form.values.age}
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                    >
+                      {location.map((loca) => (
+                        <MenuItem key={loca} value={loca}>
+                          {loca}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -338,6 +341,9 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                   <Grid item xs={12} md={4}>
                     <TextField
                       variant="outlined"
+                      sx={{
+                        marginLeft: '50px'
+                      }}
                       fullWidth
                       InputProps={{
                         startAdornment: (
@@ -346,6 +352,10 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                           </Typography>
                         )
                       }}
+                      name="wanaPrice"
+                      value={form.values.wanaPrice}
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
                     />
                   </Grid>
                 </Grid>
@@ -366,6 +376,13 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                       rows={4}
                       fullWidth
                       multiline
+                      sx={{
+                        marginLeft: '50px'
+                      }}
+                      name="note"
+                      value={form.values.note}
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
                     />
                   </Grid>
                 </Grid>
@@ -409,7 +426,12 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
                   justifyContent: 'center'
                 }}
               >
-                <ImageUpload />
+                <ImageUpload
+                  onFileChange={(files) => {
+                    form.setFieldValue('images', files)
+                  }}
+                  files={[]}
+                />
               </Box>
             </Box>
           </Grid>
@@ -429,6 +451,9 @@ const CreateExpertisePage = (props: CreateExpertisePageProps) => {
             }}
             size="large"
             variant="outlined"
+            onClick={() => {
+              form.handleSubmit()
+            }}
           >
             Gởi yêu cầu
           </Button>

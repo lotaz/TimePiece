@@ -94,7 +94,6 @@ const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
             id="email"
             label="Email hoặc SĐT"
             name="email"
-            autoComplete="email"
             autoFocus
             value={form.values.email}
             onChange={form.handleChange}
@@ -108,7 +107,6 @@ const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
             label="Nhập mật khẩu"
             type="password"
             id="password"
-            autoComplete="current-password"
             value={form.values.password}
             onChange={form.handleChange}
           />

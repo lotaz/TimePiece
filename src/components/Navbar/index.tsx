@@ -17,7 +17,7 @@ import ArticleIcon from '@mui/icons-material/ArticleOutlined'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 import { AuthenticateType } from '@/pages/authentication/Authenticate/type'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import UserMenu from '../UserMenu'
 import { useUserStore } from '@/stores/userStore'
 
@@ -76,8 +76,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navbar = () => {
   const { user } = useUserStore()
   const token = localStorage.getItem('token')
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  useEffect(() => {
+    if (!token) {
+      window.location.href = '/authenticate/login'
+    }
+  }, [token])
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
