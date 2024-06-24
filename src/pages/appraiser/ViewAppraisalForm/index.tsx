@@ -1,5 +1,12 @@
 import AppraiserLayout from '@/components/Layout/AppraiserLayout'
-import { Avatar, Box, Button, IconButton, Typography } from '@mui/material'
+import {
+  Avatar,
+  Box,
+  Button,
+  IconButton,
+  Typography,
+  Skeleton
+} from '@mui/material'
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline'
 import CustomerInfo from './components/CustomerInfo'
 import WatchInfo from './components/WatchInfo'
@@ -7,10 +14,19 @@ import { useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import ConfirmDialog from '@/components/ConfirmDiaglog'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import useSWR from 'swr'
+import { AppPath } from '@/services/utils'
+import { convertBooleanToYesNo } from '@/common/utils'
+import WatchImages from './components/WatchImages'
 
 const ViewAppraisalFormPage = () => {
   const navigate = useNavigate()
+  const { id } = useParams()
+  const { data, error, isLoading } = useSWR(
+    `${AppPath.GET_APPRAISAL_REQUESTS_BY_ID}/${id}`
+  )
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [buttonText, setButtonText] = useState('Tạo kết quả')
   const [openDialog, setOpenDialog] = useState(false)
@@ -63,7 +79,7 @@ const ViewAppraisalFormPage = () => {
             sx={{ display: 'flex', alignItems: 'center', textAlign: 'left' }}
           >
             <Avatar
-              src="path_to_avatar_image.jpg" //
+              src="path_to_avatar_image.jpg"
               alt="Thắng Nguyễn"
               sx={{ width: 56, height: 56, marginRight: 2 }}
             />
@@ -132,64 +148,109 @@ const ViewAppraisalFormPage = () => {
           description={'Bạn có chắc chắn muốn hoàn yêu cầu thẩm định này ?'}
         />
         <Box marginTop={2} bgcolor={'#fff'} padding={8}>
-          <Box>
-            <Typography
-              component={'div'}
-              sx={{
-                padding: '16px',
-                width: '300px',
-                backgroundColor: '#434343',
-                textAlign: 'left',
-                marginLeft: '40px',
-                color: '#fff',
-                fontWeight: '600'
-              }}
-            >
-              Thông tin của khách hàng
-            </Typography>
-            <CustomerInfo
-              name={'Thắng Nguyễn'}
-              email={'ruacon130@gmail.com'}
-              brand={'Rolex'}
-              phone={'012312312321'}
-              referenceNumber={'1231232321'}
-            />
-          </Box>
-          <Box>
-            <Typography
-              component={'div'}
-              sx={{
-                padding: '16px',
-                width: '300px',
-                backgroundColor: '#434343',
-                textAlign: 'left',
-                marginLeft: '40px',
-                color: '#fff',
-                fontWeight: '600',
-                marginTop: '40px'
-              }}
-            >
-              Thông tin đồng hồ
-            </Typography>
-            <WatchInfo />
-          </Box>
-          <Box>
-            <Typography
-              component={'div'}
-              sx={{
-                padding: '16px',
-                width: '300px',
-                backgroundColor: '#434343',
-                textAlign: 'left',
-                marginLeft: '40px',
-                color: '#fff',
-                fontWeight: '600',
-                marginTop: '40px'
-              }}
-            >
-              Hình ảnh đồng hồ
-            </Typography>
-          </Box>
+          {isLoading ? (
+            <>
+              <Skeleton variant="text" width={300} height={40} />
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={200}
+                sx={{ my: 2 }}
+              />
+              <Skeleton variant="text" width={300} height={40} sx={{ my: 2 }} />
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={200}
+                sx={{ my: 2 }}
+              />
+              <Skeleton variant="text" width={300} height={40} sx={{ my: 2 }} />
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={200}
+                sx={{ my: 2 }}
+              />
+            </>
+          ) : (
+            <>
+              <Box>
+                <Typography
+                  component={'div'}
+                  sx={{
+                    padding: '16px',
+                    width: '300px',
+                    backgroundColor: '#434343',
+                    textAlign: 'left',
+                    marginLeft: '40px',
+                    color: '#fff',
+                    fontWeight: '600'
+                  }}
+                >
+                  Thông tin của khách hàng
+                </Typography>
+                <CustomerInfo
+                  name={data?.name}
+                  email={data?.email}
+                  address={data?.address}
+                  phone={data?.phone}
+                />
+              </Box>
+              <Box>
+                <Typography
+                  component={'div'}
+                  sx={{
+                    padding: '16px',
+                    width: '300px',
+                    backgroundColor: '#434343',
+                    textAlign: 'left',
+                    marginLeft: '40px',
+                    color: '#fff',
+                    fontWeight: '600',
+                    marginTop: '40px'
+                  }}
+                >
+                  Thông tin đồng hồ
+                </Typography>
+                <WatchInfo
+                  hasBox={convertBooleanToYesNo(data?.hasBox)}
+                  hasPapersOrWarranty={convertBooleanToYesNo(
+                    data?.hasPapersOrWarranty
+                  )}
+                  hasPurchaseReceipt={convertBooleanToYesNo(
+                    data?.hasPurchaseReceipt
+                  )}
+                  region={data?.region}
+                  arethereanystickers={convertBooleanToYesNo(
+                    data?.areThereAnyStickers
+                  )}
+                  age={data?.age}
+                  description={data?.description}
+                  desiredPrice={data?.desiredPrice}
+                  referenceNumber={data?.referenceCode}
+                  brand={data?.brand}
+                />
+              </Box>
+              <Box>
+                <Typography
+                  component={'div'}
+                  sx={{
+                    padding: '16px',
+                    width: '300px',
+                    backgroundColor: '#434343',
+                    textAlign: 'left',
+                    marginLeft: '40px',
+                    color: '#fff',
+                    fontWeight: '600',
+                    marginTop: '40px'
+                  }}
+                >
+                  Hình ảnh đồng hồ
+                </Typography>
+                <WatchImages images={data?.imageUrls} />
+              </Box>
+            </>
+          )}
         </Box>
       </Box>
     </AppraiserLayout>

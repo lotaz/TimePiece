@@ -16,7 +16,8 @@ import AppraisalFormDetailPage from './pages/appraiser/AppraisalFormDetail'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />
+    element: <HomePage />,
+    children: []
   },
   {
     path: 'item',

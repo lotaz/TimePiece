@@ -6,6 +6,7 @@ export interface CreateAppraisalRequest {
   name: string
   email: string
   phone: string
+  address: string
   hasBox: string
   hasWarranty: string
   hasInvoice: string
@@ -16,7 +17,6 @@ export interface CreateAppraisalRequest {
   brand: string
   reference: string
   images: File[]
-  location: string
 }
 
 const createAppraisalRequest = async (req: CreateAppraisalRequest) => {
@@ -36,14 +36,21 @@ const createAppraisalRequest = async (req: CreateAppraisalRequest) => {
     )
     form.append('areThereAnyStickers', `${convertYesNoToBoolean(req.hasLabel)}`)
     form.append('age', `${req.age}`)
-    form.append('region', `${req.location}`)
     form.append('desiredPrice', `${req.wanaPrice}`)
     form.append('description', `${req.note}`)
     form.append('brand', `${req.brand}`)
     form.append('referenceCode', `${req.reference}`)
     form.append('imageFiles', `${req.images}`)
 
-    const response = await axiosClient.post(AppPath.CREATE_APPRAISAL_REQUEST)
+    const response = await axiosClient.post(
+      AppPath.CREATE_APPRAISAL_REQUEST,
+      form,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    )
 
     return response.data
   } catch (error) {
@@ -52,4 +59,17 @@ const createAppraisalRequest = async (req: CreateAppraisalRequest) => {
   }
 }
 
-export { createAppraisalRequest }
+const getDetailAppraisalRequest = async (id: string) => {
+  try {
+    const response = await axiosClient.get(
+      `${AppPath.GET_APPRAISAL_REQUESTS}/${id}`
+    )
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+export { createAppraisalRequest, getDetailAppraisalRequest }
