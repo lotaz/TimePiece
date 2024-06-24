@@ -1,21 +1,28 @@
 import { AppBar, Avatar, Box, Button, Toolbar, Typography } from '@mui/material'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Logo from '@/assets/app-logo.png'
-import { useUserStore } from '@/stores/userStore'
-import UserMenu from '../UserMenu'
+import AppraiserMenu from '../AppraiserMenu'
+import { useNavigate } from 'react-router-dom'
+import useAuth from '@/stores/authStore'
 
 const pages = [
   { title: 'Yêu cầu thẩm định', href: '/appraiser/dashboard' },
-  { title: 'Lịch sử thẩm định', href: '/' },
-  { title: 'Tin nhắn', href: '/' },
-  { title: 'Tạo giấy thẩm định', href: '/appraiser/create-appraisal-paper' },
-  { title: 'Tài khoản', href: '/' }
+  { title: 'Lịch sử thẩm định', href: '#' },
+  { title: 'Tin nhắn', href: '#' },
+  { title: 'Tạo giấy thẩm định', href: '/appraiser/create-appraisal-paper' }
 ]
 
 const AppraiserNavbar = () => {
-  const { user } = useUserStore()
+  const navigate = useNavigate()
+  const { user } = useAuth()
   const token = localStorage.getItem('token')
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/authenticate/login')
+    }
+  }, [navigate, token])
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -90,7 +97,7 @@ const AppraiserNavbar = () => {
               </Typography>
               <ExpandMoreOutlinedIcon />
             </Button>
-            <UserMenu
+            <AppraiserMenu
               anchorEl={anchorEl}
               isOpen={Boolean(anchorEl)}
               setOpen={(value) =>

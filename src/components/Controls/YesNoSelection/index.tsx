@@ -1,21 +1,16 @@
 // YesNoSelection.tsx
 import React from 'react'
-import {
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  styled
-} from '@mui/material'
+import { FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material'
+import styled from '@emotion/styled'
 
 interface YesNoSelectionProps {
   name: string
   value: string
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
-  flex: '1 1 0', // Ensure equal width
+const StyledFormControlLabel = styled(FormControlLabel)({
+  flex: '1 1 0',
   marginLeft: 4,
   width: '140px',
   '& .MuiRadio-root': {
@@ -23,10 +18,10 @@ const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
   },
   '& .MuiTypography-root': {
     border: '1px solid black',
-    padding: theme.spacing(1, 2),
-    textAlign: 'center', // Center align text
+    padding: '10px 0',
+    textAlign: 'center',
     width: '100%', // Full width
-    boxSizing: 'border-box'
+    boxSizing: 'border-box' as const // Update the type of boxSizing
   },
   '&.Mui-checked .MuiTypography-root': {
     backgroundColor: '#444',
@@ -37,7 +32,7 @@ const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
     backgroundColor: '#fff',
     color: 'black'
   }
-}))
+})
 
 const YesNoSelection: React.FC<YesNoSelectionProps> = ({
   name,

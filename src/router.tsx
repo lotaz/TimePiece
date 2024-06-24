@@ -11,11 +11,13 @@ import PaymentPage from './pages/item/Payment'
 import CreateAppraisalPaperPage from './pages/appraiser/CreateAppraisalPaper'
 import ViewAppraisalFormPage from './pages/appraiser/ViewAppraisalForm'
 import UserInfo from './pages/user/UserInfo'
+import AppraisalFormDetailPage from './pages/appraiser/AppraisalFormDetail'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />
+    element: <HomePage />,
+    children: []
   },
   {
     path: 'item',
@@ -106,11 +108,15 @@ const router = createBrowserRouter([
       },
       {
         path: ':id',
-        element: <ViewAppraisalFormPage />
+        element: <AppraisalFormDetailPage />
       },
       {
         path: 'create-appraisal-paper',
         element: <CreateAppraisalPaperPage />
+      },
+      {
+        path: ':id/view-appraisal-form',
+        element: <ViewAppraisalFormPage />
       }
     ]
   }

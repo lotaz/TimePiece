@@ -4,3 +4,8 @@ export enum Role {
   APPRAISER = 'Appraiser',
   ADMIN = 'Admin'
 }
+
+export interface Pagination {
+  page: number
+  size: number
+}
