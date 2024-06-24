@@ -33,15 +33,11 @@ const CreateExpertisePage = () => {
       wanaPrice: '',
       note: '',
       images: [],
-      location: ''
+      address: ''
     },
     onSubmit: async (values) => {
       console.log(values)
-      try {
-        await createAppraisalRequest(form.values)
-      } catch (error) {
-        console.log(error)
-      }
+      await createAppraisalRequest(form.values)
     }
   })
   return (
@@ -118,26 +114,15 @@ const CreateExpertisePage = () => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={12}>
                   <TextField
-                    placeholder="Thương hiệu đồng hồ"
+                    placeholder="Địa chỉ"
                     variant="outlined"
-                    value={form.values.brand}
+                    value={form.values.address}
                     onChange={form.handleChange}
                     onBlur={form.handleBlur}
-                    name="brand"
+                    name="address"
                     fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    placeholder="Số tham chiếu"
-                    variant="outlined"
-                    fullWidth
-                    value={form.values.reference}
-                    onChange={form.handleChange}
-                    name="reference"
-                    onBlur={form.handleBlur}
                   />
                 </Grid>
               </Grid>
@@ -252,7 +237,7 @@ const CreateExpertisePage = () => {
                     <Typography
                       textAlign={'left'}
                       fontSize={18}
-                      marginTop={1}
+                      marginTop={4}
                       marginLeft={4}
                     >
                       Đồng hồ của bạn bao nhiêu tuổi
@@ -271,7 +256,7 @@ const CreateExpertisePage = () => {
                       margin="normal"
                       required
                       fullWidth
-                      id="gender"
+                      id="age"
                       label="Tuổi của đồng hồ"
                       name="age"
                       select
@@ -295,36 +280,46 @@ const CreateExpertisePage = () => {
                       marginTop={1}
                       marginLeft={4}
                     >
-                      Khu vực
+                      Thương hiệu đồng hồ
                     </Typography>
                   </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={4}
-                    sx={{
-                      marginLeft: '50px'
-                    }}
-                  >
+                  <Grid item xs={12} md={4}>
                     <TextField
                       variant="outlined"
-                      margin="normal"
-                      required
+                      sx={{
+                        marginLeft: '50px'
+                      }}
                       fullWidth
-                      id="gender"
-                      label="Khu vực"
-                      name="age"
-                      select
-                      value={form.values.age}
+                      name="brand"
+                      value={form.values.brand}
                       onChange={form.handleChange}
                       onBlur={form.handleBlur}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container spacing={4} marginTop={1}>
+                  <Grid item xs={12} md={6}>
+                    <Typography
+                      textAlign={'left'}
+                      fontSize={18}
+                      marginTop={1}
+                      marginLeft={4}
                     >
-                      {location.map((loca) => (
-                        <MenuItem key={loca} value={loca}>
-                          {loca}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+                      Số tham chiếu
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      variant="outlined"
+                      sx={{
+                        marginLeft: '50px'
+                      }}
+                      fullWidth
+                      name="reference"
+                      value={form.values.reference}
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                    />
                   </Grid>
                 </Grid>
                 <Grid container spacing={4} marginTop={1}>
@@ -409,9 +404,8 @@ const CreateExpertisePage = () => {
                 <Typography
                   component={'div'}
                   color={'#434343'}
-                  fontSize={'18px'}
+                  fontSize={'14px'}
                   textAlign={'left'}
-                  marginLeft={'20px'}
                   fontWeight={'600'}
                 >
                   Chọn ít nhất 5 tấm ảnh chụp các góc của đồng hồ. Kich thước

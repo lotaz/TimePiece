@@ -2,9 +2,9 @@ import { AppBar, Avatar, Box, Button, Toolbar, Typography } from '@mui/material'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 import { useEffect, useState } from 'react'
 import Logo from '@/assets/app-logo.png'
-import { useUserStore } from '@/stores/userStore'
 import AppraiserMenu from '../AppraiserMenu'
 import { useNavigate } from 'react-router-dom'
+import useAuth from '@/stores/authStore'
 
 const pages = [
   { title: 'Yêu cầu thẩm định', href: '/appraiser/dashboard' },
@@ -15,7 +15,7 @@ const pages = [
 
 const AppraiserNavbar = () => {
   const navigate = useNavigate()
-  const { user } = useUserStore()
+  const { user } = useAuth()
   const token = localStorage.getItem('token')
 
   useEffect(() => {

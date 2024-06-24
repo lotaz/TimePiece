@@ -2,6 +2,7 @@ import { Box, Grid, Typography } from '@mui/material'
 import Logo from '@/assets/app-logo.png'
 import { FacebookSharp } from '@mui/icons-material'
 import StyledImage from '../StyledImage'
+import { textAlign } from 'html2canvas/dist/types/css/property-descriptors/text-align'
 
 const Footer = () => {
   return (
@@ -12,7 +13,8 @@ const Footer = () => {
         px: 2,
         mt: 'auto',
         backgroundColor: (theme) =>
-          theme.palette.mode === 'light' ? '#4E4E4E' : theme.palette.grey[800]
+          theme.palette.mode === 'light' ? '#4E4E4E' : theme.palette.grey[800],
+        textAlign: 'left'
       }}
     >
       <Box>
@@ -69,7 +71,7 @@ const Footer = () => {
             >
               Đồng hồ
             </Typography>
-            <Typography color="white">Đồng hồ</Typography>
+
             <Typography color="white">Mua đồng hồ</Typography>
             <Typography color="white">Bán đồng hồ</Typography>
             <Typography color="white">Thẩm định đồng hồ </Typography>

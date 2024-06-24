@@ -8,24 +8,21 @@ import {
 } from '@mui/material'
 import { Google as GoogleIcon } from '@mui/icons-material'
 import { useFormik } from 'formik'
-import { signin } from '@/services/authService'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { authStore } from '@/stores/authStore'
-import { useUserStore } from '@/stores/userStore'
 import { Role } from '@/common/type'
 import { isEmpty } from 'lodash'
+import authStore from '@/stores/authStore'
 
 interface LoginFormProps {
   handleChangeFormType: () => void
 }
 
 const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
-  const { setToken } = authStore()
-  const { setUser } = useUserStore()
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
+  const { signIn, user } = authStore()
 
   const form = useFormik({
     initialValues: {
@@ -34,20 +31,11 @@ const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
     },
     onSubmit: async (values) => {
       try {
-        const data = await signin(values)
-        setToken(data.accessToken)
-        setUser({
-          userid: data.userid,
-          role: data.role,
-          name: data.name
-        })
-        localStorage.setItem('token', data.accessToken)
-        if (data.role === Role.APPRAISER) {
-          console.log(data)
+        await signIn(values.email, values.password)
+        if (user?.role === Role.APPRAISER) {
           navigate('/appraiser/dashboard')
-        } else {
-          navigate('/')
         }
+        navigate('/')
       } catch (error) {
         setError('Email hoặc mật khẩu không chính xác')
       }

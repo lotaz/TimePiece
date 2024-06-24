@@ -8,8 +8,8 @@ const axiosClient = axios.create({
   }
 })
 
-  axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
-  axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8'
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*'
 // Request Interceptor
 axiosClient.interceptors.request.use(
   (config) => {
