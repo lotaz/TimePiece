@@ -5,9 +5,7 @@ import {
   Button,
   InputBase,
   Toolbar,
-  Typography,
-  alpha,
-  styled
+  Typography
 } from '@mui/material'
 import Logo from '@/assets/app-logo.png'
 import SearchIcon from '@mui/icons-material/Search'
@@ -19,13 +17,8 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 import { AuthenticateType } from '@/pages/authentication/Authenticate/type'
 import { useEffect, useState } from 'react'
 import UserMenu from '../UserMenu'
-import { useUserStore } from '@/stores/userStore'
-
-const pages = [
-  { title: 'Thương Hiệu', href: '/' },
-  { title: 'Đồng Hồ', href: '/' },
-  { title: 'Thẩm Định', href: '/appraisal/online-form' }
-]
+import useAuth from '@/stores/authStore'
+import { alpha, styled } from '@mui/material/styles'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -74,15 +67,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const Navbar = () => {
-  const { user } = useUserStore()
-  const token = localStorage.getItem('token')
+  const { user } = useAuth()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-
-  useEffect(() => {
-    if (!token) {
-      window.location.href = '/authenticate/login'
-    }
-  }, [token])
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -92,7 +78,7 @@ const Navbar = () => {
     setAnchorEl(null)
   }
 
-  const hasAuth = user || token
+  const hasAuth = user
 
   return (
     <AppBar
@@ -110,7 +96,7 @@ const Navbar = () => {
         }}
       >
         <Box
-          marginLeft={6}
+          marginLeft={4}
           component={'button'}
           bgcolor={'transparent'}
           border={'none'}
@@ -120,23 +106,32 @@ const Navbar = () => {
         >
           <img src={Logo} alt="logo" height={'46px'} />
         </Box>
-        <Box>
-          {pages.map((page) => (
-            <Button
-              key={page.title}
-              sx={{
-                textTransform: 'none',
-                fontSize: '14px',
-                fontWeight: '600',
-                width: 'fit-content',
-                marginLeft: '10px'
-              }}
-              color="inherit"
-              href={page.href}
-            >
-              {page.title}
-            </Button>
-          ))}
+
+        <Box sx={{ marginRight: 10 }}>
+          <Button
+            sx={{
+              textTransform: 'none',
+              fontSize: '14px',
+              fontWeight: '600',
+              width: 'fit-content',
+              marginRight: 2
+            }}
+            color="inherit"
+          >
+            Danh mục
+          </Button>
+          <Button
+            sx={{
+              textTransform: 'none',
+              fontSize: '14px',
+              fontWeight: '600',
+              width: 'fit-content'
+            }}
+            color="inherit"
+            href="/appraisal/online-form"
+          >
+            Thẩm định
+          </Button>
         </Box>
         <Box>
           <Search>

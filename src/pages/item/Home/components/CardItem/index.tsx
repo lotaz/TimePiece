@@ -11,7 +11,8 @@ interface CardItemProps {
 const CardItem: React.FC<CardItemProps> = ({
   id,
   name,
-  price
+  price,
+  image
 }: CardItemProps) => {
   const navigate = useNavigate()
 
@@ -22,8 +23,8 @@ const CardItem: React.FC<CardItemProps> = ({
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
-        alignItems: 'center',
         padding: '20px',
+        textAlign: 'left',
         borderRadius: '10px',
         boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.1)',
         backgroundColor: '#fff',
@@ -46,14 +47,14 @@ const CardItem: React.FC<CardItemProps> = ({
         }}
       >
         <StyledImage
-          src="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6"
+          src={image}
           alt="Banner"
           style={{
             borderRadius: '10px'
           }}
         />
       </Box>
-      <Box maxWidth={200} component={'div'}>
+      <Box component={'div'} paddingY={2}>
         <Typography color={'#080808'} marginTop={2} textAlign={'left'}>
           {name}
         </Typography>
@@ -66,7 +67,7 @@ const CardItem: React.FC<CardItemProps> = ({
           width: '100%'
         }}
       >
-        <Box component={'div'} marginLeft={1}>
+        <Box component={'div'} marginRight={2}>
           <Typography color={'#111111'} marginTop={2} fontWeight={'bold'}>
             {price} đ
           </Typography>

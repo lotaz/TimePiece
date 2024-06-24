@@ -11,34 +11,6 @@ export const getAllWatchService = async () => {
   }
 }
 
-interface SearchWatch {
-  search: string
-}
-
-export const searchWatchService = async (params: SearchWatch) => {
-  try {
-    const response = await axiosClient.get(
-      `/watches/search?name=${params.search}`
-    )
-
-    return response.data
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
-}
-
-export const getTop12WatchService = async () => {
-  try {
-    const response = await axiosClient.get('/watches/getTop12')
-
-    return response.data
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
-}
-
 interface CreateWatch {
   userId: number
   name: string

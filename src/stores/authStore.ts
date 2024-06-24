@@ -1,19 +1,35 @@
+import { Role } from '@/common/type'
+import { signin } from '@/services/authService'
+import { AppPath } from '@/services/utils'
+import useSWR from 'swr'
 import { create } from 'zustand'
 
-export type AuthStoreType = {
-  token: string
-  setToken: (token: string) => void
-  clearToken: () => void
+interface User {
+  role: Role | string
+  name: string
 }
 
-export const authStore = create<AuthStoreType>((set) => {
+export type AuthStoreType = {
+  user: User | null
+  signIn: (username: string, password: string) => Promise<void>
+  fetchCurrentUser: () => Promise<void>
+}
+
+const useAuth = create<AuthStoreType>((set) => {
   return {
-    token: '',
-    setToken: (token: string) => {
-      set({ token })
+    user: null,
+    signIn: async (username, password) => {
+      const data = await signin({ email: username, password })
+      localStorage.setItem('token', data.accessToken)
+      set(() => ({
+        user: {
+          role: data.role,
+          name: data.name
+        }
+      }))
     },
-    clearToken: () => {
-      set({ token: '' })
-    }
+    fetchCurrentUser: async () => {}
   }
 })
+
+export default useAuth
