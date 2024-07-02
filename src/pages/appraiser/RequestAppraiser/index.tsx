@@ -1,50 +1,10 @@
-import { Box, CircularProgress } from '@mui/material'
+import { Box } from '@mui/material'
 import FindRequestAppraiser from './components/FindRequestAppraiser'
 import ListRequest from './components/ListRequest'
 import { useEffect, useState } from 'react'
 import AppraiserLayout from '@/components/Layout/AppraiserLayout'
 import useSWR from 'swr'
-import { AppPath, fetcher } from '@/services/utils'
-
-// interface RequestAppraiserProps {}
-
-const mockrequests = [
-  {
-    id: 1,
-    date: '01-09-2020',
-    code: '098765432',
-    brand: 'Rolex',
-    status: 'Đợi duyệt'
-  },
-  {
-    id: 2,
-    date: '01-09-2020',
-    code: '098765432',
-    brand: 'Rolex',
-    status: 'Đợi duyệt'
-  },
-  {
-    id: 3,
-    date: '01-09-2020',
-    code: '098765432',
-    brand: 'Rolex',
-    status: 'Đợi duyệt'
-  },
-  {
-    id: 4,
-    date: '01-09-2020',
-    code: '098765432',
-    brand: 'Rolex',
-    status: 'Đợi duyệt'
-  },
-  {
-    id: 5,
-    date: '01-09-2020',
-    code: '098765432',
-    brand: 'Rolex',
-    status: 'Đợi duyệt'
-  }
-]
+import { AppPath } from '@/services/utils'
 
 const PAGE_SZIE = 5
 
@@ -54,7 +14,7 @@ const RequestAppraiserPage: React.FC = () => {
 
   const {
     data: data,
-    error,
+
     isLoading
   } = useSWR(
     `${AppPath.GET_APPRAISAL_REQUESTS}?page=${currentPage}&size=${PAGE_SZIE}`

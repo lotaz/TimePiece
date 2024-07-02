@@ -22,7 +22,7 @@ interface LoginFormProps {
 const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
   const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
-  const { signIn, user } = authStore()
+  const { signIn } = authStore()
 
   const form = useFormik({
     initialValues: {
@@ -31,9 +31,10 @@ const LoginForm = ({ handleChangeFormType }: LoginFormProps) => {
     },
     onSubmit: async (values) => {
       try {
-        await signIn(values.email, values.password)
-        if (user?.role === Role.APPRAISER) {
-          navigate('/appraiser/dashboard')
+        const res = await signIn(values.email, values.password)
+
+        if (res?.role === Role.APPRAISER) {
+          return navigate('/appraiser/dashboard')
         }
         navigate('/')
       } catch (error) {

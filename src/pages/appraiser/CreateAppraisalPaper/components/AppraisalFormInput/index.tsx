@@ -45,7 +45,8 @@ const AppraisalFormInput: React.FC<AppraisalFormInputProps> = ({
         size="small"
         helperText={error}
         sx={{
-          marginLeft: 8
+          marginLeft: 8,
+          width: '24vw'
         }}
       />
       {isEstimated && (

@@ -8,6 +8,7 @@ import {
   Skeleton
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import { getVietnameseStatus } from '@/common/utils'
 
 interface Request {
   date: string
@@ -95,7 +96,7 @@ const ListRequest: React.FC<ListRequestProps> = ({
                       fontWeight: 'bold'
                     }}
                   >
-                    {request.status}
+                    {getVietnameseStatus(request?.status)}
                   </Typography>
                   <Typography variant="body2">{request.date}</Typography>
                 </Grid>
