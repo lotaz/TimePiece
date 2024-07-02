@@ -1,7 +1,5 @@
 import { Role } from '@/common/type'
 import { signin } from '@/services/authService'
-import { AppPath } from '@/services/utils'
-import useSWR from 'swr'
 import { create } from 'zustand'
 
 interface User {
@@ -11,7 +9,13 @@ interface User {
 
 export type AuthStoreType = {
   user: User | null
-  signIn: (username: string, password: string) => Promise<void>
+  signIn: (
+    username: string,
+    password: string
+  ) => Promise<{
+    role: Role | string
+    name: string
+  }>
   fetchCurrentUser: () => Promise<void>
 }
 
@@ -27,6 +31,10 @@ const useAuth = create<AuthStoreType>((set) => {
           name: data.name
         }
       }))
+      return {
+        role: data.role,
+        name: data.name
+      }
     },
     fetchCurrentUser: async () => {}
   }

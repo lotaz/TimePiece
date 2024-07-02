@@ -18,14 +18,11 @@ const ListCards: React.FC = () => {
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-end',
           alignItems: 'center',
           marginBottom: '20px'
         }}
       >
-        <Typography variant="h5" fontWeight={700}>
-          Tin đăng dành cho bạn
-        </Typography>
         <Button
           sx={{
             textTransform: 'none'

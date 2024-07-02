@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { createTheme } from '@mui/material/styles'
 import { SWRConfig } from 'swr'
 import { fetcher } from './services/utils'
+import ScrollToTop from './components/ScollOnTop'
 
 const theme = createTheme()
 
@@ -16,7 +17,7 @@ function App() {
     <SWRConfig
       value={{
         fetcher,
-        refreshInterval: 3000
+        refreshInterval: 5000
       }}
     >
       <ThemeProvider theme={theme}>

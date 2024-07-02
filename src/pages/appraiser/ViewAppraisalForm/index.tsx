@@ -10,11 +10,11 @@ import {
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline'
 import CustomerInfo from './components/CustomerInfo'
 import WatchInfo from './components/WatchInfo'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import ConfirmDialog from '@/components/ConfirmDiaglog'
 import { toast } from 'react-toastify'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 import { AppPath } from '@/services/utils'
 import { convertBooleanToYesNo } from '@/common/utils'
@@ -23,13 +23,16 @@ import WatchImages from './components/WatchImages'
 const ViewAppraisalFormPage = () => {
   const navigate = useNavigate()
   const { id } = useParams()
-  const { data, error, isLoading } = useSWR(
+  const { data, isLoading } = useSWR(
     `${AppPath.GET_APPRAISAL_REQUESTS_BY_ID}/${id}`
   )
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [buttonText, setButtonText] = useState('Tạo kết quả')
   const [openDialog, setOpenDialog] = useState(false)
+
+  const location = useLocation()
+  const { pdfUrl, fileName } = location.state || {}
 
   const handleFileChange = (event) => {
     const file = event.target.files[0]
@@ -51,6 +54,13 @@ const ViewAppraisalFormPage = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false)
   }
+
+  useEffect(() => {
+    if (pdfUrl) {
+      setButtonText('Xác nhận hoàn thành')
+      setSelectedFile(pdfUrl)
+    }
+  }, [pdfUrl])
 
   return (
     <AppraiserLayout>
@@ -105,30 +115,22 @@ const ViewAppraisalFormPage = () => {
               alignItems: 'flex-end'
             }}
           >
-            <input
-              accept="application/pdf"
-              id="upload-pdf"
-              type="file"
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
-            />
-            <label htmlFor={selectedFile ? '' : 'upload-pdf'}>
-              <Button
-                variant="contained"
-                color="success"
-                component="span"
-                onClick={() => {
-                  if (selectedFile) {
-                    handleOpenDialog()
-                  }
-                }}
-              >
-                {buttonText}
-              </Button>
-            </label>
+            <Button
+              variant="contained"
+              color="success"
+              component="span"
+              onClick={() => {
+                if (!selectedFile) {
+                  navigate(`/appraiser/${id}/create-appraisal-paper`)
+                }
+              }}
+            >
+              {buttonText}
+            </Button>
+
             {selectedFile && (
               <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 1 }}>
-                <Typography variant="body2">{selectedFile.name}</Typography>
+                <Typography variant="body2">{fileName}</Typography>
                 <IconButton size="small" onClick={handleRemoveFile}>
                   <CloseIcon />
                 </IconButton>

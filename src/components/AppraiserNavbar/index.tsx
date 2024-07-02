@@ -9,8 +9,7 @@ import useAuth from '@/stores/authStore'
 const pages = [
   { title: 'Yêu cầu thẩm định', href: '/appraiser/dashboard' },
   { title: 'Lịch sử thẩm định', href: '#' },
-  { title: 'Tin nhắn', href: '#' },
-  { title: 'Tạo giấy thẩm định', href: '/appraiser/create-appraisal-paper' }
+  { title: 'Tin nhắn', href: '#' }
 ]
 
 const AppraiserNavbar = () => {
@@ -58,7 +57,7 @@ const AppraiserNavbar = () => {
             bgcolor={'transparent'}
             border={'none'}
             onClick={() => {
-              window.location.href = '/'
+              window.location.href = '/appraiser/dashboard'
             }}
           >
             <img src={Logo} alt="logo" height={'46px'} />

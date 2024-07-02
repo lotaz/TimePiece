@@ -2,6 +2,7 @@ import ListCards from './components/ListCards'
 import { Box } from '@mui/material'
 import Banner from './components/Banner'
 import UserLayout from '@/components/Layout/UserLayout'
+import Brands from './components/Brands'
 
 const HomePage = () => {
   return (
@@ -14,6 +15,7 @@ const HomePage = () => {
         }}
       >
         <Banner />
+        <Brands />
         <ListCards />
       </Box>
     </UserLayout>
