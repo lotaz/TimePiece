@@ -72,7 +72,7 @@ const ManagerPostTab: React.FC<ManagerPostTabProps> = ({
               sx={{
                 backgroundColor: '#434343',
                 width: '200px',
-                height: '60px',
+                height: '50px',
                 '&:hover': {
                   backgroundColor: '#333333'
                 }

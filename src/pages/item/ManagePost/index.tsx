@@ -29,7 +29,15 @@ const ManagePostPage: FC<ManagePostPageProps> = () => {
           setTab={setTab}
         />
       </Container>
-      <ManagerPostContent />
+      <Container
+        disableGutters
+        component={'div'}
+        sx={{
+          marginTop: '20px'
+        }}
+      >
+        <ManagerPostContent />
+      </Container>
     </UserLayout>
   )
 }

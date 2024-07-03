@@ -14,6 +14,7 @@ import ViewAppraisalFormPage from './pages/appraiser/ViewAppraisalForm'
 import UserInfo from './pages/user/UserInfo'
 import AppraisalFormDetailPage from './pages/appraiser/AppraisalFormDetail'
 import ScrollToTop from './components/ScollOnTop'
+import ManageOrder from './pages/item/ManageOrder'
 
 const Root = () => (
   <>
@@ -71,12 +72,20 @@ const router = createBrowserRouter([
         path: 'post',
         children: [
           {
-            path: 'create',
+            path: 'create-post',
             element: <CreatePostPage />
           },
           {
-            path: 'manage',
+            path: 'manage-post',
             element: <ManagePostPage />,
+            loader: async () => {
+              return { data: 'manage' }
+            }
+          },
+
+          {
+            path: 'manage-order',
+            element: <ManageOrder />,
             loader: async () => {
               return { data: 'manage' }
             }

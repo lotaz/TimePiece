@@ -2,7 +2,6 @@ import { Box, Grid, Typography } from '@mui/material'
 import Logo from '@/assets/app-logo.png'
 import { FacebookSharp } from '@mui/icons-material'
 import StyledImage from '../StyledImage'
-import { textAlign } from 'html2canvas/dist/types/css/property-descriptors/text-align'
 
 const Footer = () => {
   return (
@@ -17,23 +16,25 @@ const Footer = () => {
         textAlign: 'left'
       }}
     >
-      <Box>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
+      <Box component={'div'} alignItems={'center'}>
+        <Grid container gap={2}>
+          <Grid item xs={12} md={1} />
+          <Grid item xs={12} md={2}>
             <Box
-              width={400}
-              height={100}
               sx={{
                 flex: 1,
                 justifyContent: 'center',
-                margin: 'auto',
                 marginTop: 4
               }}
             >
               <StyledImage
                 src={Logo}
                 alt="App Logo"
-                style={{ width: '300px', height: '100%', objectFit: 'fill' }}
+                style={{
+                  width: '240px',
+                  height: '100%',
+                  objectFit: 'fill'
+                }}
               />
             </Box>
           </Grid>
@@ -89,7 +90,14 @@ const Footer = () => {
           </Grid>
         </Grid>
       </Box>
-      <Box mt={2}>
+      <Box
+        mt={2}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}
+      >
         <Typography variant="body2" color="white">
           © 2024 Timepiece.com · Điều khoản · Chính sách bảo mật
         </Typography>
