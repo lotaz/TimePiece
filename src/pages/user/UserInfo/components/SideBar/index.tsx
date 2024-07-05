@@ -11,15 +11,16 @@ import {
 import PersonIcon from '@mui/icons-material/Person'
 import SettingsIcon from '@mui/icons-material/Settings'
 
-const SideBar = () => {
-  const [selectedTab, setSelectedTab] = useState('personalInfo')
+interface SideBarProps {
+  selectedTab: string
+  handleTabChange: (tab: string) => void
+}
 
-  const handleTabChange = (tab) => {
-    setSelectedTab(tab)
-  }
-
+const SideBar = ({ selectedTab, handleTabChange }: SideBarProps) => {
   return (
-    <Box sx={{ width: 250, bgcolor: 'background.paper' }}>
+    <Box
+      sx={{ width: 250, bgcolor: 'background.paper', height: 'fit-content' }}
+    >
       <Box
         sx={{
           display: 'flex',
@@ -45,10 +46,7 @@ const SideBar = () => {
             Thắng fake 2
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Đánh giá{' '}
-            <span role="img" aria-label="crown">
-              👑
-            </span>
+            Đánh giá
           </Typography>
         </Box>
       </Box>

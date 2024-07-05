@@ -3,7 +3,8 @@ import { Menu, MenuItem, Box, Typography } from '@mui/material'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import ListAltIcon from '@mui/icons-material/ListAlt'
 import SettingsIcon from '@mui/icons-material/Settings'
-import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import LogoutIcon from '@mui/icons-material/Logout'
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks'
 import { useNavigate } from 'react-router-dom'
 
 interface UserMenuProps {
@@ -43,7 +44,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
           Quản lý đơn hàng
         </Typography>
       </Box>
-      <MenuItem onClick={handleClose}>
+      <MenuItem
+        onClick={() => {
+          navigate('/post/manage-order')
+          handleClose()
+        }}
+      >
         <ShoppingCartIcon style={{ marginRight: 16 }} />
         Đơn mua
       </MenuItem>
@@ -56,6 +62,15 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
           Quản lý tài khoản
         </Typography>
       </Box>
+      <MenuItem onClick={handleClose}>
+        <LibraryBooksIcon style={{ marginRight: 16 }} />
+        Lịch sử thẩm định
+      </MenuItem>
+      <Box px={2} py={1} bgcolor={'#E6E6E6'}>
+        <Typography variant="subtitle1" color="textSecondary">
+          Quản lý đơn thẩm định
+        </Typography>
+      </Box>
       <MenuItem
         onClick={() => {
           navigate('/user/info')
@@ -65,22 +80,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
         <SettingsIcon style={{ marginRight: 16 }} />
         Cài đặt tài khoản
       </MenuItem>
-      <Box px={2} py={1} bgcolor={'#E6E6E6'}>
-        <Typography variant="subtitle1" color="textSecondary">
-          Quản lý đơn thẩm định
-        </Typography>
-      </Box>
-      <MenuItem onClick={handleClose}>
-        <SettingsIcon style={{ marginRight: 16 }} />
-        Lịch sử thẩm định
-      </MenuItem>
       <MenuItem
         onClick={() => {
           localStorage.removeItem('token')
           handleClose()
         }}
       >
-        <ExitToAppIcon style={{ marginRight: 16 }} />
+        <LogoutIcon style={{ marginRight: 16 }} />
         Đăng xuất
       </MenuItem>
     </Menu>

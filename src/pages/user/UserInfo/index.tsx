@@ -1,26 +1,39 @@
 import UserLayout from '@/components/Layout/UserLayout'
 import SideBar from './components/SideBar'
 import { Box } from '@mui/material'
-import YesNoSelection from '@/components/Controls/YesNoSelection'
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
+import UserInfoTab from './components/UserInfoTab'
+import SettingTab from './components/UserSettingTab'
 
 const UserInfo = () => {
-  const [value, setValue] = useState('yes')
+  const [selectedTab, setSelectedTab] = useState('personalInfo')
+
+  const tab = () => {
+    switch (selectedTab) {
+      case 'personalInfo':
+        return <UserInfoTab />
+      case 'accountSettings':
+        return <SettingTab />
+      default:
+        return <UserInfoTab />
+    }
+  }
+
   return (
     <UserLayout>
       <Box
         sx={{
-          margin: 16
+          marginX: 16,
+          marginTop: 12,
+          marginBottom: 4,
+          display: 'flex',
+          flexDirection: 'row',
+          gap: 10,
+          minHeight: 'calc(100vh - 340px)'
         }}
       >
-        <SideBar />
-        <YesNoSelection
-          name={''}
-          value={value}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            setValue(event.target.value)
-          }}
-        />
+        <SideBar selectedTab={selectedTab} handleTabChange={setSelectedTab} />
+        <Box>{tab()}</Box>
       </Box>
     </UserLayout>
   )
