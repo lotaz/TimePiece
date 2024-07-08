@@ -10,7 +10,9 @@ export const AppPath = {
   GET_BRANDS: '/api/brands/getAll',
   GET_TOP12_WATCHES: '/api/watches/top12/Approved',
   GET_WATCH_BY_ID: (id) => `/api/watches/${id}/getWatchById`,
-  USER_INFO: (id) => `/api/users/${id}`
+  USER_INFO: (id) => `/api/users/${id}`,
+  SEARCH_BY_KEYWORD: ({ keyword, page, size }) =>
+    `/api/watches/searchWatchByKeyword?keyword=${keyword}&page=${page}&size=${size}`
 }
 
 export const fetcher = (url) => axiosClient.get(url).then((res) => res.data)

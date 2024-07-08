@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import {
   AppBar,
   Avatar,
@@ -15,10 +16,10 @@ import ArticleIcon from '@mui/icons-material/ArticleOutlined'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 import { AuthenticateType } from '@/pages/authentication/Authenticate/type'
-import { useState } from 'react'
 import UserMenu from '../UserMenu'
 import useAuth from '@/stores/authStore'
 import { alpha, styled } from '@mui/material/styles'
+import { useNavigate } from 'react-router-dom'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -50,7 +51,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -67,8 +67,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const Navbar = () => {
+  const navigate = useNavigate()
   const { user } = useAuth()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -76,6 +78,16 @@ const Navbar = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value)
+  }
+
+  const handleSearchSubmit = (event: React.FormEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    // Handle search action, e.g., redirect to search results page
+    navigate(`/item/search?keyword=${searchQuery}`)
   }
 
   const hasAuth = user
@@ -133,7 +145,7 @@ const Navbar = () => {
             Thẩm định
           </Button>
         </Box>
-        <Box>
+        <Box component="form" onSubmit={handleSearchSubmit}>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -141,6 +153,8 @@ const Navbar = () => {
             <StyledInputBase
               placeholder="Tìm kiếm…"
               inputProps={{ 'aria-label': 'search' }}
+              value={searchQuery}
+              onChange={handleSearchChange}
             />
           </Search>
         </Box>

@@ -13,8 +13,9 @@ import CreateAppraisalPaperPage from './pages/appraiser/CreateAppraisalPaper'
 import ViewAppraisalFormPage from './pages/appraiser/ViewAppraisalForm'
 import UserInfo from './pages/user/UserInfo'
 import AppraisalFormDetailPage from './pages/appraiser/AppraisalFormDetail'
-import ScrollToTop from './components/ScollOnTop'
 import ManageOrder from './pages/item/ManageOrder'
+import ScrollToTop from './components/ScollOnTop'
+import SearchPage from './pages/item/Search'
 
 const Root = () => (
   <>
@@ -43,6 +44,15 @@ const router = createBrowserRouter([
           {
             path: 'payment',
             element: <PaymentPage />
+          },
+          {
+            path: 'search', // Add the search path
+            element: <SearchPage />,
+            loader: async ({ request }) => {
+              const url = new URL(request.url)
+              const query = url.searchParams.get('keyword')
+              return { query }
+            }
           }
         ]
       },
@@ -82,7 +92,6 @@ const router = createBrowserRouter([
               return { data: 'manage' }
             }
           },
-
           {
             path: 'manage-order',
             element: <ManageOrder />,
