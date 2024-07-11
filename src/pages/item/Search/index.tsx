@@ -1,35 +1,42 @@
-import UserLayout from '@/components/Layout/UserLayout'
 import { Box, Container, Pagination, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLoaderData } from 'react-router-dom'
 import FilterComponent from './components/FilterComponent'
-import ListCards from '../Home/components/ListCards'
 import useSWR from 'swr'
-import { AppPath, fetcher } from '@/services/utils'
+import { AppPath } from '@/services/utils'
+import ListWatches from './components/ListWatches'
 
 const SearchPage = () => {
   const { query } = useLoaderData() as { query: string }
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(10)
   const { data, isLoading } = useSWR(
-    AppPath.SEARCH_BY_KEYWORD({ keyword: query, page: currentPage, size: 12 })
+    AppPath.SEARCH_BY_KEYWORD({
+      keyword: query,
+      page: currentPage - 1,
+      size: 8
+    })
   )
 
-  console.log(data, isLoading)
+  useEffect(() => {
+    if (data) {
+      setTotalPages(data.totalPages)
+    }
+  }, [currentPage, data])
 
   return (
-    <UserLayout>
-      <Container
+    <Container
+      sx={{
+        marginTop: '80px',
+        minHeight: 'calc(100vh - 80px)'
+      }}
+    >
+      <Box
         sx={{
-          marginTop: '80px',
-          minHeight: 'calc(100vh - 80px)'
+          textAlign: 'left'
         }}
       >
-        <Box
-          sx={{
-            textAlign: 'left'
-          }}
-        >
+        {query && (
           <Typography
             sx={{
               fontSize: '1.5rem',
@@ -38,20 +45,22 @@ const SearchPage = () => {
           >
             Kết quả tìm kiếm cho: {query}
           </Typography>
-        </Box>
-        <Box>
-          <FilterComponent />
-        </Box>
-        <Box>
-          <ListCards />
-        </Box>
-        <Box
-          display="flex"
-          justifyContent="center"
-          sx={{
-            marginY: '20px'
-          }}
-        >
+        )}
+      </Box>
+      <Box>
+        <FilterComponent />
+      </Box>
+      <Box>
+        <ListWatches watch={data?.content} isLoading={isLoading} />
+      </Box>
+      <Box
+        display="flex"
+        justifyContent="center"
+        sx={{
+          marginY: '20px'
+        }}
+      >
+        {totalPages > 1 && (
           <Pagination
             count={totalPages}
             page={currentPage}
@@ -59,9 +68,9 @@ const SearchPage = () => {
             variant="outlined"
             shape="rounded"
           />
-        </Box>
-      </Container>
-    </UserLayout>
+        )}
+      </Box>
+    </Container>
   )
 }
 

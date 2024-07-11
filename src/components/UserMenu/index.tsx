@@ -5,6 +5,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt'
 import SettingsIcon from '@mui/icons-material/Settings'
 import LogoutIcon from '@mui/icons-material/Logout'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks'
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import { useNavigate } from 'react-router-dom'
 
 interface UserMenuProps {
@@ -59,16 +60,21 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
       </MenuItem>
       <Box px={2} py={1} bgcolor={'#E6E6E6'}>
         <Typography variant="subtitle1" color="textSecondary">
-          Quản lý tài khoản
+          {' '}
+          Quản lý đơn thẩm định{' '}
         </Typography>
       </Box>
       <MenuItem onClick={handleClose}>
         <LibraryBooksIcon style={{ marginRight: 16 }} />
         Lịch sử thẩm định
       </MenuItem>
+      <MenuItem onClick={handleClose}>
+        <AccountBalanceWalletIcon style={{ marginRight: 16 }} />
+        Ví tiền
+      </MenuItem>
       <Box px={2} py={1} bgcolor={'#E6E6E6'}>
         <Typography variant="subtitle1" color="textSecondary">
-          Quản lý đơn thẩm định
+          Quản lý tài khoản
         </Typography>
       </Box>
       <MenuItem
@@ -83,6 +89,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
       <MenuItem
         onClick={() => {
           localStorage.removeItem('token')
+          localStorage.removeItem('user')
+          navigate('/')
           handleClose()
         }}
       >

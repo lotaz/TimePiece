@@ -3,28 +3,38 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Zalo from '@/assets/logoZalo.png'
 import Momo from '@/assets/logoMomo.png'
+import thanhtoantructiep from '@/assets/thanhtoantructiep.png'
 
-const method = [
+const methods = [
   { name: 'ZaloPay', image: Zalo },
-  { name: 'Momo', image: Momo }
+  { name: 'Momo', image: Momo },
+  { name: 'ThanhToanTrucTiep', image: thanhtoantructiep }
 ]
 
 interface PaymentMethodProps {
   price: number
   extraPrice: number
+  paymentMethod: string
+  handleChangeMethod: (method: string) => void
 }
 
-const PaymentMethod: React.FC<PaymentMethodProps> = ({ price, extraPrice }) => {
+const PaymentMethod: React.FC<PaymentMethodProps> = ({
+  price,
+  extraPrice,
+  paymentMethod,
+  handleChangeMethod
+}) => {
   const total = price + extraPrice
   const navigate = useNavigate()
 
   const handleSubmit = () => {
-    toast.success('Đặt hàng thành công', {
+    toast.success(`Đặt hàng thành công với phương thức ${paymentMethod}`, {
       onClose(props) {
         navigate('/')
       }
     })
   }
+
   return (
     <Box
       border={1}
@@ -55,7 +65,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ price, extraPrice }) => {
           padding={2}
           flexDirection={'row'}
         >
-          {method.map((item, index) => (
+          {methods.map((item, index) => (
             <Box
               key={index}
               display={'flex'}
@@ -64,8 +74,19 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ price, extraPrice }) => {
               width={160}
               height={100}
               marginX={2}
-              border={'1px solid #D7D7D7'}
+              border={
+                paymentMethod === item.name
+                  ? '2px solid blue'
+                  : '1px solid #D7D7D7'
+              }
               borderRadius={2}
+              onClick={() => handleChangeMethod(item.name)}
+              sx={{
+                cursor: 'pointer',
+                '&:hover': {
+                  borderColor: 'blue'
+                }
+              }}
             >
               <img
                 style={{

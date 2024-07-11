@@ -37,7 +37,7 @@ const CardItem: React.FC<CardItemProps> = ({
           transform: 'scale(1.05)'
         }
       }}
-      onClick={() => navigate(`/item/:${id}`)}
+      onClick={() => navigate(`/item/${id}`)}
     >
       <Box
         component={'div'}
