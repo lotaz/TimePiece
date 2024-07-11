@@ -16,12 +16,13 @@ import AppraisalFormDetailPage from './pages/appraiser/AppraisalFormDetail'
 import ManageOrder from './pages/item/ManageOrder'
 import ScrollToTop from './components/ScollOnTop'
 import SearchPage from './pages/item/Search'
+import UserLayout from './components/Layout/UserLayout'
 
 const Root = () => (
-  <>
+  <UserLayout>
     <ScrollToTop />
     <Outlet />
-  </>
+  </UserLayout>
 )
 
 const router = createBrowserRouter([
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
             element: <PaymentPage />
           },
           {
-            path: 'search', // Add the search path
+            path: 'product', // Add the search path
             element: <SearchPage />,
             loader: async ({ request }) => {
               const url = new URL(request.url)
@@ -100,50 +101,50 @@ const router = createBrowserRouter([
             }
           }
         ]
-      },
-      {
-        path: 'authenticate',
-        children: [
-          {
-            path: 'login',
-            element: <AuthenticatePage />,
-            loader: async () => {
-              return { type: AuthenticateType.Login }
-            }
-          },
-          {
-            path: 'register',
-            element: <AuthenticatePage />,
-            loader: async () => {
-              return { type: AuthenticateType.Register }
-            }
-          }
-        ]
-      },
-      {
-        path: 'appraiser',
-        children: [
-          {
-            path: 'dashboard',
-            element: <RequestAppraiserPage />
-          },
-          {
-            path: ':id',
-            element: <AppraisalFormDetailPage />
-          },
-          {
-            path: ':id/create-appraisal-paper',
-            element: <CreateAppraisalPaperPage />
-          },
-          {
-            path: ':id/view-appraisal-form',
-            element: <ViewAppraisalFormPage />
-          }
-        ]
-      },
-      { path: '*', element: <div>404 Not Found</div> }
+      }
     ]
-  }
+  },
+  {
+    path: 'authenticate',
+    children: [
+      {
+        path: 'login',
+        element: <AuthenticatePage />,
+        loader: async () => {
+          return { type: AuthenticateType.Login }
+        }
+      },
+      {
+        path: 'register',
+        element: <AuthenticatePage />,
+        loader: async () => {
+          return { type: AuthenticateType.Register }
+        }
+      }
+    ]
+  },
+  {
+    path: 'appraiser',
+    children: [
+      {
+        path: 'dashboard',
+        element: <RequestAppraiserPage />
+      },
+      {
+        path: ':id',
+        element: <AppraisalFormDetailPage />
+      },
+      {
+        path: ':id/create-appraisal-paper',
+        element: <CreateAppraisalPaperPage />
+      },
+      {
+        path: ':id/view-appraisal-form',
+        element: <ViewAppraisalFormPage />
+      }
+    ]
+  },
+  { path: '*', element: <div>404 Not Found</div> }
 ])
 
 export default router

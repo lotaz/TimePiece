@@ -5,6 +5,7 @@ import { create } from 'zustand'
 interface User {
   role: Role | string
   name: string
+  id: number
 }
 
 export type AuthStoreType = {
@@ -25,10 +26,20 @@ const useAuth = create<AuthStoreType>((set) => {
     signIn: async (username, password) => {
       const data = await signin({ email: username, password })
       localStorage.setItem('token', data.accessToken)
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          role: data.role,
+          name: data.name,
+          id: data.id
+        })
+      )
+
       set(() => ({
         user: {
           role: data.role,
-          name: data.name
+          name: data.name,
+          id: data.id
         }
       }))
       return {

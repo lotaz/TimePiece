@@ -1,10 +1,9 @@
-import Footer from '@/components/Footer'
 import { styled } from '@mui/material'
 import CommonLayout from '../CommonLayout'
 import AppraiserNavbar from '@/components/AppraiserNavbar'
 
 interface AppraiserLayoutProps {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 const StyledLayout = styled(`div`)`

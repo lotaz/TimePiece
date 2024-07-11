@@ -13,7 +13,7 @@ const ManagePostPage: FC<ManagePostPageProps> = () => {
     name: 'Tuan Nguyen'
   }
   return (
-    <UserLayout>
+    <>
       <Container
         disableGutters
         component={'div'}
@@ -38,7 +38,7 @@ const ManagePostPage: FC<ManagePostPageProps> = () => {
       >
         <ManagerPostContent />
       </Container>
-    </UserLayout>
+    </>
   )
 }
 

@@ -17,9 +17,9 @@ import NotificationsIcon from '@mui/icons-material/Notifications'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 import { AuthenticateType } from '@/pages/authentication/Authenticate/type'
 import UserMenu from '../UserMenu'
-import useAuth from '@/stores/authStore'
 import { alpha, styled } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
+import MenuPopover from '../MenuPopover'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -68,7 +68,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar = () => {
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const user = localStorage.getItem('user')
+    ? JSON.parse(localStorage.getItem('user') as string)
+    : null
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -86,8 +88,7 @@ const Navbar = () => {
 
   const handleSearchSubmit = (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault()
-    // Handle search action, e.g., redirect to search results page
-    navigate(`/item/search?keyword=${searchQuery}`)
+    navigate(`/item/product?keyword=${searchQuery}`)
   }
 
   const hasAuth = user
@@ -120,18 +121,7 @@ const Navbar = () => {
         </Box>
 
         <Box sx={{ marginRight: 10 }}>
-          <Button
-            sx={{
-              textTransform: 'none',
-              fontSize: '14px',
-              fontWeight: '600',
-              width: 'fit-content',
-              marginRight: 2
-            }}
-            color="inherit"
-          >
-            Danh mục
-          </Button>
+          <MenuPopover buttonLabel="Danh mục" />
           <Button
             sx={{
               textTransform: 'none',
