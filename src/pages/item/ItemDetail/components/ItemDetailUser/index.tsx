@@ -1,17 +1,39 @@
 import { Box, Typography, Grid, Button, Avatar, Link } from '@mui/material'
 import PhoneIcon from '@mui/icons-material/Phone'
 import ChatIcon from '@mui/icons-material/Chat'
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 import { Role } from '@/common/type'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import { createOrder } from '@/services/orderService'
+import { useState } from 'react'
+import ConfirmDialog from '@/components/ConfirmDiaglog'
+import { toast } from 'react-toastify'
 
 interface ItemDetailUserProps {
-  role?: Role
+  role?: string
 }
 
 const ItemDetailUser = ({ role = Role.BUYER }: ItemDetailUserProps) => {
+  const navigate = useNavigate()
+  const user = localStorage.getItem('user')
+    ? JSON.parse(localStorage.getItem('user') as string)
+    : null
+
+  const [isOpen, setIsOpen] = useState(false)
   const data = useLoaderData()
   const { id } = data as { id: string }
+
+  const handleCreateOrder = async () => {
+    const res = await createOrder({ watchId: Number(id), userId: user.id })
+    if (res) {
+      setIsOpen(false)
+      toast.success('Đặt hàng thành công', {
+        onClose() {
+          navigate('/')
+        }
+      })
+    }
+  }
   return (
     <Box sx={{ padding: 2 }} component={'div'} id={`${id}`}>
       <Grid container spacing={2}>
@@ -62,21 +84,33 @@ const ItemDetailUser = ({ role = Role.BUYER }: ItemDetailUserProps) => {
         </Grid>
         <Grid item xs={12}>
           {role === Role.BUYER ? (
-            <Button
-              variant="outlined"
-              fullWidth
-              sx={{
-                textTransform: 'none',
-                fontSize: '14px',
-                bgcolor: 'primary.main',
-                color: 'white',
-                '&:hover': {
-                  bgcolor: 'primary.dark'
+            <>
+              <Button
+                variant="outlined"
+                fullWidth
+                onClick={() => setIsOpen(true)}
+                sx={{
+                  textTransform: 'none',
+                  fontSize: '14px',
+                  bgcolor: 'primary.main',
+                  color: 'white',
+                  '&:hover': {
+                    bgcolor: 'primary.dark'
+                  }
+                }}
+              >
+                Đặt hàng
+              </Button>
+              <ConfirmDialog
+                open={isOpen}
+                onClose={() => setIsOpen(false)}
+                onConfirm={handleCreateOrder}
+                title={'Xác nhận đặt hàng'}
+                description={
+                  'Bạn có chắc chắn muốn đặt hàng sản phẩm này không?'
                 }
-              }}
-            >
-              Đặt hàng
-            </Button>
+              />
+            </>
           ) : (
             <Button
               variant="outlined"
@@ -95,40 +129,6 @@ const ItemDetailUser = ({ role = Role.BUYER }: ItemDetailUserProps) => {
               Đã bán/ Ẩn tin
             </Button>
           )}
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            textAlign: 'left'
-          }}
-        >
-          <Typography variant="body2" color="textSecondary">
-            Được thẩm định bởi:
-          </Typography>
-          <Box display="flex" alignItems="center" mt={1}>
-            <Avatar
-              alt="Jack"
-              src="https://via.placeholder.com/50" // Replace with actual image URL
-              sx={{ width: 40, height: 40 }}
-            />
-            <Box ml={2}>
-              <Typography variant="body2" fontWeight="bold">
-                Jack
-              </Typography>
-              <Typography variant="body2">
-                <PhoneIcon
-                  sx={{ fontSize: 16, verticalAlign: 'middle', mr: 0.5 }}
-                />
-                0987654321
-              </Typography>
-            </Box>
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="outlined" fullWidth startIcon={<ChatIcon />}>
-            Liên hệ ngay
-          </Button>
         </Grid>
       </Grid>
     </Box>

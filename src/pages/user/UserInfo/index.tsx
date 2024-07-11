@@ -1,4 +1,3 @@
-import UserLayout from '@/components/Layout/UserLayout'
 import SideBar from './components/SideBar'
 import { Box } from '@mui/material'
 import { useState } from 'react'
@@ -20,22 +19,20 @@ const UserInfo = () => {
   }
 
   return (
-    <UserLayout>
-      <Box
-        sx={{
-          marginX: 16,
-          marginTop: 12,
-          marginBottom: 4,
-          display: 'flex',
-          flexDirection: 'row',
-          gap: 10,
-          minHeight: 'calc(100vh - 340px)'
-        }}
-      >
-        <SideBar selectedTab={selectedTab} handleTabChange={setSelectedTab} />
-        <Box>{tab()}</Box>
-      </Box>
-    </UserLayout>
+    <Box
+      sx={{
+        marginX: 16,
+        marginTop: 12,
+        marginBottom: 4,
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 10,
+        minHeight: 'calc(100vh - 340px)'
+      }}
+    >
+      <SideBar selectedTab={selectedTab} handleTabChange={setSelectedTab} />
+      <Box>{tab()}</Box>
+    </Box>
   )
 }
 

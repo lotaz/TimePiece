@@ -9,9 +9,11 @@ import {
 import CardItem from '../CardItem'
 import useSWR from 'swr'
 import { AppPath, fetcher } from '@/services/utils'
+import { useNavigate } from 'react-router-dom'
 
 const ListCards: React.FC = () => {
   const { data, isLoading } = useSWR(AppPath.GET_TOP12_WATCHES, fetcher)
+  const navigate = useNavigate()
 
   return (
     <Container component={'div'}>
@@ -27,6 +29,7 @@ const ListCards: React.FC = () => {
           sx={{
             textTransform: 'none'
           }}
+          onClick={() => navigate('/item/product')}
         >
           <Typography variant="h6">Xem Tất Cả</Typography>
         </Button>
