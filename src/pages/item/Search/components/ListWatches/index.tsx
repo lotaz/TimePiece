@@ -6,7 +6,7 @@ interface Watch {
   name: string
   watchstatus?: string | null
   price: number
-  watchImage?: string | null
+  imageUrl?: string | null
   accessories?: string
   status: string
 }
@@ -40,9 +40,12 @@ const ListWatches = ({ watch, isLoading }: ListWatchesProps) => {
                   name={item?.name}
                   price={item?.price}
                   image={
-                    item?.watchImage ? item.watchImage : '/images/watch.jpg'
+                    item?.imageUrl
+                      ? item.imageUrl
+                      : 'https://res.cloudinary.com/dtxbcgpot/image/upload/v1719167161/scndrdzsuky8d6ti0r2b.jpg'
                   }
                   id={item.id}
+                  sellerName={'Seller Name'}
                 />
               </Grid>
             ))}

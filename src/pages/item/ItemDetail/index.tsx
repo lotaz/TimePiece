@@ -7,9 +7,6 @@ import { useLoaderData } from 'react-router-dom'
 
 const ItemDetailPage = () => {
   const { id } = useLoaderData() as { id: string }
-  const user = localStorage.getItem('user')
-    ? JSON.parse(localStorage.getItem('user') as string)
-    : null
 
   const { data, isLoading } = useSWR(AppPath.GET_WATCH_BY_ID(id))
 
@@ -24,10 +21,20 @@ const ItemDetailPage = () => {
     >
       <Grid container spacing={2}>
         <Grid item xs={12} md={8}>
-          <ItemDetail watch={data} images={[]} isLoading={isLoading} />
+          <ItemDetail
+            watch={data}
+            images={data?.watchImages}
+            isLoading={isLoading}
+          />
         </Grid>
         <Grid item xs={12} md={4}>
-          <ItemDetailUser role={user?.role} />
+          <ItemDetailUser
+            loading={isLoading}
+            sellerId={data?.userId}
+            sellerName={data?.userName}
+            sellerPhone={data?.userPhoneNumber}
+            sellerAvatar={data?.userAvatar}
+          />
         </Grid>
       </Grid>
     </Container>

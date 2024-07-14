@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   Box,
   Button,
@@ -8,13 +8,15 @@ import {
   Grid,
   MenuItem
 } from '@mui/material'
-import { Email, Phone, Lock, Person, Event } from '@mui/icons-material'
+import { Email, Phone, Lock, Person } from '@mui/icons-material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useNavigate } from 'react-router-dom'
 import { isEmpty } from 'lodash'
 import { signup } from '@/services/authService'
 import { useFormik } from 'formik'
 import { AxiosError } from 'axios'
+import { DatePicker } from '@mui/x-date-pickers'
+import { toast } from 'react-toastify'
 
 interface RegistrationFormProps {
   handleChangeFormType: () => void
@@ -27,16 +29,20 @@ const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
   const form = useFormik({
     initialValues: {
       email: '',
-      phone: '',
+      phoneNumber: '',
       password: '',
       confirmPassword: '',
-      fullName: '',
-      dob: '',
+      name: '',
+      dob: null,
       gender: ''
     },
     onSubmit: async (values) => {
       try {
         const data = await signup(values)
+        if (data) {
+          toast.success('Đăng ký thành công')
+          navigate('/login')
+        }
         handleChangeFormType()
       } catch (error) {
         let errorMessage = 'Đã có lỗi xảy ra'
@@ -51,11 +57,17 @@ const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
       if (!values.email) {
         errors.email = 'Email không được để trống'
       }
-      if (!values.phone) {
-        errors.phone = 'Số điện thoại không được để trống'
+      if (!values.phoneNumber) {
+        errors.phoneNumber = 'Số điện thoại không được để trống'
       }
       if (!values.password) {
         errors.password = 'Mật khẩu không được để trống'
+      }
+      if (values.password.length < 6) {
+        errors.password = 'Mật khẩu phải chứa ít nhất 6 ký tự'
+      }
+      if (values.phoneNumber.length < 10 || values.phoneNumber.length > 15) {
+        errors.phoneNumber = 'Số điện thoại không hợp lệ. Vui lòng kiểm tra lại'
       }
       if (!values.confirmPassword) {
         errors.confirmPassword = 'Nhập lại mật khẩu không được để trống'
@@ -63,8 +75,8 @@ const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
       if (values.password !== values.confirmPassword) {
         errors.confirmPassword = 'Mật khẩu không khớp'
       }
-      if (!values.fullName) {
-        errors.fullName = 'Họ và tên không được để trống'
+      if (!values.name) {
+        errors.name = 'Họ và tên không được để trống'
       }
       if (!values.dob) {
         errors.dob = 'Ngày sinh không được để trống'
@@ -111,11 +123,11 @@ const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
             margin="normal"
             required
             fullWidth
-            id="phone"
+            id="phoneNumber"
             label="Số điện thoại"
-            name="phone"
+            name="phoneNumber"
             autoComplete="phone"
-            value={form.values.phone}
+            value={form.values.phoneNumber}
             onChange={form.handleChange}
             InputProps={{
               endAdornment: <Phone />
@@ -158,11 +170,11 @@ const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
             margin="normal"
             required
             fullWidth
-            id="fullName"
+            id="name"
             label="Họ và tên"
-            name="fullName"
+            name="name"
             autoComplete="name"
-            value={form.values.fullName}
+            value={form.values.name}
             onChange={form.handleChange}
             InputProps={{
               endAdornment: <Person />
@@ -170,23 +182,14 @@ const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
           />
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="dob"
-                placeholder="Ngày sinh"
+              <DatePicker
+                sx={{ marginTop: 2 }}
                 label="Ngày sinh"
-                name="dob"
-                type="date"
-                InputLabelProps={{
-                  shrink: true
-                }}
+                disableFuture
                 value={form.values.dob}
-                onChange={form.handleChange}
-                InputProps={{
-                  endAdornment: <Event />
+                name="dob"
+                onChange={(newValue) => {
+                  form.setFieldValue('dob', newValue)
                 }}
               />
             </Grid>
@@ -222,16 +225,16 @@ const RegistrationForm = ({ handleChangeFormType }: RegistrationFormProps) => {
               isEmpty(form.values.email) ||
               isEmpty(form.values.password) ||
               isEmpty(form.values.confirmPassword) ||
-              isEmpty(form.values.fullName) ||
+              isEmpty(form.values.name) ||
               isEmpty(form.values.dob) ||
-              isEmpty(form.values.phone) ||
+              isEmpty(form.values.phoneNumber) ||
               isEmpty(form.values.gender) ||
               !!form.isSubmitting ||
               !!form.errors.email ||
-              !!form.errors.phone ||
+              !!form.errors.phoneNumber ||
               !!form.errors.password ||
               !!form.errors.confirmPassword ||
-              !!form.errors.fullName ||
+              !!form.errors.name ||
               !!form.errors.dob
             }
           >

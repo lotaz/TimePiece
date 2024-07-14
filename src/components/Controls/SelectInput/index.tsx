@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react'
-import { Box, Typography, TextField, MenuItem } from '@mui/material'
+import { Box, Typography, TextField, MenuItem, Skeleton } from '@mui/material'
 
 interface SelectInputProps {
   label: string
@@ -10,6 +10,7 @@ interface SelectInputProps {
   fullWidth?: boolean
   isRequired?: boolean
   isDisabled?: boolean
+  isLoading?: boolean
   prefix?: string | ReactNode
   suffix?: string | ReactNode
   name: string
@@ -23,6 +24,7 @@ const SelectInput: FC<SelectInputProps> = ({
   onChange,
   isRequired,
   isDisabled = false,
+  isLoading = false,
   fullWidth = false,
   name,
   options
@@ -49,11 +51,17 @@ const SelectInput: FC<SelectInputProps> = ({
         disabled={isDisabled}
         variant="outlined"
       >
-        {options.map((option) => (
-          <MenuItem key={option} value={option}>
-            {option}
-          </MenuItem>
-        ))}
+        {isLoading
+          ? [1, 2, 3].map((index) => (
+              <MenuItem key={index} value="">
+                <Skeleton width="100%" />
+              </MenuItem>
+            ))
+          : options.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
       </TextField>
     </Box>
   )

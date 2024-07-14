@@ -155,9 +155,6 @@ const Navbar = () => {
           <Button color="inherit">
             <QuestionAnswerIcon fontSize="large" />
           </Button>
-          <Button color="inherit">
-            <ShoppingCartIcon fontSize="large" />
-          </Button>
           <Button color="inherit" href="/post/manage-post">
             <ArticleIcon fontSize="large" />
           </Button>

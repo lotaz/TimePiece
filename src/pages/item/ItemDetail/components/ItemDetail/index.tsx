@@ -37,15 +37,9 @@ interface IWatch {
 
 interface ItemDetailProps {
   watch: IWatch
-  images: { src: string; alt: string }[]
+  images: []
   isLoading?: boolean
 }
-
-const mockedImage = [
-  { src: 'https://picsum.photos/200/300', alt: 'Image 1' },
-  { src: 'https://picsum.photos/200/300', alt: 'Image 2' },
-  { src: 'https://picsum.photos/200/300', alt: 'Image 3' }
-]
 
 const ItemDetail: React.FC<ItemDetailProps> = ({
   watch,
@@ -58,7 +52,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({
         {isLoading ? (
           <Skeleton variant="rectangular" width={210} height={118} />
         ) : (
-          <ItemImageList images={mockedImage} />
+          <ItemImageList images={images} />
         )}
         <Grid item xs={12} md={12}>
           <Box
