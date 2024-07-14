@@ -77,7 +77,7 @@ const ManagerPostTab: React.FC<ManagerPostTabProps> = ({
                   backgroundColor: '#333333'
                 }
               }}
-              href="/post/create"
+              href="/post/create-post"
             >
               Đăng tin
             </Button>

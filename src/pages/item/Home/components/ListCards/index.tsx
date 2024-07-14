@@ -29,7 +29,7 @@ const ListCards: React.FC = () => {
           sx={{
             textTransform: 'none'
           }}
-          onClick={() => navigate('/item/product')}
+          onClick={() => navigate('/item/product?keyword=%20')}
         >
           <Typography variant="h6">Xem Tất Cả</Typography>
         </Button>
@@ -57,6 +57,7 @@ const ListCards: React.FC = () => {
                     price={item?.price}
                     image={item?.imageUrl}
                     id={item.id}
+                    sellerName="Seller Name" // Added sellerName prop
                   />
                 </Grid>
               ))}

@@ -1,8 +1,15 @@
-import { Box, Typography, Grid, Button, Avatar, Link } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Grid,
+  Button,
+  Avatar,
+  Link,
+  Skeleton
+} from '@mui/material'
 import PhoneIcon from '@mui/icons-material/Phone'
 import ChatIcon from '@mui/icons-material/Chat'
 import { useLoaderData, useNavigate } from 'react-router-dom'
-import { Role } from '@/common/type'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { createOrder } from '@/services/orderService'
 import { useState } from 'react'
@@ -10,10 +17,20 @@ import ConfirmDialog from '@/components/ConfirmDiaglog'
 import { toast } from 'react-toastify'
 
 interface ItemDetailUserProps {
-  role?: string
+  sellerId: number
+  sellerName: string
+  sellerPhone: string
+  sellerAvatar: string
+  loading: boolean
 }
 
-const ItemDetailUser = ({ role = Role.BUYER }: ItemDetailUserProps) => {
+const ItemDetailUser = ({
+  sellerId,
+  sellerName,
+  sellerPhone,
+  sellerAvatar,
+  loading
+}: ItemDetailUserProps) => {
   const navigate = useNavigate()
   const user = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user') as string)
@@ -34,56 +51,82 @@ const ItemDetailUser = ({ role = Role.BUYER }: ItemDetailUserProps) => {
       })
     }
   }
+
   return (
     <Box sx={{ padding: 2 }} component={'div'} id={`${id}`}>
       <Grid container spacing={2}>
         <Grid item xs={3}>
-          <Avatar
-            alt="Thắng Nguyễn Store"
-            src="https://via.placeholder.com/100" // Replace with actual image URL
-            sx={{ width: 80, height: 80 }}
-          />
+          {loading ? (
+            <Skeleton variant="circular" width={80} height={80} />
+          ) : (
+            <Avatar
+              alt="Thắng Nguyễn Store"
+              src={
+                sellerAvatar ? sellerAvatar : 'https://via.placeholder.com/100'
+              } // Replace with actual image URL
+              sx={{ width: 80, height: 80 }}
+            />
+          )}
         </Grid>
         <Grid item xs={9}>
-          <Typography variant="h6" fontWeight="bold">
-            Thắng Nguyễn Store
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            <Box component="span" sx={{ color: 'gold' }}>
-              ★★★★☆
-            </Box>
-            4.7 (
-            <Link href="#" underline="hover">
-              10 đánh giá
-            </Link>
-            )
-          </Typography>
+          {loading ? (
+            <>
+              <Skeleton variant="text" width="60%" />
+              <Skeleton variant="text" width="40%" />
+            </>
+          ) : (
+            <>
+              <Typography variant="h6" fontWeight="bold">
+                {sellerName}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                <Box component="span" sx={{ color: 'gold' }}>
+                  ★★★★☆
+                </Box>
+                4.7 (
+                <Link href="#" underline="hover">
+                  10 đánh giá
+                </Link>
+                )
+              </Typography>
+            </>
+          )}
         </Grid>
         <Grid item xs={5}>
-          <Button variant="outlined" fullWidth startIcon={<PhoneIcon />}>
-            0987654321
-          </Button>
+          {loading ? (
+            <Skeleton variant="rectangular" width="100%" height={40} />
+          ) : (
+            <Button variant="outlined" fullWidth startIcon={<PhoneIcon />}>
+              {sellerPhone}
+            </Button>
+          )}
         </Grid>
         <Grid item xs={7}>
-          <Button
-            variant="outlined"
-            fullWidth
-            sx={{
-              textTransform: 'none',
-              fontSize: '14px',
-              bgcolor: 'primary.main',
-              color: 'white',
-              '&:hover': {
-                bgcolor: 'primary.dark'
-              }
-            }}
-            startIcon={<ChatIcon />}
-          >
-            Chat với người bán
-          </Button>
+          {loading ? (
+            <Skeleton variant="rectangular" width="100%" height={40} />
+          ) : (
+            <Button
+              variant="outlined"
+              fullWidth
+              sx={{
+                textTransform: 'none',
+                fontSize: '14px',
+                bgcolor: 'primary.main',
+                color: 'white',
+                '&:hover': {
+                  bgcolor: 'primary.dark'
+                }
+              }}
+              startIcon={<ChatIcon />}
+            >
+              Chat với người bán
+            </Button>
+          )}
         </Grid>
         <Grid item xs={12}>
-          {role === Role.BUYER ? (
+          {loading ? (
+            <Skeleton variant="rectangular" width="100%" height={40} />
+          ) : sellerId !== user.id ? (
             <>
               <Button
                 variant="outlined"

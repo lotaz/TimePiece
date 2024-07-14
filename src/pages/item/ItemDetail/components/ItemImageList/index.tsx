@@ -1,17 +1,12 @@
 import React, { useState } from 'react'
 import { Box, Paper } from '@mui/material'
 
-interface Image {
-  src: string
-  alt: string
-}
-
 interface ItemImageListProps {
-  images: Image[]
+  images: string[]
 }
 
 const ItemImageList: React.FC<ItemImageListProps> = ({ images }) => {
-  const [mainImage, setMainImage] = useState(images[0].src)
+  const [mainImage, setMainImage] = useState(images[0])
 
   return (
     <Box display="flex" flexDirection="row" marginTop={4}>
@@ -19,16 +14,12 @@ const ItemImageList: React.FC<ItemImageListProps> = ({ images }) => {
         {images.map((image, index) => (
           <Paper
             key={index}
-            onClick={() => setMainImage(image.src)}
+            onClick={() => setMainImage(image)}
             elevation={3}
             square
             style={{ cursor: 'pointer' }}
           >
-            <img
-              src={image.src}
-              alt={image.alt}
-              style={{ width: '175px', height: '125px' }}
-            />
+            <img src={image} style={{ width: '175px', height: '125px' }} />
           </Paper>
         ))}
       </Box>

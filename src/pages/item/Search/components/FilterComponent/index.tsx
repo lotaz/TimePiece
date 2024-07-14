@@ -1,15 +1,67 @@
-import React from 'react'
-import { Box, Button, MenuItem, Select, Typography } from '@mui/material'
+import { Box, MenuItem, TextField, Typography, Skeleton } from '@mui/material'
+import useSWR from 'swr'
+import { AppPath } from '@/services/utils'
 
-const FilterComponent = () => {
-  const filters = [
-    { label: 'Khu vực', options: ['Option 1', 'Option 2', 'Option 3'] },
-    { label: 'Thương hiệu', options: ['Option 1', 'Option 2', 'Option 3'] },
-    { label: 'Giá', options: ['Option 1', 'Option 2', 'Option 3'] },
-    { label: 'Trạng thái', options: ['Option 1', 'Option 2', 'Option 3'] },
-    { label: 'Loại', options: ['Option 1', 'Option 2', 'Option 3'] },
-    { label: 'Tình trạng', options: ['Option 1', 'Option 2', 'Option 3'] }
+interface FilterProps {
+  area: string
+  brand: string
+  price: string
+  status: string
+  type: string
+  condition: string
+  isLoading: boolean
+  onFilterChange: (name: string, value: string) => void
+}
+
+const FilterComponent = ({
+  isLoading,
+  area,
+  brand,
+  price,
+  status,
+  type,
+  condition,
+  onFilterChange
+}: FilterProps) => {
+  const { data: brands, isLoading: loadBrand } = useSWR(AppPath.GET_BRANDS)
+  const { data: types, isLoading: loadTypes } = useSWR(AppPath.GET_TYPES)
+
+  const filterOptions = [
+    {
+      label: 'Khu vực',
+      name: 'area',
+      options: ['Option 1', 'Option 2', 'Option 3']
+    },
+    {
+      label: 'Thương hiệu',
+      name: 'brand',
+      options: brands?.map((brand) => brand.brandName) || []
+    },
+    {
+      label: 'Giá',
+      name: 'price',
+      options: ['Option 1', 'Option 2', 'Option 3']
+    },
+    {
+      label: 'Trạng thái',
+      name: 'status',
+      options: ['Option 1', 'Option 2', 'Option 3']
+    },
+    {
+      label: 'Loại',
+      name: 'type',
+      options: types?.map((type) => type.typeName) || []
+    },
+    {
+      label: 'Tình trạng',
+      name: 'condition',
+      options: ['Option 1', 'Option 2', 'Option 3']
+    }
   ]
+
+  const handleFilterChange = (name: string, value: string) => {
+    onFilterChange(name, value)
+  }
 
   return (
     <Box
@@ -19,24 +71,50 @@ const FilterComponent = () => {
       my={2}
     >
       <Typography>Sắp xếp theo</Typography>
-      {filters.map((filter, index) => (
-        <Select
-          key={index}
-          displayEmpty
-          inputProps={{ 'aria-label': 'Without label' }}
-          defaultValue=""
+
+      {filterOptions.map((filter) => (
+        <TextField
+          key={filter.name}
+          select
+          sx={{
+            width: '150px'
+          }}
+          label={filter.label}
           variant="outlined"
-          sx={{ mx: 1 }}
+          value={(() => {
+            switch (filter.name) {
+              case 'area':
+                return area
+              case 'brand':
+                return brand
+              case 'price':
+                return price
+              case 'status':
+                return status
+              case 'type':
+                return type
+              case 'condition':
+                return condition
+              default:
+                return ''
+            }
+          })()}
+          onChange={(e) => handleFilterChange(filter.name, e.target.value)}
         >
-          <MenuItem value="" disabled>
-            {filter.label}
-          </MenuItem>
-          {filter.options.map((option, idx) => (
-            <MenuItem key={idx} value={option}>
-              {option}
-            </MenuItem>
-          ))}
-        </Select>
+          {isLoading ||
+          (filter.name === 'brand' && loadBrand) ||
+          (filter.name === 'type' && loadTypes)
+            ? [1, 2, 3].map((idx) => (
+                <MenuItem key={idx} value="">
+                  <Skeleton width="100%" />
+                </MenuItem>
+              ))
+            : filter.options.map((option, idx) => (
+                <MenuItem key={idx} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+        </TextField>
       ))}
     </Box>
   )

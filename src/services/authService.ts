@@ -8,11 +8,11 @@ export interface LoginRequest {
 
 export interface RegisterRequest {
   email: string
-  phone: string
+  phoneNumber: string
   password: string
   confirmPassword: string
-  fullName: string
-  dob: string
+  name: string
+  dob: Date | null
   gender: string
 }
 
@@ -29,7 +29,11 @@ const signin = async (request: LoginRequest) => {
 
 const signup = async (request: RegisterRequest) => {
   try {
-    const response = await axiosClient.post(AppPath.REGISTER, request)
+    const birthday = request.dob?.toISOString().split('T')[0]
+    const response = await axiosClient.post(AppPath.REGISTER, {
+      ...request,
+      birthday: birthday
+    })
 
     return response.data
   } catch (error) {

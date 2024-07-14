@@ -10,11 +10,28 @@ const SearchPage = () => {
   const { query } = useLoaderData() as { query: string }
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(10)
+  const [filters, setFilters] = useState({
+    area: '',
+    brand: '',
+    price: '',
+    status: '',
+    type: '',
+    condition: ''
+  })
+
+  const handleFilterChange = (name: string, value: string) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value
+    }))
+  }
+
   const { data, isLoading } = useSWR(
     AppPath.SEARCH_BY_KEYWORD({
       keyword: query,
       page: currentPage - 1,
-      size: 8
+      size: 8,
+      ...filters
     })
   )
 
@@ -36,7 +53,7 @@ const SearchPage = () => {
           textAlign: 'left'
         }}
       >
-        {query && (
+        {query.trim() && (
           <Typography
             sx={{
               fontSize: '1.5rem',
@@ -48,7 +65,16 @@ const SearchPage = () => {
         )}
       </Box>
       <Box>
-        <FilterComponent />
+        <FilterComponent
+          area={filters.area}
+          brand={filters.brand}
+          price={filters.price}
+          status={filters.status}
+          type={filters.type}
+          condition={filters.condition}
+          isLoading={isLoading}
+          onFilterChange={handleFilterChange}
+        />
       </Box>
       <Box>
         <ListWatches watch={data?.content} isLoading={isLoading} />

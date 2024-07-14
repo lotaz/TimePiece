@@ -1,18 +1,22 @@
-import StyledImage from '@/components/StyledImage'
+import React from 'react'
 import { Box, Card, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import StyledImage from '@/components/StyledImage'
+
 interface CardItemProps {
   id: string
   name: string
   image: string
   price: number
+  sellerName: string // Added sellerName prop
 }
 
 const CardItem: React.FC<CardItemProps> = ({
   id,
   name,
   price,
-  image
+  image,
+  sellerName
 }: CardItemProps) => {
   const navigate = useNavigate()
 
@@ -54,8 +58,20 @@ const CardItem: React.FC<CardItemProps> = ({
           }}
         />
       </Box>
-      <Box component={'div'} paddingY={2}>
-        <Typography color={'#080808'} marginTop={2} textAlign={'left'}>
+      <Box component={'div'} paddingTop={2}>
+        <Typography
+          color={'#080808'}
+          textAlign={'left'}
+          fontWeight={'bold'}
+          fontSize={'18px'}
+          noWrap
+          sx={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            width: '200px'
+          }}
+        >
           {name}
         </Typography>
       </Box>
@@ -63,28 +79,28 @@ const CardItem: React.FC<CardItemProps> = ({
         component={'div'}
         sx={{
           display: 'flex',
+          flexDirection: 'column', // Change to column to stack price and seller name
           justifyContent: 'space-between',
           width: '100%'
         }}
       >
         <Box component={'div'} marginRight={2}>
-          <Typography color={'#111111'} marginTop={2} fontWeight={'bold'}>
-            {price} đ
+          <Typography
+            color={'#CA2C2C'} // Updated color to match the image
+            fontWeight={'bold'}
+            fontSize={'24px'} // Adjusted font size to match the image
+          >
+            {price.toLocaleString('vi-VN', {
+              style: 'currency',
+              currency: 'VND'
+            })}
           </Typography>
-        </Box>
-        <Box
-          component={'div'}
-          bgcolor={'#1AB61A'}
-          sx={{
-            paddingX: '10px',
-            borderRadius: '10px',
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: '10px'
-          }}
-        >
-          <Typography color={'#fff'}>Đã thẩm định</Typography>
+          <Typography
+            color={'#757575'} // Gray color for seller name
+            fontSize={'16px'} // Font size for seller name
+          >
+            {sellerName}
+          </Typography>
         </Box>
       </Box>
     </Card>
