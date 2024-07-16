@@ -1,6 +1,7 @@
 import { Box, MenuItem, TextField, Typography, Skeleton } from '@mui/material'
 import useSWR from 'swr'
 import { AppPath } from '@/services/utils'
+import { Area, ProductStatus } from '@/common/type'
 
 interface FilterProps {
   area: string
@@ -30,7 +31,7 @@ const FilterComponent = ({
     {
       label: 'Khu vực',
       name: 'area',
-      options: ['Option 1', 'Option 2', 'Option 3']
+      options: Object.values(Area)
     },
     {
       label: 'Thương hiệu',
@@ -45,7 +46,7 @@ const FilterComponent = ({
     {
       label: 'Trạng thái',
       name: 'status',
-      options: ['Option 1', 'Option 2', 'Option 3']
+      options: ['Đã sử dụng', 'Mới', 'Cũ']
     },
     {
       label: 'Loại',
@@ -55,7 +56,7 @@ const FilterComponent = ({
     {
       label: 'Tình trạng',
       name: 'condition',
-      options: ['Option 1', 'Option 2', 'Option 3']
+      options: Object.values(ProductStatus)
     }
   ]
 
