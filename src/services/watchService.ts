@@ -29,6 +29,7 @@ interface CreateWatch {
   watchTypeId: number
   address: string
   imageFiles: File[] | string[]
+  area: string
 }
 
 export const createWatchService = async (params: CreateWatch) => {
@@ -50,9 +51,10 @@ export const createWatchService = async (params: CreateWatch) => {
     formData.append('referenceCode', params.referenceCode)
     formData.append('placeOfProduction', params.placeOfProduction)
     formData.append('watchTypeId', params.watchTypeId.toString())
-    formData.append('address', params.address)
+    formData.append('address', params.address),
+      formData.append('area', params.area)
 
-    params.imageFiles.forEach((file, index) => {
+    params.imageFiles.forEach((file) => {
       formData.append(`imageFiles`, file)
     })
 

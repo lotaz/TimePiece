@@ -1,21 +1,14 @@
 import { useState } from 'react'
-import {
-  Box,
-  Grid,
-  Typography,
-  Button,
-  Radio,
-  RadioGroup,
-  FormControlLabel
-} from '@mui/material'
+import { Box, Grid, Typography, Button } from '@mui/material'
 import useSWR from 'swr'
 import SelectInput from '@/components/Controls/SelectInput'
 import TextInput from '@/components/Controls/TextInput'
 import { AppPath } from '@/services/utils'
 import ImageSide from './components/ImageVideoSide'
 import { createWatchService } from '@/services/watchService'
+import { Area, ProductStatus } from '@/common/type'
+import { toast } from 'react-toastify'
 
-const mockedOptions = ['Option 1', 'Option 2', 'Option 3']
 const statusOptions = ['Đã sử dụng', 'Mới', 'Cũ']
 
 const CreatePostPage = () => {
@@ -24,22 +17,17 @@ const CreatePostPage = () => {
     : null
 
   const { data: brands, isLoading: isLoadingBrands } = useSWR(
-    AppPath.GET_BRANDS,
-    {
-      revalidateOnFocus: false
-    }
+    AppPath.GET_BRANDS
   )
-  const { data: types, isLoading: isLoadingTypes } = useSWR(AppPath.GET_TYPES, {
-    revalidateOnFocus: false
-  })
+  const { data: types, isLoading: isLoadingTypes } = useSWR(AppPath.GET_TYPES)
 
   const [formValues, setFormValues] = useState({
+    postName: '',
     brand: '',
     status: '',
     type: '',
     models: '',
     modelsNumber: '',
-    battery: '',
     materialCase: '',
     materialStrap: '',
     productYear: '',
@@ -49,6 +37,7 @@ const CreatePostPage = () => {
     price: '',
     description: '',
     address: '',
+    area: '',
     images: [] as string[]
   })
 
@@ -64,24 +53,18 @@ const CreatePostPage = () => {
     }))
   }
 
-  const handleImageUpload = (urls: string[]) => {
+  const handleUploadImage = (images: Blob[]) => {
     setFormValues((prevValues) => ({
       ...prevValues,
-      images: urls
-    }))
-  }
-
-  const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      status: e.target.value
+      images: images as unknown
     }))
   }
 
   const handleSubmit = async () => {
+    console.log(formValues)
     const data = await createWatchService({
       userId: user?.id,
-      name: formValues.models,
+      name: formValues.postName,
       watchStatus: formValues.statusProduct,
       description: formValues.description,
       price: parseInt(formValues.price),
@@ -92,14 +75,19 @@ const CreatePostPage = () => {
       material: formValues.materialCase,
       watchStrap: formValues.materialStrap,
       size: formValues.size,
-      accessories: 'No Box',
+      accessories: formValues.statusProduct,
       referenceCode: formValues.modelsNumber,
       placeOfProduction: formValues.madeBy,
       watchTypeId: types?.find((type) => type.typeName === formValues.type)
         ?.id as number,
       address: formValues.address,
+      area: formValues.area,
       imageFiles: formValues.images
     })
+
+    if (data) {
+      toast.success('Đăng bài thành công')
+    }
   }
 
   return (
@@ -122,13 +110,21 @@ const CreatePostPage = () => {
       </Typography>
       <Grid container spacing={6} justifyContent={'center'}>
         <Grid item xs={12} md={5}>
-          <ImageSide
-            initialImages={formValues.images}
-            onImageUpload={handleImageUpload}
-          />
+          <ImageSide handleUploadFile={handleUploadImage} />
         </Grid>
         <Grid item xs={12} md={5}>
           <Box component={'div'}>
+            <TextInput
+              label="Tên bài đăng"
+              type="text"
+              placeholder="Nhập tên bài viết"
+              value={formValues.postName}
+              onChange={handleChange}
+              isRequired={true}
+              isDisabled={false}
+              fullWidth={true}
+              name="postName"
+            />
             <SelectInput
               label="Thương hiệu"
               placeholder="Chọn thương hiệu"
@@ -144,7 +140,7 @@ const CreatePostPage = () => {
                   : brands?.map(
                       (brand: { id: number; brandName: string }) =>
                         brand.brandName
-                    ) || mockedOptions
+                    ) || []
               }
             />
             <Typography
@@ -211,7 +207,7 @@ const CreatePostPage = () => {
                   ? []
                   : types?.map(
                       (type: { id: number; typeName: string }) => type.typeName
-                    ) || mockedOptions
+                    ) || []
               }
             />
             <TextInput
@@ -235,17 +231,6 @@ const CreatePostPage = () => {
               isDisabled={false}
               fullWidth={true}
               name="modelsNumber"
-            />
-            <TextInput
-              label="Dung lượng pin"
-              type="text"
-              placeholder="Nhập dung lượng pin"
-              value={formValues.battery}
-              onChange={handleChange}
-              isDisabled={false}
-              suffix="Giờ"
-              fullWidth={true}
-              name="battery"
             />
             <TextInput
               label="Chất liệu vỏ"
@@ -288,7 +273,7 @@ const CreatePostPage = () => {
               isDisabled={false}
               fullWidth={true}
               name="statusProduct"
-              options={['Mới', 'Cũ']}
+              options={Object.values(ProductStatus)}
             />
             <TextInput
               label="Kích thước"
@@ -336,8 +321,19 @@ const CreatePostPage = () => {
               fullWidth={true}
               name="description"
             />
+            <SelectInput
+              label="Khu vực"
+              placeholder="Chọn khu vực"
+              value={formValues.area}
+              onChange={handleChange}
+              isRequired
+              isDisabled={false}
+              fullWidth={true}
+              name="area"
+              options={Object.values(Area)}
+            />
             <TextInput
-              label="Địa chỉ"
+              label="Địa chỉ cụ thể"
               type="text"
               placeholder="Nhập địa chỉ"
               value={formValues.address}

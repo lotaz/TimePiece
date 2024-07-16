@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import {
   Tabs,
   Tab,
@@ -10,12 +10,17 @@ import {
 } from '@mui/material'
 import OrderItem from '../OrderItem'
 import useSWR from 'swr'
+import { AppPath } from '@/services/utils'
 
-const mockItem = {
-  image: 'https://example.com/image.jpg', // Replace with actual image URL
-  title: 'Rolex Day Date 36 128235 Ombre Chocolate',
-  price: '1,080,869₫',
-  address: 'Phường Long Thạnh Mỹ (Quận 9 cũ), Thành phố Thủ Đức, Tp Hồ Chí Minh'
+export interface Order {
+  id: number
+  note?: string | null
+  orderDate?: string
+  status?: string
+  totalPrice?: number
+  watchImages?: string[]
+  watchName?: string
+  role?: 'seller' | 'buyer'
 }
 
 const StyledTab = styled(Tab)(({ theme }) => ({
@@ -55,7 +60,20 @@ function a11yProps(index) {
 }
 
 const ManageOrderTab = () => {
-  const [value, setValue] = React.useState(0)
+  const [value, setValue] = useState(0)
+  const [orders, setOrders] = useState<Order[]>([])
+
+  const user = localStorage.getItem('user')
+    ? JSON.parse(localStorage.getItem('user') as string)
+    : null
+
+  const { data: buyerOrder, isLoading: isLoadingBuyer } = useSWR(
+    AppPath.GET_BUYER_ORDERS(user?.id)
+  )
+
+  const { data: sellerOrder, isLoading: isLoadingSeller } = useSWR(
+    AppPath.GET_SELLER_ORDERS(user?.id)
+  )
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -93,9 +111,15 @@ const ManageOrderTab = () => {
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            <StyledTab label="Tất cả (1)" {...a11yProps(0)} />
-            <StyledTab label="Đợi duyệt (1)" {...a11yProps(1)} />
-            <StyledTab label="Đã duyệt (0)" {...a11yProps(2)} />
+            <StyledTab label={`Tất cả (${orders.length})`} {...a11yProps(0)} />
+            <StyledTab
+              label={`Đợi duyệt (${orders.filter((order) => order.status === 'wait').length})`}
+              {...a11yProps(1)}
+            />
+            <StyledTab
+              label={`Đã duyệt (${orders.filter((order) => order.status === 'approved').length})`}
+              {...a11yProps(2)}
+            />
             <StyledTab label="Giao dịch trực tiếp (0)" {...a11yProps(3)} />
             <StyledTab label="Đã cọc (0)" {...a11yProps(4)} />
             <StyledTab label="Hoàn tất giao dịch (0)" {...a11yProps(5)} />
@@ -109,13 +133,22 @@ const ManageOrderTab = () => {
         }}
       >
         <TabPanel value={value} index={0}>
-          <OrderItem item={mockItem} />
+          <OrderItem
+            data={orders}
+            isLoading={isLoadingBuyer || isLoadingSeller}
+          />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Đơn hàng đợi duyệt
+          <OrderItem
+            data={orders.filter((order) => order.status === 'wait')}
+            isLoading={isLoadingBuyer || isLoadingSeller}
+          />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Đơn hàng đã duyệt
+          <OrderItem
+            data={orders.filter((order) => order.status === 'approved')}
+            isLoading={isLoadingBuyer || isLoadingSeller}
+          />
         </TabPanel>
         <TabPanel value={value} index={3}>
           Giao dịch trực tiếp

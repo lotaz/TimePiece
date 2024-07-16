@@ -19,13 +19,10 @@ function App() {
       <SWRConfig
         value={{
           fetcher,
-          refreshInterval: 5000,
           refreshWhenHidden: false,
           revalidateOnFocus: false,
           fallback: <div>Loading...</div>,
-          dedupingInterval: 5000,
-          revalidateOnMount: true,
-          revalidateOnReconnect: true
+          dedupingInterval: 5000
         }}
       >
         <ThemeProvider theme={theme}>

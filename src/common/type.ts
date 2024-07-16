@@ -21,3 +21,17 @@ export enum AppraisalStatusVietnamese {
   complete = 'Hoàn thành',
   processing = 'Đang xử lý'
 }
+
+export enum ProductStatus {
+  hasBox = 'Còn hộp',
+  hasAccessories = 'Còn phụ kiện',
+  noBox = 'Không hộp',
+  noAccessories = 'Không phụ kiện'
+}
+
+export enum Area {
+  HANOI = 'Hà Nội',
+  HCM = 'Hồ Chí Minh',
+  DANANG = 'Đà Nẵng',
+  OTHER = 'Khác'
+}
