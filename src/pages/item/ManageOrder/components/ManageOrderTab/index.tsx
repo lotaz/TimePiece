@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Tabs,
   Tab,
@@ -11,6 +11,7 @@ import {
 import OrderItem from '../OrderItem'
 import useSWR from 'swr'
 import { AppPath } from '@/services/utils'
+import { Role } from '@/common/type'
 
 export interface Order {
   id: number
@@ -20,7 +21,7 @@ export interface Order {
   totalPrice?: number
   watchImages?: string[]
   watchName?: string
-  role?: 'seller' | 'buyer'
+  role?: Role
 }
 
 const StyledTab = styled(Tab)(({ theme }) => ({
@@ -67,13 +68,31 @@ const ManageOrderTab = () => {
     ? JSON.parse(localStorage.getItem('user') as string)
     : null
 
-  const { data: buyerOrder, isLoading: isLoadingBuyer } = useSWR(
+  const { data: buyerOrders, isLoading: isLoadingBuyer } = useSWR(
     AppPath.GET_BUYER_ORDERS(user?.id)
   )
 
-  const { data: sellerOrder, isLoading: isLoadingSeller } = useSWR(
+  const { data: sellerOrders, isLoading: isLoadingSeller } = useSWR(
     AppPath.GET_SELLER_ORDERS(user?.id)
   )
+
+  useEffect(() => {
+    const combinedOrders: Order[] = []
+
+    if (buyerOrders) {
+      combinedOrders.push(
+        ...buyerOrders.map((order) => ({ ...order, role: Role.BUYER }))
+      )
+    }
+
+    if (sellerOrders) {
+      combinedOrders.push(
+        ...sellerOrders.map((order) => ({ ...order, role: Role.SELLER }))
+      )
+    }
+
+    setOrders(combinedOrders)
+  }, [buyerOrders, sellerOrders])
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -84,7 +103,7 @@ const ManageOrderTab = () => {
       style={{
         padding: '20px',
         borderRadius: '8px',
-        minHeight: '64vh'
+        minHeight: '66vh'
       }}
     >
       <Box

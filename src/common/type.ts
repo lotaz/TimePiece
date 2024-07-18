@@ -35,3 +35,9 @@ export enum Area {
   DANANG = 'Đà Nẵng',
   OTHER = 'Khác'
 }
+
+export enum OrderStatus {
+  WAIT = 'wait',
+  APPROVED = 'Approved',
+  CANCELED = 'Cancel'
+}

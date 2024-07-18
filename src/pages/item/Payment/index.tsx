@@ -12,11 +12,12 @@ import UserInfo from './components/UserInfo'
 import WatchInfo from './components/WatchInfo'
 import PaymentMethod from './components/PaymentMethod'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
 import { AppPath } from '@/services/utils'
 
 const PaymentPage = () => {
+  const { id } = useLoaderData() as { id: number }
   const navigate = useNavigate()
   const user = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user') as string)
@@ -43,6 +44,7 @@ const PaymentPage = () => {
   }, [navigate, user])
 
   const { data, isLoading } = useSWR(AppPath.USER_INFO(user?.id))
+
   console.log(data)
 
   const handleChange = () => {

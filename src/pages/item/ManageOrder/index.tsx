@@ -8,7 +8,7 @@ const ManageOrder = () => {
       component={'div'}
       sx={{
         paddingY: '40px',
-        marginTop: '60px'
+        marginTop: '20px'
       }}
     >
       <ManageOrderTab />

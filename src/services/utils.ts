@@ -16,6 +16,8 @@ export const AppPath = {
   SEARCH_BY_KEYWORD: ({ keyword, page, size }) =>
     `/api/watches/searchWatchByKeyword?keyword=${keyword}&page=${page}&size=${size}`,
   CREATE_ORDER: '/orders/create',
+  UPDATE_ORDER: (id: number, status: string) =>
+    `/orders/${id}/status?status=${status}`,
   GET_SELLER_ORDERS: (id) => `/orders/seller/${id}`,
   GET_BUYER_ORDERS: (id) => `/orders/buyer/${id}`
 }

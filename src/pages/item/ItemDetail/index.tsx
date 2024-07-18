@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import { useLoaderData } from 'react-router-dom'
 
 const ItemDetailPage = () => {
-  const { id } = useLoaderData() as { id: string }
+  const { id } = useLoaderData() as { id: number }
 
   const { data, isLoading } = useSWR(AppPath.GET_WATCH_BY_ID(id))
 

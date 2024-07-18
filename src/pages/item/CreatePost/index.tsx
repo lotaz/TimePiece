@@ -8,10 +8,12 @@ import ImageSide from './components/ImageVideoSide'
 import { createWatchService } from '@/services/watchService'
 import { Area, ProductStatus } from '@/common/type'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const statusOptions = ['Đã sử dụng', 'Mới', 'Cũ']
 
 const CreatePostPage = () => {
+  const navigator = useNavigate()
   const user = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user') as string)
     : null
@@ -61,7 +63,6 @@ const CreatePostPage = () => {
   }
 
   const handleSubmit = async () => {
-    console.log(formValues)
     const data = await createWatchService({
       userId: user?.id,
       name: formValues.postName,
@@ -87,6 +88,7 @@ const CreatePostPage = () => {
 
     if (data) {
       toast.success('Đăng bài thành công')
+      navigator('/')
     }
   }
 

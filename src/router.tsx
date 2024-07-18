@@ -43,8 +43,12 @@ const router = createBrowserRouter([
             }
           },
           {
-            path: 'payment',
-            element: <PaymentPage />
+            path: ':id/payment',
+            element: <PaymentPage />,
+            loader: async ({ params }) => {
+              const { id } = params
+              return { id }
+            }
           },
           {
             path: 'product', // Add the search path
