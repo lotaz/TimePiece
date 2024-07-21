@@ -10,11 +10,31 @@ import CardItem from '../CardItem'
 import useSWR from 'swr'
 import { AppPath, fetcher } from '@/services/utils'
 import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+
+interface Item {
+  id: number
+  imageUrl: string
+  name: string
+  price: number
+  status: string
+  userAvatar: string | null
+  userId: number
+  userName: string
+  area: string | null
+  createDate: string
+}
 
 const ListCards: React.FC = () => {
+  const [watches, setWatches] = useState<Item[]>([])
   const { data, isLoading } = useSWR(AppPath.GET_TOP12_WATCHES, fetcher)
-  const navigate = useNavigate()
 
+  useEffect(() => {
+    if (!isLoading) {
+      setWatches(data)
+    }
+  }, [data, isLoading])
+  const navigate = useNavigate()
   return (
     <Container component={'div'}>
       <Box
@@ -29,7 +49,7 @@ const ListCards: React.FC = () => {
           sx={{
             textTransform: 'none'
           }}
-          onClick={() => navigate('/item/product?keyword=%20')}
+          onClick={() => navigate('/item/product?page=1&size=12')}
         >
           <Typography variant="h6">Xem Tất Cả</Typography>
         </Button>
@@ -50,14 +70,19 @@ const ListCards: React.FC = () => {
                   <Skeleton width="40%" />
                 </Grid>
               ))
-            : data?.map((item) => (
+            : watches?.map((item) => (
                 <Grid item xs={6} sm={4} md={3} key={item.id}>
                   <CardItem
-                    name={item?.name}
-                    price={item?.price}
-                    image={item?.imageUrl}
                     id={item.id}
-                    sellerName="Seller Name" // Added sellerName prop
+                    imageUrl={item.imageUrl}
+                    name={item.name}
+                    price={item.price}
+                    status={item.status}
+                    userAvatar={item.userAvatar}
+                    userId={item.userId}
+                    sellerName={item.userName}
+                    area={item.area}
+                    createDate={item.createDate}
                   />
                 </Grid>
               ))}

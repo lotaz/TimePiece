@@ -7,19 +7,26 @@ import { AppPath } from '@/services/utils'
 import ListWatches from './components/ListWatches'
 
 const SearchPage = () => {
-  const { query } = useLoaderData() as { query: string }
+  const { query, brand, type } = useLoaderData() as {
+    query: string
+    brand: string
+    type: string
+  }
+
+  const [watches, setWatches] = useState()
   const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(10)
+  const [totalPages, setTotalPages] = useState(12)
   const [filters, setFilters] = useState({
     area: '',
-    brand: '',
-    price: '',
+    brand,
+    maxPrice: undefined,
+    minPrice: undefined,
     status: '',
-    type: '',
+    type,
     condition: ''
   })
 
-  const handleFilterChange = (name: string, value: string) => {
+  const handleFilterChange = (name, value) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       [name]: value
@@ -27,10 +34,10 @@ const SearchPage = () => {
   }
 
   const { data, isLoading } = useSWR(
-    AppPath.SEARCH_BY_KEYWORD({
+    AppPath.SEARCH_WATCH({
       keyword: query,
-      page: currentPage - 1,
-      size: 8,
+      page: currentPage,
+      size: 12,
       ...filters
     })
   )
@@ -38,8 +45,15 @@ const SearchPage = () => {
   useEffect(() => {
     if (data) {
       setTotalPages(data.totalPages)
+      setCurrentPage(data.pageable.pageNumber + 1)
     }
   }, [currentPage, data])
+
+  useEffect(() => {
+    if (!isLoading) {
+      setWatches(data?.content)
+    }
+  }, [data?.content, isLoading])
 
   return (
     <Container
@@ -68,7 +82,8 @@ const SearchPage = () => {
         <FilterComponent
           area={filters.area}
           brand={filters.brand}
-          price={filters.price}
+          maxPrice={filters.maxPrice}
+          minPrice={filters.minPrice}
           status={filters.status}
           type={filters.type}
           condition={filters.condition}
@@ -77,7 +92,7 @@ const SearchPage = () => {
         />
       </Box>
       <Box>
-        <ListWatches watch={data?.content} isLoading={isLoading} />
+        <ListWatches watch={watches} isLoading={isLoading} />
       </Box>
       <Box
         display="flex"
@@ -86,7 +101,7 @@ const SearchPage = () => {
           marginY: '20px'
         }}
       >
-        {totalPages > 1 && (
+        {totalPages > 1 && !isLoading && (
           <Pagination
             count={totalPages}
             page={currentPage}

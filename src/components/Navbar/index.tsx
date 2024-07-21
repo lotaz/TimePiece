@@ -11,15 +11,15 @@ import {
 import Logo from '@/assets/app-logo.png'
 import SearchIcon from '@mui/icons-material/Search'
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswerOutlined'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined'
 import ArticleIcon from '@mui/icons-material/ArticleOutlined'
-import NotificationsIcon from '@mui/icons-material/Notifications'
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 import { AuthenticateType } from '@/pages/authentication/Authenticate/type'
 import UserMenu from '../UserMenu'
 import { alpha, styled } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
 import MenuPopover from '../MenuPopover'
+import { stringAvatar } from '@/common/utils'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -98,7 +98,8 @@ const Navbar = () => {
       position="fixed"
       sx={{
         backgroundColor: '#4E4E4E',
-        width: '100%'
+        width: '100%',
+        paddingY: 1
       }}
     >
       <Toolbar
@@ -150,7 +151,7 @@ const Navbar = () => {
         </Box>
         <Box>
           <Button color="inherit">
-            <NotificationsIcon fontSize="large" />
+            <NotificationsNoneOutlinedIcon fontSize="large" />
           </Button>
           <Button color="inherit">
             <QuestionAnswerIcon fontSize="large" />
@@ -163,12 +164,12 @@ const Navbar = () => {
           {hasAuth ? (
             <Box>
               <Button color="inherit" onClick={handleMenuOpen}>
-                <Avatar>TN</Avatar>
+                <Avatar {...stringAvatar(user.name)} />
                 <Typography
                   marginLeft={2}
+                  marginRight={1}
                   sx={{
-                    textTransform: 'none',
-                    fontSize: '16px'
+                    textTransform: 'none'
                   }}
                 >
                   {user?.name}

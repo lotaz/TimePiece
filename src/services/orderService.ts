@@ -18,3 +18,16 @@ export const createOrder = async (req: CreateOrderRequest) => {
     throw error
   }
 }
+
+export const updateOrder = async (orderId: number, status: string) => {
+  try {
+    const response = await axiosClient.put(
+      AppPath.UPDATE_ORDER(orderId, status)
+    )
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}

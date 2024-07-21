@@ -1,4 +1,3 @@
-import React from 'react'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
 import ItemDetailPage from './pages/item/ItemDetail'
 import CreatePostPage from './pages/item/CreatePost'
@@ -14,9 +13,9 @@ import ViewAppraisalFormPage from './pages/appraiser/ViewAppraisalForm'
 import UserInfo from './pages/user/UserInfo'
 import AppraisalFormDetailPage from './pages/appraiser/AppraisalFormDetail'
 import ManageOrder from './pages/item/ManageOrder'
-import ScrollToTop from './components/ScollOnTop'
 import SearchPage from './pages/item/Search'
 import UserLayout from './components/Layout/UserLayout'
+import ScrollToTop from './components/ScollOnTop'
 
 const Root = () => (
   <UserLayout>
@@ -43,16 +42,24 @@ const router = createBrowserRouter([
             }
           },
           {
-            path: 'payment',
-            element: <PaymentPage />
+            path: ':id/payment',
+            element: <PaymentPage />,
+            loader: async ({ params }) => {
+              const { id } = params
+              return { id }
+            }
           },
           {
-            path: 'product', // Add the search path
+            path: 'product',
             element: <SearchPage />,
             loader: async ({ request }) => {
               const url = new URL(request.url)
-              const query = url.searchParams.get('keyword')
-              return { query }
+              const keyword = url.searchParams.get('keyword') || ''
+              const brand = url.searchParams.get('brand') || ''
+              const type = url.searchParams.get('type') || ''
+              const service = url.searchParams.get('service') || ''
+
+              return { query: keyword, brand, type, service }
             }
           }
         ]
