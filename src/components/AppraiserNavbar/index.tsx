@@ -84,7 +84,7 @@ const AppraiserNavbar = () => {
         <Box marginRight={10}>
           <Box>
             <Button color="inherit" onClick={handleMenuOpen}>
-              <Avatar>TN</Avatar>
+              <Avatar>TV</Avatar>
               <Typography
                 marginLeft={2}
                 sx={{
