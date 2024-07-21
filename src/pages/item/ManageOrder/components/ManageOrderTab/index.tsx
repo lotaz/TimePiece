@@ -6,23 +6,14 @@ import {
   Typography,
   Breadcrumbs,
   Link,
-  styled
+  styled,
+  Skeleton
 } from '@mui/material'
 import OrderItem from '../OrderItem'
 import useSWR from 'swr'
 import { AppPath } from '@/services/utils'
 import { Role } from '@/common/type'
-
-export interface Order {
-  id: number
-  note?: string | null
-  orderDate?: string
-  status?: string
-  totalPrice?: number
-  watchImages?: string[]
-  watchName?: string
-  role?: Role
-}
+import { Order } from '../../type'
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   fontWeight: 'bold',
@@ -69,41 +60,45 @@ const ManageOrderTab = () => {
     : null
 
   const { data: buyerOrders, isLoading: isLoadingBuyer } = useSWR(
-    AppPath.GET_BUYER_ORDERS(user?.id)
+    user ? AppPath.GET_BUYER_ORDERS(user.id) : null
   )
 
   const { data: sellerOrders, isLoading: isLoadingSeller } = useSWR(
-    AppPath.GET_SELLER_ORDERS(user?.id)
+    user ? AppPath.GET_SELLER_ORDERS(user.id) : null
   )
 
   useEffect(() => {
-    const combinedOrders: Order[] = []
+    if (buyerOrders || sellerOrders) {
+      const combinedOrders: Order[] = []
 
-    if (buyerOrders) {
-      combinedOrders.push(
-        ...buyerOrders.map((order) => ({ ...order, role: Role.BUYER }))
-      )
+      if (buyerOrders) {
+        combinedOrders.push(
+          ...buyerOrders.map((order) => ({ ...order, role: Role.BUYER }))
+        )
+      }
+
+      if (sellerOrders) {
+        combinedOrders.push(
+          ...sellerOrders.map((order) => ({ ...order, role: Role.SELLER }))
+        )
+      }
+
+      setOrders(combinedOrders)
     }
-
-    if (sellerOrders) {
-      combinedOrders.push(
-        ...sellerOrders.map((order) => ({ ...order, role: Role.SELLER }))
-      )
-    }
-
-    setOrders(combinedOrders)
   }, [buyerOrders, sellerOrders])
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
 
+  const isLoading = isLoadingBuyer || isLoadingSeller
+
   return (
     <div
       style={{
         padding: '20px',
         borderRadius: '8px',
-        minHeight: '66vh'
+        minHeight: '67vh'
       }}
     >
       <Box
@@ -130,13 +125,16 @@ const ManageOrderTab = () => {
             onChange={handleChange}
             aria-label="basic tabs example"
           >
-            <StyledTab label={`Tất cả (${orders.length})`} {...a11yProps(0)} />
             <StyledTab
-              label={`Đợi duyệt (${orders.filter((order) => order.status === 'wait').length})`}
+              label={`Tất cả (${isLoading ? '...' : orders.length})`}
+              {...a11yProps(0)}
+            />
+            <StyledTab
+              label={`Đợi duyệt (${isLoading ? '...' : orders.filter((order) => order.status === 'wait').length})`}
               {...a11yProps(1)}
             />
             <StyledTab
-              label={`Đã duyệt (${orders.filter((order) => order.status === 'approved').length})`}
+              label={`Đã duyệt (${isLoading ? '...' : orders.filter((order) => order.status === 'approved').length})`}
               {...a11yProps(2)}
             />
             <StyledTab label="Giao dịch trực tiếp (0)" {...a11yProps(3)} />
@@ -151,33 +149,38 @@ const ManageOrderTab = () => {
           backgroundColor: '#fff'
         }}
       >
-        <TabPanel value={value} index={0}>
-          <OrderItem
-            data={orders}
-            isLoading={isLoadingBuyer || isLoadingSeller}
-          />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <OrderItem
-            data={orders.filter((order) => order.status === 'wait')}
-            isLoading={isLoadingBuyer || isLoadingSeller}
-          />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <OrderItem
-            data={orders.filter((order) => order.status === 'approved')}
-            isLoading={isLoadingBuyer || isLoadingSeller}
-          />
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          Giao dịch trực tiếp
-        </TabPanel>
-        <TabPanel value={value} index={4}>
-          Đơn hàng đã cọc
-        </TabPanel>
-        <TabPanel value={value} index={5}>
-          Hoàn tất giao dịch
-        </TabPanel>
+        {isLoading ? (
+          <Box p={3}>
+            <Skeleton variant="rectangular" width="100%" height={300} />
+          </Box>
+        ) : (
+          <>
+            <TabPanel value={value} index={0}>
+              <OrderItem data={orders} isLoading={isLoading} />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <OrderItem
+                data={orders.filter((order) => order.status === 'wait')}
+                isLoading={isLoading}
+              />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <OrderItem
+                data={orders.filter((order) => order.status === 'approved')}
+                isLoading={isLoading}
+              />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              Giao dịch trực tiếp
+            </TabPanel>
+            <TabPanel value={value} index={4}>
+              Đơn hàng đã cọc
+            </TabPanel>
+            <TabPanel value={value} index={5}>
+              Hoàn tất giao dịch
+            </TabPanel>
+          </>
+        )}
       </Box>
     </div>
   )

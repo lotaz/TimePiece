@@ -2,17 +2,23 @@ import CardItem from '@/pages/item/Home/components/CardItem'
 import { Box, Grid, Skeleton } from '@mui/material'
 
 interface Watch {
-  id: string
+  accessories: string
+  area: string | null
+  createDate: string
+  id: number
+  imageUrl: string
   name: string
-  watchstatus?: string | null
   price: number
-  imageUrl?: string | null
-  accessories?: string
+  sellerId: number
+  sellerImage: string | null
+  sellerName: string
   status: string
+  watchImage: string | null
+  watchstatus: string | null
 }
 
 interface ListWatchesProps {
-  watch: Watch[]
+  watch: Watch[] | undefined
   isLoading?: boolean
 }
 
@@ -37,15 +43,20 @@ const ListWatches = ({ watch, isLoading }: ListWatchesProps) => {
           : watch?.map((item) => (
               <Grid item xs={6} sm={4} md={3} key={item.id}>
                 <CardItem
+                  id={item.id}
                   name={item?.name}
-                  price={item?.price}
-                  image={
-                    item?.imageUrl
+                  price={item.price}
+                  imageUrl={
+                    item.imageUrl
                       ? item.imageUrl
                       : 'https://res.cloudinary.com/dtxbcgpot/image/upload/v1719167161/scndrdzsuky8d6ti0r2b.jpg'
                   }
-                  id={item.id}
-                  sellerName={'Seller Name'}
+                  status={item.status}
+                  userAvatar={item.sellerImage}
+                  userId={item.sellerId}
+                  sellerName={item?.sellerName}
+                  area={item.area}
+                  createDate={item.createDate}
                 />
               </Grid>
             ))}

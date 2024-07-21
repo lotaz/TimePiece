@@ -17,18 +17,27 @@ const ItemImageList: React.FC<ItemImageListProps> = ({ images }) => {
             onClick={() => setMainImage(image)}
             elevation={3}
             square
-            style={{ cursor: 'pointer' }}
+            sx={{
+              cursor: 'pointer',
+              boxShadow: mainImage === image ? '0 0 0 2px #1976d2' : 'none'
+            }}
           >
-            <img src={image} style={{ width: '175px', height: '125px' }} />
+            <img src={image} style={{ width: '100px', height: '75px' }} />
           </Paper>
         ))}
       </Box>
       <Box>
-        <Paper elevation={3} square>
+        <Paper
+          elevation={3}
+          square
+          sx={{
+            boxShadow: 'none'
+          }}
+        >
           <img
             src={mainImage}
             alt="Main"
-            style={{ width: '400px', height: '400px' }}
+            style={{ width: '300px', height: '300px' }}
           />
         </Paper>
       </Box>

@@ -16,10 +16,11 @@ const ItemDetailPage = () => {
       sx={{
         backgroundColor: '#fff',
         padding: '40px',
-        marginTop: '60px'
+        marginTop: '100px',
+        marginBottom: '40px'
       }}
     >
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item xs={12} md={8}>
           <ItemDetail
             watch={data}

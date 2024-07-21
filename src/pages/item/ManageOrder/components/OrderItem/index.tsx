@@ -13,10 +13,10 @@ import {
 import { styled } from '@mui/material/styles'
 import ConfirmDialog from '@/components/ConfirmDiaglog'
 import { useNavigate } from 'react-router-dom'
-import { Order } from '../ManageOrderTab'
 import { updateOrder } from '@/services/orderService'
 import { toast } from 'react-toastify'
 import { OrderStatus, Role } from '@/common/type'
+import { Order } from '../../type'
 
 interface OrderProps {
   data: Order[]
@@ -91,15 +91,13 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
     )
   }
 
-  const handleOrderAction = async (orderId: number, status) => {
+  const handleOrderAction = async (orderId: number, status: OrderStatus) => {
     const data = await updateOrder(orderId, status)
     if (data) {
       toast.success('Duyệt đơn thành công')
       setOpen(false)
     }
   }
-
-  console.log(data)
 
   return (
     <Box>
@@ -119,8 +117,8 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
               <CardMedia
                 component="img"
                 sx={{ width: 100, height: 100, borderRadius: 1 }}
-                image={item?.watchImages[0] ?? ''}
-                alt={item.watchName}
+                image={item.watch.imageUrl}
+                alt={item.watch.name}
               />
               <Box
                 sx={{
@@ -142,21 +140,24 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
                     variant="h6"
                     sx={{ fontWeight: 'bold' }}
                   >
-                    {item.watchName}
+                    {item.watch.name}
                   </Typography>
                   <Typography
                     variant="subtitle1"
                     component="div"
                     sx={{ fontWeight: 'bold', color: 'red' }}
                   >
-                    {item.totalPrice}
+                    {item.totalPrice.toLocaleString('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND'
+                    })}
                   </Typography>
                   <Typography
                     variant="body2"
                     color="textSecondary"
                     component="div"
                   >
-                    {}
+                    {item.seller.address}
                   </Typography>
                 </CardContent>
               </Box>
@@ -179,7 +180,9 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
                       textAlign: 'right'
                     }}
                   >
-                    {item.status === 'wait' ? 'Đợi duyệt' : 'Đã duyệt'}
+                    {item.status === OrderStatus.WAIT
+                      ? 'Đợi duyệt'
+                      : 'Đã duyệt'}
                   </Typography>
                 </Box>
                 {item.role === Role.SELLER &&
@@ -220,7 +223,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
                   onClose={() => setOpen(false)}
                   onConfirm={() =>
                     handleOrderAction(item.id, OrderStatus.APPROVED)
-                  } // Replace with actual approve logic
+                  }
                   title={'Xác nhận duyệt đơn'}
                   description={'Bạn có chắc chắn muốn duyệt đơn mua này ?'}
                 />
@@ -229,7 +232,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
                   onClose={() => setCancel(false)}
                   onConfirm={() =>
                     handleOrderAction(item.id, OrderStatus.CANCELED)
-                  } // Replace with actual cancel logic
+                  }
                   title={'Xác nhận huỷ đơn'}
                   description={'Bạn có muốn hủy đơn này ?'}
                 />
