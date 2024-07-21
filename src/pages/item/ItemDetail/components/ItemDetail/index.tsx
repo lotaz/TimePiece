@@ -11,10 +11,12 @@ import {
   Skeleton
 } from '@mui/material'
 import ItemImageList from '../ItemImageList'
-
+import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined'
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 interface IWatch {
   accessories?: string
   address?: string
+  area?: string
   brandName?: string
   createDate?: string
   description?: string
@@ -71,7 +73,12 @@ const ItemDetail: React.FC<ItemDetailProps> = ({
             {isLoading ? (
               <Skeleton variant="text" width="40%" height={30} />
             ) : (
-              <Typography variant="h6" color={'#CA2C2C'} fontWeight={'bold'}>
+              <Typography
+                variant="h6"
+                color={'#CA2C2C'}
+                fontWeight={'bold'}
+                fontSize={30}
+              >
                 {watch.price?.toLocaleString()}₫
               </Typography>
             )}
@@ -81,7 +88,16 @@ const ItemDetail: React.FC<ItemDetailProps> = ({
               {isLoading ? (
                 <Skeleton variant="text" width="100%" height={30} />
               ) : (
-                <Typography variant="h5" mt={2} fontWeight={700}>
+                <Typography
+                  variant="h5"
+                  mt={2}
+                  fontWeight={700}
+                  sx={{
+                    fontSize: '1.5rem',
+                    color: '#484848',
+                    textDecoration: 'underline'
+                  }}
+                >
                   Thông tin
                 </Typography>
               )}
@@ -221,7 +237,77 @@ const ItemDetail: React.FC<ItemDetailProps> = ({
           </List>
           <Box
             sx={{
-              textAlign: 'left'
+              textAlign: 'left',
+              marginLeft: '16px'
+            }}
+          >
+            <>
+              {isLoading ? (
+                <Skeleton variant="text" width="100%" height={30} />
+              ) : (
+                <>
+                  <Typography
+                    variant="h5"
+                    fontWeight={600}
+                    mt={2}
+                    sx={{
+                      fontSize: '1.5rem',
+                      color: '#484848',
+                      textDecoration: 'underline'
+                    }}
+                  >
+                    Địa chỉ
+                  </Typography>
+                  <Typography variant="body1">
+                    <MapOutlinedIcon
+                      sx={{
+                        fontSize: '1.5rem',
+                        color: '#484848',
+                        verticalAlign: 'text-bottom',
+                        marginRight: '5px'
+                      }}
+                    />
+                    {watch.address}
+                  </Typography>
+                </>
+              )}
+            </>
+            <>
+              {isLoading ? (
+                <Skeleton variant="text" width="100%" height={30} />
+              ) : (
+                <>
+                  <Typography
+                    fontWeight={600}
+                    variant="h5"
+                    sx={{
+                      fontSize: '1.5rem',
+                      color: '#484848',
+                      textDecoration: 'underline'
+                    }}
+                    mt={2}
+                  >
+                    Khu vực
+                  </Typography>
+                  <Typography variant="body1">
+                    <FmdGoodOutlinedIcon
+                      sx={{
+                        fontSize: '1.5rem',
+                        color: '#484848',
+                        verticalAlign: 'text-bottom',
+                        marginRight: '5px'
+                      }}
+                    />
+                    {watch.area}
+                  </Typography>
+                </>
+              )}
+            </>
+          </Box>
+          <Box
+            sx={{
+              textAlign: 'left',
+              marginLeft: '16px'
             }}
           >
             {isLoading ? (
@@ -233,7 +319,16 @@ const ItemDetail: React.FC<ItemDetailProps> = ({
               </>
             ) : (
               <>
-                <Typography variant="h5" fontWeight={700} mt={2}>
+                <Typography
+                  variant="h5"
+                  fontWeight={600}
+                  sx={{
+                    fontSize: '1.5rem',
+                    color: '#484848',
+                    textDecoration: 'underline'
+                  }}
+                  mt={2}
+                >
                   Mô tả
                 </Typography>
                 <Typography variant="body1">{watch.description}</Typography>

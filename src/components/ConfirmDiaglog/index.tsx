@@ -24,7 +24,18 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   description
 }) => {
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      sx={{
+        boxShadow: 'none'
+      }}
+      BackdropProps={{
+        sx: {
+          backgroundColor: 'rgba(32, 29, 29, 0.26)'
+        }
+      }}
+    >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText>{description}</DialogContentText>

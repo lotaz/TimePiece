@@ -1,23 +1,32 @@
 import React from 'react'
-import { Box, Card, Typography } from '@mui/material'
+import { Avatar, Box, Card, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import StyledImage from '@/components/StyledImage'
+import moment from 'moment'
+import { formatDate, stringAvatar } from '@/common/utils'
 
-interface CardItemProps {
-  id: string
+interface Watch {
+  id: number
+  imageUrl: string
   name: string
-  image: string
   price: number
-  sellerName: string // Added sellerName prop
+  status: string
+  userAvatar: string | null
+  userId: number
+  sellerName: string
+  area: string | null
+  createDate: string
 }
 
-const CardItem: React.FC<CardItemProps> = ({
+const CardItem: React.FC<Watch> = ({
   id,
   name,
   price,
-  image,
-  sellerName
-}: CardItemProps) => {
+  imageUrl,
+  sellerName,
+  area,
+  createDate
+}: Watch) => {
   const navigate = useNavigate()
 
   return (
@@ -51,7 +60,7 @@ const CardItem: React.FC<CardItemProps> = ({
         }}
       >
         <StyledImage
-          src={image}
+          src={imageUrl}
           alt="Banner"
           style={{
             borderRadius: '10px'
@@ -87,19 +96,27 @@ const CardItem: React.FC<CardItemProps> = ({
         <Box component={'div'} marginRight={2}>
           <Typography
             color={'#CA2C2C'} // Updated color to match the image
-            fontWeight={'bold'}
-            fontSize={'24px'} // Adjusted font size to match the image
+            fontWeight={'500'}
+            fontSize={'20px'} // Adjusted font size to match the image
           >
             {price.toLocaleString('vi-VN', {
               style: 'currency',
               currency: 'VND'
             })}
           </Typography>
-          <Typography
-            color={'#757575'} // Gray color for seller name
-            fontSize={'16px'} // Font size for seller name
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              marginTop: '5px'
+            }}
           >
-            {sellerName}
+            <Typography color={'#757575'} fontSize={'16px'}>
+              {sellerName ? `${sellerName}` : 'Không rõ'}
+            </Typography>
+          </Box>
+          <Typography color={'#757575'} fontSize={'14px'}>
+            {formatDate(createDate)} {area && ` - ${area}`}
           </Typography>
         </Box>
       </Box>

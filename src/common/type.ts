@@ -41,3 +41,18 @@ export enum OrderStatus {
   APPROVED = 'Approved',
   CANCELED = 'Cancel'
 }
+
+export interface SearchParams {
+  keyword?: string
+  minPrice?: number
+  maxPrice?: number
+  area?: string
+  type?: string
+  brand?: string
+  watchStatus?: string
+  status?: string
+  accessories?: string
+  name?: string
+  page?: number
+  size?: number
+}

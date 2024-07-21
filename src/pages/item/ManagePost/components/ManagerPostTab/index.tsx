@@ -1,42 +1,45 @@
 import React from 'react'
-import { Avatar, Box, Button, Tab, Tabs, Typography } from '@mui/material'
+import {
+  Avatar,
+  Box,
+  Button,
+  Tab,
+  Tabs,
+  Typography,
+  Skeleton
+} from '@mui/material'
+import { stringAvatar } from '@/common/utils'
 
 interface ManagerPostTabProps {
   name: string
-  avatar?: string
   currentTab?: number
   setTab: (tab: number) => void
+  showTotal?: number
+  hiddenTotal?: number
+  isLoading?: boolean
 }
-
-const tab = [
-  {
-    id: 0,
-    name: 'Đang hiển thị',
-    total: 10
-  },
-  {
-    id: 1,
-    name: 'Chờ duyệt',
-    total: 20
-  },
-  {
-    id: 2,
-    name: 'Bị từ chôi',
-    total: 20
-  },
-  {
-    id: 3,
-    name: 'Đã bán/Đã ẩn',
-    total: 20
-  }
-]
 
 const ManagerPostTab: React.FC<ManagerPostTabProps> = ({
   name,
-  avatar,
   currentTab,
-  setTab
+  setTab,
+  showTotal,
+  hiddenTotal,
+  isLoading
 }) => {
+  const tab = [
+    {
+      id: 0,
+      name: 'Đang hiển thị',
+      total: showTotal
+    },
+    {
+      id: 1,
+      name: 'Đã bán/Đã ẩn',
+      total: hiddenTotal
+    }
+  ]
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue)
   }
@@ -50,21 +53,31 @@ const ManagerPostTab: React.FC<ManagerPostTabProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            p: 4,
-            bgcolor: 'background.paper'
+            p: 4
           }}
         >
           <Box display="flex" alignItems="center" flex="1">
-            <Avatar
-              src={avatar}
-              alt={name}
-              sx={{ width: 76, height: 76, marginRight: 2 }}
-            >
-              {avatar ? null : 'ABC'}
-            </Avatar>
-            <Typography variant="h6" sx={{ fontWeight: '500' }}>
-              {name}
-            </Typography>
+            {isLoading ? (
+              <>
+                <Skeleton variant="circular" width={40} height={40} />
+                <Skeleton
+                  variant="text"
+                  width={150}
+                  height={40}
+                  sx={{ marginLeft: 2 }}
+                />
+              </>
+            ) : (
+              <>
+                <Avatar {...stringAvatar(name, 3)} />
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: '500', marginLeft: 2 }}
+                >
+                  {name}
+                </Typography>
+              </>
+            )}
           </Box>
           <Box ml={2}>
             <Button
@@ -87,7 +100,16 @@ const ManagerPostTab: React.FC<ManagerPostTabProps> = ({
       </Box>
       <Tabs value={currentTab} onChange={handleChange}>
         {tab.map((item) => (
-          <Tab key={item.id} label={`${item.name} (${item.total})`} />
+          <Tab
+            key={item.id}
+            label={
+              isLoading ? (
+                <Skeleton variant="text" width={100} />
+              ) : (
+                `${item.name} (${item.total})`
+              )
+            }
+          />
         ))}
       </Tabs>
     </Box>
