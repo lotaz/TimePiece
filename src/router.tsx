@@ -12,10 +12,11 @@ import CreateAppraisalPaperPage from './pages/appraiser/CreateAppraisalPaper'
 import ViewAppraisalFormPage from './pages/appraiser/ViewAppraisalForm'
 import UserInfo from './pages/user/UserInfo'
 import AppraisalFormDetailPage from './pages/appraiser/AppraisalFormDetail'
-import ManageOrder from './pages/item/ManageOrder'
 import SearchPage from './pages/item/Search'
 import UserLayout from './components/Layout/UserLayout'
 import ScrollToTop from './components/ScollOnTop'
+import ManageSellOrder from './pages/item/ManageSellOrder'
+import ManageBuyOrder from './pages/item/ManageBuyOrder'
 
 const Root = () => (
   <UserLayout>
@@ -54,10 +55,10 @@ const router = createBrowserRouter([
             element: <SearchPage />,
             loader: async ({ request }) => {
               const url = new URL(request.url)
-              const keyword = url.searchParams.get('keyword') || ''
-              const brand = url.searchParams.get('brand') || ''
-              const type = url.searchParams.get('type') || ''
-              const service = url.searchParams.get('service') || ''
+              const keyword = url.searchParams.get('keyword') ?? ''
+              const brand = url.searchParams.get('brand') ?? ''
+              const type = url.searchParams.get('type') ?? ''
+              const service = url.searchParams.get('service') ?? ''
 
               return { query: keyword, brand, type, service }
             }
@@ -95,17 +96,15 @@ const router = createBrowserRouter([
           },
           {
             path: 'manage-post',
-            element: <ManagePostPage />,
-            loader: async () => {
-              return { data: 'manage' }
-            }
+            element: <ManagePostPage />
           },
           {
-            path: 'manage-order',
-            element: <ManageOrder />,
-            loader: async () => {
-              return { data: 'manage' }
-            }
+            path: 'manage-order/buy',
+            element: <ManageBuyOrder />
+          },
+          {
+            path: 'manage-order/sell',
+            element: <ManageSellOrder />
           }
         ]
       }
