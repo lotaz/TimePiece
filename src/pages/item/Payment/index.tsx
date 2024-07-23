@@ -1,8 +1,8 @@
+import React, { useEffect, useState } from 'react'
 import {
   Box,
   Button,
   Modal,
-  Skeleton,
   TextField,
   Typography,
   IconButton
@@ -11,21 +11,35 @@ import CloseIcon from '@mui/icons-material/Close'
 import UserInfo from './components/UserInfo'
 import WatchInfo from './components/WatchInfo'
 import PaymentMethod from './components/PaymentMethod'
-import { useEffect, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
 import { AppPath } from '@/services/utils'
+import { Order } from '../ManageBuyOrder/type'
+
+interface User {
+  address: string | null
+  avatar: string | null
+  birthday: string | null
+  citizenID: string | null
+  dateCreate: string
+  gender: 'male' | 'female' | 'other'
+  name: string | null
+  phoneNumber: string | null
+  status: 'true' | 'false'
+}
 
 const PaymentPage = () => {
   const { id } = useLoaderData() as { id: number }
   const navigate = useNavigate()
-  const user = localStorage.getItem('user')
+  const userLocal = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user') as string)
     : null
 
   const [open, setOpen] = useState(false)
-  const [address, setAddress] = useState(user?.address)
+  const [address, setAddress] = useState(userLocal?.address)
   const [paymentMethod, setPaymentMethod] = useState('ZaloPay')
+  const [user, setUser] = useState<User>()
+  const [order, setOrder] = useState<Order>()
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -33,23 +47,39 @@ const PaymentPage = () => {
     setAddress(event.target.value)
   }
   const handleAddressSubmit = () => {
-    // Logic to save the new address
     handleClose()
   }
 
   useEffect(() => {
-    if (!user) {
+    if (!userLocal) {
       navigate('/')
     }
-  }, [navigate, user])
+  }, [navigate, userLocal])
 
-  const { data, isLoading } = useSWR(AppPath.USER_INFO(user?.id))
+  const { data: userInfo, isLoading: isUserInfoLoading } = useSWR(
+    userLocal ? AppPath.USER_INFO(userLocal?.id) : null
+  )
+  const { data: orderInfo, isLoading: isOrderInfoLoading } = useSWR(
+    AppPath.GET_ORDER(id)
+  )
 
-  console.log(data)
+  useEffect(() => {
+    if (userInfo) {
+      setUser(userInfo)
+    }
+
+    if (orderInfo) {
+      setOrder(orderInfo)
+    }
+  }, [orderInfo, userInfo])
 
   const handleChange = () => {
     handleOpen()
   }
+
+  const isLoading = isUserInfoLoading || isOrderInfoLoading
+
+  console.log('order', order)
 
   return (
     <Box maxWidth={1200} marginX={'auto'} width={'inherit'}>
@@ -58,45 +88,34 @@ const PaymentPage = () => {
           display: 'flex',
           flexDirection: 'column',
           gap: 2,
-          marginTop: '100px'
+          marginTop: '80px'
         }}
       >
-        {isLoading ? (
-          <Skeleton variant="rectangular" height={118} />
-        ) : (
-          <UserInfo
-            name={data?.name}
-            phone={data?.phone}
-            address={data?.address || address}
-            onChange={handleChange}
-          />
-        )}
+        <UserInfo
+          name={user?.name ?? ''}
+          phone={user?.phoneNumber ?? ''}
+          address={user?.address ?? address}
+          onChange={handleChange}
+        />
       </Box>
       <Box>
-        {isLoading ? (
-          <Skeleton variant="rectangular" height={118} />
-        ) : (
-          <WatchInfo
-            seller="Hoangnd"
-            itemName="Rolex Day Date 36 128235 Ombre Chocolate"
-            itemType="Đồng hồ nam"
-            itemPrice="1,080,869₫"
-            itemLocation="Phường Long Thạnh Mỹ (Quận 9 cũ), Thành phố Thủ Đức, Tp Hồ Chí Minh"
-            itemImage="/path/to/item/image.jpg" // Replace with the correct path to the image
-          />
-        )}
+        <WatchInfo
+          seller={order?.seller.name}
+          itemName={order?.watch.name}
+          itemType={order?.watch.type ?? ''}
+          itemPrice={order?.watch?.price?.toString()}
+          itemLocation={order?.watch.address}
+          itemImage={order?.watch.imageUrl}
+          isLoading={isLoading}
+        />
       </Box>
       <Box>
-        {isLoading ? (
-          <Skeleton variant="rectangular" height={118} />
-        ) : (
-          <PaymentMethod
-            price={100}
-            extraPrice={1231231231213}
-            paymentMethod={paymentMethod}
-            handleChangeMethod={setPaymentMethod}
-          />
-        )}
+        <PaymentMethod
+          price={100}
+          extraPrice={1231231231213}
+          paymentMethod={paymentMethod}
+          handleChangeMethod={setPaymentMethod}
+        />
       </Box>
       <Modal open={open} onClose={handleClose}>
         <Box

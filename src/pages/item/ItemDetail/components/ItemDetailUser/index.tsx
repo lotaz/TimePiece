@@ -51,7 +51,6 @@ const ItemDetailUser = ({
       })
     }
   }
-
   return (
     <Box sx={{ padding: 2 }} component={'div'} id={`${id}`}>
       <Grid container spacing={2}>

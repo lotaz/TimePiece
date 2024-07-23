@@ -47,14 +47,19 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
       </Box>
       <MenuItem
         onClick={() => {
-          navigate('/post/manage-order')
+          navigate('/post/manage-order/buy')
           handleClose()
         }}
       >
         <ShoppingCartIcon style={{ marginRight: 16 }} />
         Đơn mua
       </MenuItem>
-      <MenuItem onClick={handleClose}>
+      <MenuItem
+        onClick={() => {
+          navigate('/post/manage-order/sell')
+          handleClose()
+        }}
+      >
         <ListAltIcon style={{ marginRight: 16 }} />
         Đơn bán
       </MenuItem>

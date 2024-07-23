@@ -1,19 +1,21 @@
 import React from 'react'
-import { Box, Typography, Link } from '@mui/material'
+import { Box, Typography, Link, Skeleton } from '@mui/material'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 
 interface UserInfoProps {
-  name: string
-  phone: string
-  address: string
+  name: string | null
+  phone: string | null
+  address: string | null
   onChange: () => void
+  isLoading?: boolean
 }
 
 const UserInfo: React.FC<UserInfoProps> = ({
   name,
   phone,
   address,
-  onChange
+  onChange,
+  isLoading
 }) => {
   return (
     <Box
@@ -64,15 +66,38 @@ const UserInfo: React.FC<UserInfoProps> = ({
         </Link>
       </Box>
       <Box display="flex" alignItems="center" m={2}>
-        <Typography variant="h6" style={{ marginRight: 8, fontWeight: 600 }}>
-          {name}
-        </Typography>
-        <Typography margin={2} variant="h6" sx={{ fontWeight: 600 }}>
-          {phone}
-        </Typography>
-        <Typography margin={2} variant="body1">
-          {address}
-        </Typography>
+        {isLoading ? (
+          <>
+            <Skeleton variant="text" width={100} height={30} />
+            <Skeleton
+              variant="text"
+              width={100}
+              height={30}
+              style={{ marginLeft: 16 }}
+            />
+            <Skeleton
+              variant="text"
+              width={200}
+              height={30}
+              style={{ marginLeft: 16 }}
+            />
+          </>
+        ) : (
+          <>
+            <Typography
+              variant="h6"
+              style={{ marginRight: 8, fontWeight: 600 }}
+            >
+              {name}
+            </Typography>
+            <Typography margin={2} variant="h6" sx={{ fontWeight: 600 }}>
+              {phone}
+            </Typography>
+            <Typography margin={2} variant="body1">
+              {address}
+            </Typography>
+          </>
+        )}
       </Box>
     </Box>
   )
