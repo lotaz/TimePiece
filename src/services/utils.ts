@@ -47,6 +47,7 @@ export const AppPath = {
   },
   USER_INFO: (id) => `/api/users/${id}`,
   CREATE_ORDER: '/orders/create',
+  GET_ORDER: (id) => `/orders/${id}`,
   UPDATE_ORDER: (id: number, status: string) =>
     `/orders/${id}/status?status=${status}`,
   GET_SELLER_ORDERS: (id) => `/orders/seller/${id}`,

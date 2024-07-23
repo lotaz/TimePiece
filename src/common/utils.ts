@@ -15,28 +15,8 @@ export const getVietnameseStatus = (
   return AppraisalStatusVietnamese[status] || 'Unknown status'
 }
 
-function stringToColor(string: string) {
-  let hash = 0
-  let i
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash)
-  }
-
-  let color = '#'
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff
-    color += `00${value.toString(16)}`.slice(-2)
-  }
-  /* eslint-enable no-bitwise */
-
-  return color
-}
-
 export const stringAvatar = (name: string, padding = 0) => {
-  if (!name)
+  if (!name) {
     return {
       sx: {
         bgcolor: '#000000',
@@ -44,12 +24,23 @@ export const stringAvatar = (name: string, padding = 0) => {
       },
       children: 'N'
     }
+  }
+
+  const nameParts = name.split(' ')
+
+  let initials = 'N'
+  if (nameParts.length === 1) {
+    initials = `${nameParts[0][0]}`
+  } else if (nameParts.length > 1) {
+    initials = `${nameParts[0][0]}${nameParts[1][0]}`
+  }
+
   return {
     sx: {
       bgcolor: stringToColor(name),
       padding: padding
     },
-    children: `${name?.split(' ')[0][0]}${name?.split(' ')[1][0]}`
+    children: initials
   }
 }
 
@@ -64,4 +55,21 @@ export const formatDate = (date: string) => {
   } else {
     return `${diffMonths} tháng trước`
   }
+}
+
+// Helper function to generate a color from a string
+const stringToColor = (string: string) => {
+  let hash = 0
+  let i
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  let color = '#'
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff
+    color += `00${value.toString(16)}`.slice(-2)
+  }
+  /* eslint-enable no-bitwise */
+  return color
 }

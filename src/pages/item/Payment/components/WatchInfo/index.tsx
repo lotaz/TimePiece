@@ -1,14 +1,15 @@
 import React from 'react'
-import { Box, Typography, Link, Grid, Divider } from '@mui/material'
+import { Box, Typography, Link, Grid, Divider, Skeleton } from '@mui/material'
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
 
 interface WatchInfoProps {
-  seller: string
-  itemName: string
-  itemType: string
-  itemPrice: string
-  itemLocation: string
-  itemImage: string
+  seller?: string
+  itemName?: string
+  itemType?: string
+  itemPrice?: string
+  itemLocation?: string
+  itemImage?: string
+  isLoading?: boolean
 }
 
 const WatchInfo: React.FC<WatchInfoProps> = ({
@@ -17,7 +18,8 @@ const WatchInfo: React.FC<WatchInfoProps> = ({
   itemType,
   itemPrice,
   itemLocation,
-  itemImage
+  itemImage,
+  isLoading
 }) => {
   return (
     <Grid
@@ -41,33 +43,54 @@ const WatchInfo: React.FC<WatchInfoProps> = ({
               flexDirection: 'row'
             }}
           >
-            <Typography>Người bán: {seller}</Typography>
-            <Divider
-              orientation="vertical"
-              sx={{
-                bgcolor: '#C8C8C8',
-                mx: 1
-              }}
-              flexItem
-            />
-            <Link href="#" underline="hover">
-              <Typography color={'#00C600'}>
-                <QuestionAnswerIcon
+            {isLoading ? (
+              <>
+                <Skeleton width={100} height={20} />
+                <Divider
+                  orientation="vertical"
                   sx={{
-                    fontSize: 16,
-                    verticalAlign: 'middle',
-                    marginRight: 0.5
+                    bgcolor: '#C8C8C8',
+                    mx: 1
                   }}
+                  flexItem
                 />
-                Chat ngay
-              </Typography>
-            </Link>
+                <Skeleton width={60} height={20} />
+              </>
+            ) : (
+              <>
+                <Typography>Người bán: {seller}</Typography>
+                <Divider
+                  orientation="vertical"
+                  sx={{
+                    bgcolor: '#C8C8C8',
+                    mx: 1
+                  }}
+                  flexItem
+                />
+                <Link href="#" underline="hover">
+                  <Typography color={'#00C600'}>
+                    <QuestionAnswerIcon
+                      sx={{
+                        fontSize: 16,
+                        verticalAlign: 'middle',
+                        marginRight: 0.5
+                      }}
+                    />
+                    Chat ngay
+                  </Typography>
+                </Link>
+              </>
+            )}
           </Box>
         </Box>
-        <Box display="flex" flexDirection={'row'}>
-          <Box>
-            <img src={itemImage} width={64} height={64} />
-          </Box>
+        <Box display="flex" flexDirection={'row'} mt={2}>
+          {isLoading ? (
+            <Skeleton variant="rectangular" width={64} height={64} />
+          ) : (
+            <Box>
+              <img src={itemImage} width={64} height={64} />
+            </Box>
+          )}
           <Box
             alignItems="baseline"
             display={'flex'}
@@ -75,20 +98,29 @@ const WatchInfo: React.FC<WatchInfoProps> = ({
             marginLeft={2}
             textAlign={'left'}
           >
-            <Typography
-              sx={{
-                fontWeight: 'bold'
-              }}
-            >
-              {itemName}
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: 14
-              }}
-            >
-              {itemLocation}
-            </Typography>
+            {isLoading ? (
+              <>
+                <Skeleton width={150} height={20} />
+                <Skeleton width={100} height={20} />
+              </>
+            ) : (
+              <>
+                <Typography
+                  sx={{
+                    fontWeight: 'bold'
+                  }}
+                >
+                  {itemName}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: 14
+                  }}
+                >
+                  {itemLocation}
+                </Typography>
+              </>
+            )}
           </Box>
         </Box>
       </Grid>
@@ -102,14 +134,18 @@ const WatchInfo: React.FC<WatchInfoProps> = ({
               marginBottom: 4
             }}
           >
-            <Typography
-              sx={{
-                fontSize: 16,
-                fontWeight: 'bold'
-              }}
-            >
-              Loại
-            </Typography>
+            {isLoading ? (
+              <Skeleton width={60} height={20} />
+            ) : (
+              <Typography
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 'bold'
+                }}
+              >
+                Loại
+              </Typography>
+            )}
           </Box>
           <Box
             sx={{
@@ -118,7 +154,11 @@ const WatchInfo: React.FC<WatchInfoProps> = ({
               flexDirection: 'row'
             }}
           >
-            <Typography>{itemType}</Typography>
+            {isLoading ? (
+              <Skeleton width={60} height={20} />
+            ) : (
+              <Typography>{itemType}</Typography>
+            )}
           </Box>
         </Box>
       </Grid>
@@ -132,14 +172,18 @@ const WatchInfo: React.FC<WatchInfoProps> = ({
               marginBottom: 4
             }}
           >
-            <Typography
-              sx={{
-                fontSize: 16,
-                fontWeight: 'bold'
-              }}
-            >
-              Đơn giá
-            </Typography>
+            {isLoading ? (
+              <Skeleton width={60} height={20} />
+            ) : (
+              <Typography
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 'bold'
+                }}
+              >
+                Đơn giá
+              </Typography>
+            )}
           </Box>
           <Box
             sx={{
@@ -148,7 +192,11 @@ const WatchInfo: React.FC<WatchInfoProps> = ({
               flexDirection: 'row'
             }}
           >
-            <Typography>{itemPrice}</Typography>
+            {isLoading ? (
+              <Skeleton width={60} height={20} />
+            ) : (
+              <Typography>{itemPrice}</Typography>
+            )}
           </Box>
         </Box>
       </Grid>

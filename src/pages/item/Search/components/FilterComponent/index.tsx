@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import {
   Box,
-  MenuItem,
   TextField,
   Typography,
-  Skeleton,
   Slider,
   Button,
   Popover,
   RadioGroup,
   FormControlLabel,
-  Radio
+  Radio,
+  Skeleton
 } from '@mui/material'
 import useSWR from 'swr'
 import { AppPath } from '@/services/utils'
@@ -186,14 +185,25 @@ const FilterComponent = ({
           })()}
           onChange={handleRadioChange(name)}
         >
-          {options.map((option) => (
-            <FormControlLabel
-              key={option}
-              value={option}
-              control={<Radio />}
-              label={option}
-            />
-          ))}
+          {isLoading ||
+          (name === 'brand' && loadBrand) ||
+          (name === 'type' && loadTypes)
+            ? [1, 2, 3].map((idx) => (
+                <FormControlLabel
+                  key={idx}
+                  value=""
+                  control={<Skeleton width={40} height={40} />}
+                  label={<Skeleton width="100%" />}
+                />
+              ))
+            : options.map((option) => (
+                <FormControlLabel
+                  key={option}
+                  value={option}
+                  control={<Radio />}
+                  label={option}
+                />
+              ))}
         </RadioGroup>
       </Box>
     </Popover>
