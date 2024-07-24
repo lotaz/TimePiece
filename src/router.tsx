@@ -17,6 +17,7 @@ import UserLayout from './components/Layout/UserLayout'
 import ScrollToTop from './components/ScollOnTop'
 import ManageSellOrder from './pages/item/ManageSellOrder'
 import ManageBuyOrder from './pages/item/ManageBuyOrder'
+import SellerProfilePage from './pages/item/SellerProfile'
 
 const Root = () => (
   <UserLayout>
@@ -70,7 +71,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'info',
-            element: <UserInfo />,
+            element: <UserInfo />
+          },
+          {
+            path: 'seller/:id',
+            element: <SellerProfilePage />,
             loader: async ({ params }) => {
               const { id } = params
               return { id }

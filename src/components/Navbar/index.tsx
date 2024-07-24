@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   AppBar,
   Avatar,
@@ -20,6 +20,9 @@ import { alpha, styled } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
 import MenuPopover from '../MenuPopover'
 import { stringAvatar } from '@/common/utils'
+import useSWR from 'swr'
+import { AppPath } from '@/services/utils'
+import { User } from '@/pages/item/ManageBuyOrder/type'
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -68,6 +71,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar = () => {
   const navigate = useNavigate()
+  const [userState, setUserState] = useState<User>()
   const user = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user') as string)
     : null
@@ -90,6 +94,15 @@ const Navbar = () => {
     event.preventDefault()
     navigate(`/item/product?keyword=${searchQuery}`)
   }
+  const { data: userInfo, isLoading } = useSWR(AppPath.USER_INFO(user?.id))
+
+  useEffect(() => {
+    if (userInfo) {
+      setUserState(userInfo)
+    }
+  }, [userInfo])
+
+  console.log(userState)
 
   const hasAuth = user
 
@@ -164,7 +177,12 @@ const Navbar = () => {
           {hasAuth ? (
             <Box>
               <Button color="inherit" onClick={handleMenuOpen}>
-                <Avatar {...stringAvatar(user.name)} />
+                {userState?.avatar ? (
+                  <Avatar src={userState?.avatar} />
+                ) : (
+                  <Avatar {...stringAvatar(user.name)} />
+                )}
+
                 <Typography
                   marginLeft={2}
                   marginRight={1}

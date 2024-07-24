@@ -1,20 +1,12 @@
-import {
-  Box,
-  Typography,
-  Grid,
-  Button,
-  Avatar,
-  Link,
-  Skeleton
-} from '@mui/material'
+import { Box, Typography, Grid, Button, Avatar, Skeleton } from '@mui/material'
 import PhoneIcon from '@mui/icons-material/Phone'
 import ChatIcon from '@mui/icons-material/Chat'
-import { useLoaderData, useNavigate } from 'react-router-dom'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import { Link, useLoaderData, useNavigate } from 'react-router-dom'
 import { createOrder } from '@/services/orderService'
 import { useState } from 'react'
-import ConfirmDialog from '@/components/ConfirmDiaglog'
 import { toast } from 'react-toastify'
+import ConfirmDialog from '@/components/ConfirmDiaglog'
 
 interface ItemDetailUserProps {
   sellerId: number
@@ -22,6 +14,8 @@ interface ItemDetailUserProps {
   sellerPhone: string
   sellerAvatar: string
   loading: boolean
+  feedbacks?: number
+  rating: number
 }
 
 const ItemDetailUser = ({
@@ -29,7 +23,9 @@ const ItemDetailUser = ({
   sellerName,
   sellerPhone,
   sellerAvatar,
-  loading
+  loading,
+  feedbacks,
+  rating
 }: ItemDetailUserProps) => {
   const navigate = useNavigate()
   const user = localStorage.getItem('user')
@@ -41,7 +37,7 @@ const ItemDetailUser = ({
   const { id } = data as { id: string }
 
   const handleCreateOrder = async () => {
-    const res = await createOrder({ watchId: Number(id), userId: user.id })
+    const res = await createOrder({ watchId: Number(id), userId: user?.id })
     if (res) {
       setIsOpen(false)
       toast.success('Đặt hàng thành công', {
@@ -51,6 +47,11 @@ const ItemDetailUser = ({
       })
     }
   }
+
+  const handleOpenLogin = () => {
+    navigate('/authenticate/login')
+  }
+
   return (
     <Box sx={{ padding: 2 }} component={'div'} id={`${id}`}>
       <Grid container spacing={2}>
@@ -59,10 +60,8 @@ const ItemDetailUser = ({
             <Skeleton variant="circular" width={80} height={80} />
           ) : (
             <Avatar
-              alt="Thắng Nguyễn Store"
-              src={
-                sellerAvatar ? sellerAvatar : 'https://via.placeholder.com/100'
-              } // Replace with actual image URL
+              alt="Seller Avatar Image"
+              src={sellerAvatar || 'https://via.placeholder.com/100'} // Replace with actual image URL
               sx={{ width: 80, height: 80 }}
             />
           )}
@@ -74,21 +73,37 @@ const ItemDetailUser = ({
               <Skeleton variant="text" width="40%" />
             </>
           ) : (
-            <>
-              <Typography variant="h6" fontWeight="bold">
-                {sellerName}
+            <Box component={'div'} marginLeft={2} marginTop={1}>
+              <Typography variant="h6" fontWeight="medium" textAlign={'left'}>
+                <Link to={`/user/seller/${sellerId}`}>{sellerName}</Link>
               </Typography>
-              <Typography variant="body2" color="textSecondary">
-                <Box component="span" sx={{ color: 'gold' }}>
-                  ★★★★☆
-                </Box>
-                4.7 (
-                <Link href="#" underline="hover">
-                  10 đánh giá
-                </Link>
-                )
-              </Typography>
-            </>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start'
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  textAlign={'left'}
+                  marginRight={2}
+                >
+                  <Box component="span" sx={{ color: 'gold' }}>
+                    {'★'.repeat(Math.floor(rating)) +
+                      '☆'.repeat(5 - Math.floor(rating))}
+                  </Box>
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  textAlign={'left'}
+                >
+                  {feedbacks} đánh giá
+                </Typography>
+              </Box>
+            </Box>
           )}
         </Grid>
         <Grid item xs={5}>
@@ -114,9 +129,17 @@ const ItemDetailUser = ({
                 color: 'white',
                 '&:hover': {
                   bgcolor: 'primary.dark'
+                },
+                '&:disabled': {
+                  bgcolor: 'grey.500',
+                  color: 'white',
+                  '&:hover': {
+                    bgcolor: 'grey.500'
+                  }
                 }
               }}
               startIcon={<ChatIcon />}
+              disabled={!user}
             >
               Chat với người bán
             </Button>
@@ -125,6 +148,23 @@ const ItemDetailUser = ({
         <Grid item xs={12}>
           {loading ? (
             <Skeleton variant="rectangular" width="100%" height={40} />
+          ) : !user ? (
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={handleOpenLogin}
+              sx={{
+                textTransform: 'none',
+                fontSize: '14px',
+                bgcolor: 'primary.main',
+                color: 'white',
+                '&:hover': {
+                  bgcolor: 'primary.dark'
+                }
+              }}
+            >
+              Đăng nhập để đặt hàng
+            </Button>
           ) : sellerId !== user.id ? (
             <>
               <Button

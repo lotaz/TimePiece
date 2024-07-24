@@ -15,7 +15,7 @@ import ConfirmDialog from '@/components/ConfirmDiaglog'
 import { useNavigate } from 'react-router-dom'
 import { updateOrder } from '@/services/orderService'
 import { toast } from 'react-toastify'
-import { OrderStatus, Role } from '@/common/type'
+import { OrderStatus } from '@/common/type'
 import { Order } from '../../type'
 
 interface OrderProps {
@@ -185,39 +185,19 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
                       : 'Đã duyệt'}
                   </Typography>
                 </Box>
-                {item.role === Role.SELLER &&
-                  item.status === OrderStatus.WAIT && (
-                    <Box component={'div'}>
-                      <StyledButton
-                        variant="outlined"
-                        color="error"
-                        onClick={() => setCancel(true)}
-                      >
-                        Từ chối
-                      </StyledButton>
-                      <StyledButton
-                        variant="contained"
-                        color="success"
-                        onClick={() => setOpen(true)}
-                      >
-                        Duyệt
-                      </StyledButton>
-                    </Box>
-                  )}
-                {item.role === Role.BUYER &&
-                  item.status === OrderStatus.APPROVED && (
-                    <Box component={'div'}>
-                      <StyledButton
-                        variant="contained"
-                        color="success"
-                        onClick={() => {
-                          navigate(`/item/${item.id}/payment`)
-                        }}
-                      >
-                        Tiến hành thanh toán
-                      </StyledButton>
-                    </Box>
-                  )}
+                {item.status === OrderStatus.APPROVED && (
+                  <Box component={'div'}>
+                    <StyledButton
+                      variant="contained"
+                      color="success"
+                      onClick={() => {
+                        navigate(`/item/${item.id}/payment`)
+                      }}
+                    >
+                      Tiến hành thanh toán
+                    </StyledButton>
+                  </Box>
+                )}
                 <ConfirmDialog
                   open={open}
                   onClose={() => setOpen(false)}

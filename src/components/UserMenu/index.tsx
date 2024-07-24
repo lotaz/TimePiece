@@ -65,8 +65,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
       </MenuItem>
       <Box px={2} py={1} bgcolor={'#E6E6E6'}>
         <Typography variant="subtitle1" color="textSecondary">
-          {' '}
-          Quản lý đơn thẩm định{' '}
+          Quản lý đơn thẩm định
         </Typography>
       </Box>
       <MenuItem onClick={handleClose}>
