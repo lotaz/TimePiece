@@ -93,7 +93,7 @@ const ManageOrderTab = () => {
           <Link underline="hover" color="inherit" href="/">
             Trang chủ
           </Link>
-          <Typography color="textPrimary">Đơn bán (Đơn mua)</Typography>
+          <Typography color="textPrimary">Đơn bán</Typography>
         </Breadcrumbs>
         <Box
           sx={{

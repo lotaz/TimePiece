@@ -35,6 +35,8 @@ const ItemDetailPage = () => {
             sellerName={data?.userName}
             sellerPhone={data?.userPhoneNumber}
             sellerAvatar={data?.userAvatar}
+            feedbacks={10}
+            rating={data?.userRatingScore || 0}
           />
         </Grid>
       </Grid>

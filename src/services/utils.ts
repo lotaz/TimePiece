@@ -51,7 +51,8 @@ export const AppPath = {
   UPDATE_ORDER: (id: number, status: string) =>
     `/orders/${id}/status?status=${status}`,
   GET_SELLER_ORDERS: (id) => `/orders/seller/${id}`,
-  GET_BUYER_ORDERS: (id) => `/orders/buyer/${id}`
+  GET_BUYER_ORDERS: (id) => `/orders/buyer/${id}`,
+  GET_FEEDBACKS_BY_WATCH_ID: (id) => `/api/feedbacks/watch/${id}`
 }
 
 export const fetcher = (url) => axiosClient.get(url).then((res) => res.data)
