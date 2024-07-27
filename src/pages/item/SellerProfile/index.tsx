@@ -1,3 +1,4 @@
+
 import { Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useLoaderData } from 'react-router-dom'
@@ -42,6 +43,7 @@ const SellerProfilePage = () => {
 
   return (
     <Box
+
       component={'div'}
       sx={{
         marginX: 16,
@@ -64,6 +66,7 @@ const SellerProfilePage = () => {
       />
       <ContentTab sellerId={id} />
     </Box>
+
   )
 }
 
