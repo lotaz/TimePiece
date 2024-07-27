@@ -79,8 +79,6 @@ const PaymentPage = () => {
 
   const isLoading = isUserInfoLoading || isOrderInfoLoading
 
-  console.log('order', order)
-
   return (
     <Box maxWidth={1200} marginX={'auto'} width={'inherit'}>
       <Box

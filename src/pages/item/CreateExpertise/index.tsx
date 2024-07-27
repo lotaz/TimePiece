@@ -7,15 +7,12 @@ import {
   Typography
 } from '@mui/material'
 import ImageUpload from './components/UploadFile'
-import UserLayout from '@/components/Layout/UserLayout'
 import { useFormik } from 'formik'
 import YesNoSelection from '@/components/Controls/YesNoSelection'
 import { ChangeEvent } from 'react'
 import { createAppraisalRequest } from '@/services/appraisalRequestService'
 
 const names = ['10', '20', '30']
-
-const location = ['Bắc', 'Trung', 'Nam']
 
 const CreateExpertisePage = () => {
   const form = useFormik({
@@ -36,7 +33,6 @@ const CreateExpertisePage = () => {
       address: ''
     },
     onSubmit: async (values) => {
-      console.log(values)
       await createAppraisalRequest(form.values)
     }
   })
