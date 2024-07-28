@@ -1,7 +1,7 @@
 import { Container } from '@mui/material'
-import ManageOrderTab from './components/ManageOrderTab'
+import ManageAppraisalTab from './components/ManageAppraisalTab'
 
-const ManageBuyOrder = () => {
+const ManageAppraisal = () => {
   return (
     <Container
       disableGutters
@@ -14,9 +14,9 @@ const ManageBuyOrder = () => {
         justifyContent: 'center'
       }}
     >
-      <ManageOrderTab />
+      <ManageAppraisalTab />
     </Container>
   )
 }
 
-export default ManageBuyOrder
+export default ManageAppraisal

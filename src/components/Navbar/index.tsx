@@ -102,9 +102,6 @@ const Navbar = () => {
     }
   }, [userInfo])
 
-  console.log(userState)
-
-
   const hasAuth = user
 
   return (

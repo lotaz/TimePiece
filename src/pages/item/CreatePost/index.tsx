@@ -63,6 +63,7 @@ const CreatePostPage = () => {
   }
 
   const handleSubmit = async () => {
+    console.log(formValues)
     const data = await createWatchService({
       userId: user?.id,
       name: formValues.postName,

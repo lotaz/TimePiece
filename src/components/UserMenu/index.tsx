@@ -68,7 +68,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
           Quản lý đơn thẩm định
         </Typography>
       </Box>
-      <MenuItem onClick={handleClose}>
+      <MenuItem
+        onClick={() => {
+          navigate('/appraisal/manage-appraisal')
+          handleClose()
+        }}
+      >
         <LibraryBooksIcon style={{ marginRight: 16 }} />
         Lịch sử thẩm định
       </MenuItem>

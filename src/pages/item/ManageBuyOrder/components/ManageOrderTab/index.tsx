@@ -77,7 +77,8 @@ const ManageOrderTab = () => {
       style={{
         padding: '20px',
         borderRadius: '8px',
-        minHeight: 'calc(100vh - 310px)'
+        minHeight: 'calc(100vh - 310px)',
+        minWidth: 'calc(100vw - 500px)'
       }}
     >
       <Box
