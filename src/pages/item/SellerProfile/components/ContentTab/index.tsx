@@ -7,12 +7,8 @@ import {
   Grid,
   Skeleton,
   Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Avatar
+  CardContent
 } from '@mui/material'
-import moment from 'moment'
 import CardItem from '@/pages/item/Home/components/CardItem'
 import { AppPath } from '@/services/utils'
 import useSWR from 'swr'

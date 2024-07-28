@@ -52,7 +52,9 @@ export const AppPath = {
     `/orders/${id}/status?status=${status}`,
   GET_SELLER_ORDERS: (id) => `/orders/seller/${id}`,
   GET_BUYER_ORDERS: (id) => `/orders/buyer/${id}`,
-  GET_FEEDBACKS_BY_WATCH_ID: (id) => `/api/feedbacks/watch/${id}`
+  GET_FEEDBACKS_BY_WATCH_ID: (id) => `/api/feedbacks/watch/${id}`,
+  GET_APPRAISAL_BUY_USER: ({ id, page, size }) =>
+    `/api/appraisal-requests/findByUser?userId=${id}&page=${page}&size=${size}`
 }
 
 export const fetcher = (url) => axiosClient.get(url).then((res) => res.data)

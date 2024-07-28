@@ -1,20 +1,62 @@
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import {
   Box,
   Button,
   Grid,
   MenuItem,
   TextField,
-  Typography
+  Typography,
+  Skeleton
 } from '@mui/material'
 import ImageUpload from './components/UploadFile'
 import { useFormik } from 'formik'
 import YesNoSelection from '@/components/Controls/YesNoSelection'
-import { ChangeEvent } from 'react'
 import { createAppraisalRequest } from '@/services/appraisalRequestService'
+import { AppPath } from '@/services/utils'
+import useSWR from 'swr'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+
+interface User {
+  id: number
+  name: string
+  address: string | null
+  avatar: string | null
+  phoneNumber: string
+  status: string | null
+  birthday: string
+  citizenID: string | null
+  dateCreate: string
+  email: string | null
+}
 
 const names = ['10', '20', '30']
 
 const CreateExpertisePage = () => {
+  const naviage = useNavigate()
+  const [userInformation, setUserInformation] = useState<User | null>(null)
+  const [brands, setBrands] = useState<{ id: number; name: string }[]>([])
+  const user = localStorage.getItem('user')
+    ? JSON.parse(localStorage.getItem('user') as string)
+    : null
+
+  const { data, isLoading } = useSWR(AppPath.USER_INFO(user?.id))
+  const { data: brandsData, isLoading: isLoadingBrands } = useSWR(
+    AppPath.GET_BRANDS
+  )
+
+  useEffect(() => {
+    if (data) {
+      setUserInformation(data)
+    }
+
+    if (brandsData) {
+      //map data to brands
+      const mapBrand = brandsData.map((brand) => brand.brandName || '')
+      setBrands(mapBrand)
+    }
+  }, [data, brandsData])
+
   const form = useFormik({
     initialValues: {
       name: '',
@@ -33,32 +75,55 @@ const CreateExpertisePage = () => {
       address: ''
     },
     onSubmit: async (values) => {
+      console.log(values)
       await createAppraisalRequest(form.values)
+        .then((res) => {
+          toast.success('Gởi yêu cầu thành công')
+          naviage('/appraisal/manage-appraisal')
+        })
+        .catch((err) => {
+          toast.error('Gởi yêu cầu thất bại. Vui lòng thử lại sau ít phút')
+          naviage('/')
+        })
     }
   })
+
+  useEffect(() => {
+    if (userInformation) {
+      form.setValues({
+        ...form.values,
+        name: userInformation.name || '',
+        email: userInformation.email || '',
+        phone: userInformation.phoneNumber || '',
+        address: userInformation.address || ''
+      })
+    }
+  }, [userInformation])
+
   return (
     <Box
       component={'div'}
       sx={{
-        marginTop: '120px',
-        marginBottom: '40px',
-        padding: '40px',
+        marginTop: '100px',
+        marginBottom: '20px',
+        paddingX: '40px',
+        paddingY: '60px',
         backgroundColor: '#fff',
         maxWidth: '1200px',
         marginX: 'auto'
       }}
     >
-      <Grid container spacing={4} paddingX={5}>
-        <Grid item xs={12} md={12}>
+      <Grid container spacing={4} paddingX={10}>
+        <Grid item xs={12}>
           <Typography variant="h4" fontWeight="bold" textAlign="center">
             Thẩm định đồng hồ
           </Typography>
         </Grid>
-        <Grid item xs={12} md={12}>
+        <Grid item xs={12}>
           <Typography
             component={'div'}
             sx={{
-              padding: '16px',
+              padding: '10px',
               width: 'fit-content',
               backgroundColor: '#434343',
               paddingRight: '100px',
@@ -71,67 +136,49 @@ const CreateExpertisePage = () => {
           </Typography>
           <Box
             sx={{
-              marginTop: '20px',
-              paddingX: '50px'
+              marginTop: '10px',
+              paddingX: '60px'
             }}
           >
             <Grid container spacing={3}>
-              <Grid item xs={12} md={4}>
-                <TextField
-                  placeholder="Họ và tên"
-                  variant="outlined"
-                  value={form.values.name}
-                  onChange={form.handleChange}
-                  onBlur={form.handleBlur}
-                  name="name"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <TextField
-                  placeholder="Email"
-                  variant="outlined"
-                  fullWidth
-                  value={form.values.email}
-                  onChange={form.handleChange}
-                  onBlur={form.handleBlur}
-                  name="email"
-                />
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <TextField
-                  placeholder="Số điện thoại"
-                  variant="outlined"
-                  value={form.values.phone}
-                  onChange={form.handleChange}
-                  name="phone"
-                  onBlur={form.handleBlur}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12} md={12}>
-                <TextField
-                  placeholder="Địa chỉ"
-                  variant="outlined"
-                  value={form.values.address}
-                  onChange={form.handleChange}
-                  onBlur={form.handleBlur}
-                  name="address"
-                  fullWidth
-                />
-              </Grid>
+              {[
+                { name: 'name', label: 'Họ và tên' },
+                { name: 'email', label: 'Email' },
+                { name: 'phone', label: 'Số điện thoại' },
+                { name: 'address', label: 'Địa chỉ', fullWidth: true }
+              ].map((field) => (
+                <Grid
+                  item
+                  xs={12}
+                  md={field.fullWidth ? 12 : 4}
+                  key={field.name}
+                >
+                  {isLoading ? (
+                    <Skeleton variant="rectangular" width="100%" height={56} />
+                  ) : (
+                    <TextField
+                      placeholder={field.label}
+                      variant="outlined"
+                      fullWidth
+                      value={form.values[field.name]}
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                      name={field.name}
+                    />
+                  )}
+                </Grid>
+              ))}
             </Grid>
           </Box>
         </Grid>
-        <Grid item xs={12} md={12} marginLeft={'40px'}>
+        <Grid item xs={12} marginLeft={'40px'}>
           <Box>
             <Typography
               component={'div'}
               sx={{
-                padding: '16px',
+                padding: '10px',
                 width: 'fit-content',
                 backgroundColor: '#434343',
-
                 color: '#fff',
                 fontWeight: '600',
                 paddingRight: '50px'
@@ -147,249 +194,117 @@ const CreateExpertisePage = () => {
             >
               Nhấp vào tùy chọn bên dưới
             </Typography>
-            <Box component={'div'} marginTop={'10px'}>
-              <Grid container spacing={6} gap={1}>
-                <Grid item xs={12} md={6}>
-                  <Typography
-                    textAlign={'left'}
-                    fontSize={18}
-                    marginTop={1}
-                    marginLeft={4}
-                  >
-                    Đồng hồ còn nguyên hộp không?
-                  </Typography>
+            <Box component={'div'}>
+              {[
+                { label: 'Đồng hồ còn nguyên hộp không?', name: 'hasBox' },
+                {
+                  label:
+                    'Bạn có giấy tờ gốc của đồng hồ hoặc thẻ bảo hành không?',
+                  name: 'hasWarranty'
+                },
+                { label: 'Bạn có hóa đơn mua hàng không?', name: 'hasInvoice' },
+                {
+                  label: 'Đồng hồ của bạn còn nhãn dán không?',
+                  name: 'hasLabel'
+                }
+              ].map((item, index) => (
+                <Grid container spacing={6} gap={1} marginTop={1} key={index}>
+                  <Grid item xs={12} md={6}>
+                    <Typography textAlign={'left'} fontSize={18} marginLeft={4}>
+                      {item.label}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={5}>
+                    <YesNoSelection
+                      value={form.values[item.name]}
+                      name={item.name}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        form.setFieldValue(item.name, e.target.value)
+                      }}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} md={5}>
-                  <YesNoSelection
-                    value={form.values.hasBox}
-                    name={'hasBox'}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                      form.setFieldValue('hasBox', e.target.value)
-                    }}
-                  />
+              ))}
+              {[
+                {
+                  label: 'Đồng hồ của bạn bao nhiêu tuổi',
+                  name: 'age',
+                  select: true,
+                  options: names
+                },
+                {
+                  label: 'Thương hiệu đồng hồ',
+                  name: 'brand',
+                  select: true,
+                  options: brands
+                },
+                { label: 'Số tham chiếu', name: 'reference' },
+                {
+                  label: 'Giá bán mong muốn của bạn là bao nhiêu?',
+                  name: 'wanaPrice',
+                  adornment: 'VND'
+                },
+                {
+                  label: 'Thông tin thêm (nếu có)',
+                  name: 'note',
+                  multiline: true
+                }
+              ].map((item, index) => (
+                <Grid container spacing={4} marginTop={1} key={index}>
+                  <Grid item xs={12} md={6}>
+                    <Typography
+                      textAlign={'left'}
+                      fontSize={18}
+                      marginTop={item.multiline ? 1 : 4}
+                      marginLeft={4}
+                    >
+                      {item.label}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <TextField
+                      variant="outlined"
+                      sx={{
+                        marginLeft: '50px'
+                      }}
+                      fullWidth
+                      select={item.select}
+                      multiline={item.multiline}
+                      InputProps={{
+                        startAdornment: item.adornment && (
+                          <Typography sx={{ marginRight: 1, fontSize: 15 }}>
+                            {item.adornment}
+                          </Typography>
+                        )
+                      }}
+                      name={item.name}
+                      value={form.values[item.name]}
+                      onChange={form.handleChange}
+                      onBlur={form.handleBlur}
+                    >
+                      {item.select &&
+                        item.options?.map((option) => (
+                          <MenuItem key={option} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                    </TextField>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid container spacing={6} gap={1} marginTop={1}>
-                <Grid item xs={12} md={6}>
-                  <Typography textAlign={'left'} fontSize={18} marginLeft={4}>
-                    Bạn có giấy tờ gốc của đồng hồ hoặc thẻ bảo hành không?
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={5}>
-                  <YesNoSelection
-                    value={form.values.hasWarranty}
-                    name={'hasWarranty'}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                      form.setFieldValue('hasWarranty', e.target.value)
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container spacing={6} gap={1} marginTop={1}>
-                <Grid item xs={12} md={6}>
-                  <Typography
-                    textAlign={'left'}
-                    fontSize={18}
-                    marginTop={1}
-                    marginLeft={4}
-                  >
-                    Bạn có hóa đơn mua hàng không?
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={5}>
-                  <YesNoSelection
-                    value={form.values.hasInvoice}
-                    name={'hasInvoice'}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                      form.setFieldValue('hasInvoice', e.target.value)
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container spacing={6} gap={1} marginTop={1}>
-                <Grid item xs={12} md={6}>
-                  <Typography
-                    textAlign={'left'}
-                    fontSize={18}
-                    marginTop={1}
-                    marginLeft={4}
-                  >
-                    Đồng hồ của bạn còn nhãn dán không?
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={5}>
-                  <YesNoSelection
-                    value={form.values.hasLabel}
-                    name={'hasLabel'}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                      form.setFieldValue('hasLabel', e.target.value)
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container spacing={4} marginTop={1}>
-                <Grid item xs={12} md={6}>
-                  <Typography
-                    textAlign={'left'}
-                    fontSize={18}
-                    marginTop={4}
-                    marginLeft={4}
-                  >
-                    Đồng hồ của bạn bao nhiêu tuổi
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  md={4}
-                  sx={{
-                    marginLeft: '50px'
-                  }}
-                >
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="age"
-                    label="Tuổi của đồng hồ"
-                    name="age"
-                    select
-                    value={form.values.age}
-                    onChange={form.handleChange}
-                    onBlur={form.handleBlur}
-                  >
-                    {names.map((name) => (
-                      <MenuItem key={name} value={name}>
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-              </Grid>
-              <Grid container spacing={4} marginTop={1}>
-                <Grid item xs={12} md={6}>
-                  <Typography
-                    textAlign={'left'}
-                    fontSize={18}
-                    marginTop={1}
-                    marginLeft={4}
-                  >
-                    Thương hiệu đồng hồ
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    variant="outlined"
-                    sx={{
-                      marginLeft: '50px'
-                    }}
-                    fullWidth
-                    name="brand"
-                    value={form.values.brand}
-                    onChange={form.handleChange}
-                    onBlur={form.handleBlur}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container spacing={4} marginTop={1}>
-                <Grid item xs={12} md={6}>
-                  <Typography
-                    textAlign={'left'}
-                    fontSize={18}
-                    marginTop={1}
-                    marginLeft={4}
-                  >
-                    Số tham chiếu
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    variant="outlined"
-                    sx={{
-                      marginLeft: '50px'
-                    }}
-                    fullWidth
-                    name="reference"
-                    value={form.values.reference}
-                    onChange={form.handleChange}
-                    onBlur={form.handleBlur}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container spacing={4} marginTop={1}>
-                <Grid item xs={12} md={6}>
-                  <Typography
-                    textAlign={'left'}
-                    fontSize={18}
-                    marginTop={1}
-                    marginLeft={4}
-                  >
-                    Giá bán mong muốn của bạn là bao nhiêu?
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    variant="outlined"
-                    sx={{
-                      marginLeft: '50px'
-                    }}
-                    fullWidth
-                    InputProps={{
-                      startAdornment: (
-                        <Typography sx={{ marginRight: 1, fontSize: 15 }}>
-                          VND
-                        </Typography>
-                      )
-                    }}
-                    name="wanaPrice"
-                    value={form.values.wanaPrice}
-                    onChange={form.handleChange}
-                    onBlur={form.handleBlur}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container spacing={4} marginTop={1}>
-                <Grid item xs={12} md={6}>
-                  <Typography
-                    textAlign={'left'}
-                    fontSize={18}
-                    marginTop={1}
-                    marginLeft={4}
-                  >
-                    Thông tin thêm (nếu có)
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    variant="outlined"
-                    rows={4}
-                    fullWidth
-                    multiline
-                    sx={{
-                      marginLeft: '50px'
-                    }}
-                    name="note"
-                    value={form.values.note}
-                    onChange={form.handleChange}
-                    onBlur={form.handleBlur}
-                  />
-                </Grid>
-              </Grid>
+              ))}
             </Box>
           </Box>
         </Grid>
-        <Grid item xs={12} md={12}>
+        <Grid item xs={12}>
           <Box>
             <Box marginLeft={'40px'}>
               <Typography
                 component={'div'}
                 sx={{
-                  padding: '16px',
+                  padding: '10px',
                   width: 'fit-content',
                   backgroundColor: '#434343',
                   paddingRight: '100px',
-
                   color: '#fff',
                   fontWeight: '600'
                 }}
@@ -425,7 +340,7 @@ const CreateExpertisePage = () => {
           </Box>
         </Grid>
       </Grid>
-      <Grid item xs={12} md={12}>
+      <Grid item xs={12}>
         <Button
           sx={{
             paddingX: '40px',

@@ -16,7 +16,7 @@ export interface CreateAppraisalRequest {
   note: string
   brand: string
   reference: string
-  images: File[]
+  images: Blob[]
 }
 
 const createAppraisalRequest = async (req: CreateAppraisalRequest) => {
@@ -25,6 +25,7 @@ const createAppraisalRequest = async (req: CreateAppraisalRequest) => {
     form.append('name', `${req.name}`)
     form.append('email', `${req.email}`)
     form.append('phoneNumber', `${req.phone}`)
+    form.append('address', `${req.address}`)
     form.append('hasOriginalBox', `${convertYesNoToBoolean(req.hasBox)}`)
     form.append(
       'hasPapersOrWarranty',
@@ -40,7 +41,9 @@ const createAppraisalRequest = async (req: CreateAppraisalRequest) => {
     form.append('description', `${req.note}`)
     form.append('brand', `${req.brand}`)
     form.append('referenceCode', `${req.reference}`)
-    form.append('imageFiles', `${req.images}`)
+    req.images.forEach((file) => {
+      form.append(`imageFiles`, file)
+    })
 
     const response = await axiosClient.post(
       AppPath.CREATE_APPRAISAL_REQUEST,

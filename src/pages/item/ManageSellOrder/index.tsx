@@ -8,7 +8,10 @@ const ManageSellOrder = () => {
       component={'div'}
       sx={{
         paddingY: '40px',
-        marginTop: '20px'
+        marginTop: '30px',
+        minHeight: 'calc(100vh - 340px)',
+        display: 'flex',
+        justifyContent: 'center'
       }}
     >
       <ManageOrderTab />

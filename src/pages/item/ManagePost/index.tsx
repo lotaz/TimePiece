@@ -1,4 +1,4 @@
-import { Container } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import { useEffect, useState } from 'react'
 import ManagerPostTab from './components/ManagerPostTab'
 import ManagerPostContent from './components/ManagerPostContent'
@@ -38,14 +38,18 @@ const ManagePostPage = () => {
   }, [posts])
 
   return (
-    <>
+    <Box
+      sx={{
+        minHeight: 'calc(100vh - 200px)'
+      }}
+    >
       <Container
         disableGutters
         component={'div'}
         sx={{
           backgroundColor: '#fff',
           paddingY: '10px',
-          marginTop: '60px'
+          marginTop: '100px'
         }}
       >
         <ManagerPostTab
@@ -92,7 +96,7 @@ const ManagePostPage = () => {
           />
         )}
       </Container>
-    </>
+    </Box>
   )
 }
 

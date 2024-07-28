@@ -18,6 +18,7 @@ import ScrollToTop from './components/ScollOnTop'
 import ManageSellOrder from './pages/item/ManageSellOrder'
 import ManageBuyOrder from './pages/item/ManageBuyOrder'
 import SellerProfilePage from './pages/item/SellerProfile'
+import ManageAppraisal from './pages/user/ManageAppraisal'
 
 const Root = () => (
   <UserLayout>
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
           {
             path: 'online-form',
             element: <CreateExpertisePage />
+          },
+          {
+            path: 'manage-appraisal',
+            element: <ManageAppraisal />
           }
         ]
       },
