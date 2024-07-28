@@ -77,7 +77,7 @@ const ManageOrderTab = () => {
       style={{
         padding: '20px',
         borderRadius: '8px',
-        minHeight: '67vh'
+        minHeight: 'calc(100vh - 310px)'
       }}
     >
       <Box
@@ -105,20 +105,29 @@ const ManageOrderTab = () => {
             aria-label="basic tabs example"
           >
             <StyledTab
-              label={`Tất cả (${isLoadingBuyer ? '...' : orders.length})`}
+              label={`Tất cả (${isLoadingBuyer ? '' : orders.length})`}
               {...a11yProps(0)}
             />
             <StyledTab
-              label={`Đợi duyệt (${isLoadingBuyer ? '...' : orders.filter((order) => order.status === 'wait').length})`}
+              label={`Đợi duyệt (${isLoadingBuyer ? '' : orders.filter((order) => order.status === 'wait').length})`}
               {...a11yProps(1)}
             />
             <StyledTab
-              label={`Đã duyệt (${isLoadingBuyer ? '...' : orders.filter((order) => order.status === 'approved').length})`}
+              label={`Đã duyệt (${isLoadingBuyer ? '' : orders.filter((order) => order.status === 'Approved').length})`}
               {...a11yProps(2)}
             />
-            <StyledTab label="Giao dịch trực tiếp (0)" {...a11yProps(3)} />
-            <StyledTab label="Đã cọc (0)" {...a11yProps(4)} />
-            <StyledTab label="Hoàn tất giao dịch (0)" {...a11yProps(5)} />
+            <StyledTab
+              label={`Giao dịch trực tiếp (${isLoadingBuyer ? '' : orders.filter((order) => order.status === 'Direct payment').length})`}
+              {...a11yProps(3)}
+            />
+            <StyledTab
+              label={`Đã cọc (${isLoadingBuyer ? '' : orders.filter((order) => order.status === 'Payment success').length})`}
+              {...a11yProps(4)}
+            />
+            <StyledTab
+              label={`Hoàn tất giao dịch (${isLoadingBuyer ? '' : orders.filter((order) => order.status === 'complete').length})`}
+              {...a11yProps(5)}
+            />
           </Tabs>
         </Box>
       </Box>
@@ -145,18 +154,31 @@ const ManageOrderTab = () => {
             </TabPanel>
             <TabPanel value={value} index={2}>
               <OrderItem
-                data={orders.filter((order) => order.status === 'approved')}
+                data={orders.filter((order) => order.status === 'Approved')}
                 isLoading={isLoadingBuyer}
               />
             </TabPanel>
             <TabPanel value={value} index={3}>
-              Giao dịch trực tiếp
+              <OrderItem
+                data={orders.filter(
+                  (order) => order.status === 'Direct payment'
+                )}
+                isLoading={isLoadingBuyer}
+              />
             </TabPanel>
             <TabPanel value={value} index={4}>
-              Đơn hàng đã cọc
+              <OrderItem
+                data={orders.filter(
+                  (order) => order.status === 'Payment success'
+                )}
+                isLoading={isLoadingBuyer}
+              />
             </TabPanel>
             <TabPanel value={value} index={5}>
-              Hoàn tất giao dịch
+              <OrderItem
+                data={orders.filter((order) => order.status === 'complete')}
+                isLoading={isLoadingBuyer}
+              />
             </TabPanel>
           </>
         )}

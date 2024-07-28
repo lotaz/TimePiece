@@ -1,20 +1,49 @@
-import { Container } from '@mui/material'
-import { useState } from 'react'
+
+import { Box } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { useLoaderData } from 'react-router-dom'
-import { User } from '../ManageBuyOrder/type'
 import { AppPath } from '@/services/utils'
 import useSWR from 'swr'
+import InfoTab from './components/InfoTab'
+import ContentTab from './components/ContentTab'
+
+interface Seller {
+  id: number
+  name: string
+  address: string
+  avatar: string
+  phoneNumber: string
+  dateCreate: string
+}
+
+// Example usage of the component
+const products = [
+  {
+    id: 1,
+    image: 'https://via.placeholder.com/200',
+    title: 'Đồng hồ G-Shock nam 52.5 mm',
+    price: 4350000,
+    location: 'Tp Hồ Chí Minh',
+    time: new Date().toISOString(),
+    isFavorite: true
+  }
+]
 
 const SellerProfilePage = () => {
   const { id } = useLoaderData() as { id: number }
-  const [seller, setSeller] = useState<User>()
+  const [seller, setSeller] = useState<Seller>()
 
-  const { data: user, isLoading: loadingUser } = useSWR(AppPath.USER_INFO(id))
-  const { data: watchs, isLoading: loadingWatchs } = useSWR(
-    AppPath.GET_WATCH_BY_USER(id)
-  )
+  const { data, isLoading: loadingUser } = useSWR(AppPath.USER_INFO(id))
+
+  useEffect(() => {
+    if (data) {
+      setSeller(data)
+    }
+  }, [data])
+
   return (
-    <Container
+    <Box
+
       component={'div'}
       sx={{
         marginX: 16,
@@ -25,7 +54,19 @@ const SellerProfilePage = () => {
         gap: 10,
         minHeight: 'calc(100vh - 340px)'
       }}
-    ></Container>
+    >
+      <InfoTab
+        sellerId={seller?.id}
+        name={seller?.name}
+        image={seller?.avatar}
+        phone={seller?.phoneNumber}
+        address={seller?.address}
+        joinedAt={seller?.dateCreate}
+        isLoading={loadingUser}
+      />
+      <ContentTab sellerId={id} />
+    </Box>
+
   )
 }
 

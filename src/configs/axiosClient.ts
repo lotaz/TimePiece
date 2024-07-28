@@ -32,7 +32,6 @@ axiosClient.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       // Handle unauthorized errors (e.g., redirect to login)
-      console.log('Unauthorized, logging out...')
       localStorage.removeItem('token')
     }
     return Promise.reject(error)
