@@ -60,9 +60,9 @@ const ContentTab: React.FC<ContentTabProps> = ({ sellerId }) => {
     <Box
       sx={{
         width: '50vw',
-        height: '60vh',
         bgcolor: 'white',
-        borderRadius: '8px'
+        borderRadius: '8px',
+        height: 'fit-content'
       }}
     >
       <Tabs value={tabValue} onChange={handleChange} centered>

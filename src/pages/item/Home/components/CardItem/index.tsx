@@ -28,7 +28,7 @@ const CardItem: React.FC<Watch> = ({
   createDate
 }: Watch) => {
   const navigate = useNavigate()
-
+  console.log(id)
   return (
     <Card
       component={'div'}
