@@ -7,16 +7,40 @@ import { AppPath } from '@/services/utils'
 import useSWR from 'swr'
 import { convertBooleanToYesNo } from '@/common/utils'
 import WatchImages from '../ViewAppraisalForm/components/WatchImages'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ConfirmDialog from '@/components/ConfirmDiaglog'
+
+export interface Appraisal {
+  address?: string
+  age?: number
+  areThereAnyStickers?: boolean
+  brand?: string
+  description?: string
+  desiredPrice?: number
+  email?: string
+  hasOriginalBox?: boolean
+  hasPapersOrWarranty?: boolean
+  hasPurchaseReceipt?: boolean
+  imageUrls?: string[]
+  name?: string
+  phoneNumber?: string
+  referenceCode?: string
+}
 
 const AppraisalFormDetailPage = () => {
   const [show, setShow] = useState(false)
+  const [appraisal, setAppraisal] = useState<Appraisal>()
   const navigate = useNavigate()
   const { id } = useParams()
   const { data, error, isLoading } = useSWR(
     `${AppPath.GET_APPRAISAL_REQUESTS_BY_ID}/${id}`
   )
+
+  useEffect(() => {
+    if (data) {
+      setAppraisal(data)
+    }
+  }, [data])
 
   return (
     <AppraiserLayout>
@@ -79,10 +103,10 @@ const AppraisalFormDetailPage = () => {
                   Thông tin của khách hàng
                 </Typography>
                 <CustomerInfo
-                  name={data?.name}
-                  email={data?.email}
-                  address={data?.address}
-                  phone={data?.phone}
+                  name={appraisal?.name}
+                  email={appraisal?.email}
+                  address={appraisal?.address}
+                  phone={appraisal?.phoneNumber}
                 />
               </Box>
               <Box>

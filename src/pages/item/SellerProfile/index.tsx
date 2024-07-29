@@ -15,19 +15,6 @@ interface Seller {
   dateCreate: string
 }
 
-// Example usage of the component
-const products = [
-  {
-    id: 1,
-    image: 'https://via.placeholder.com/200',
-    title: 'Đồng hồ G-Shock nam 52.5 mm',
-    price: 4350000,
-    location: 'Tp Hồ Chí Minh',
-    time: new Date().toISOString(),
-    isFavorite: true
-  }
-]
-
 const SellerProfilePage = () => {
   const { id } = useLoaderData() as { id: number }
   const [seller, setSeller] = useState<Seller>()

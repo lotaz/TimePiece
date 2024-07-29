@@ -27,8 +27,7 @@ const CustomerInfo = ({ name, email, phone, address }) => {
         </Box>
         <Box>
           <Typography variant="body2">
-            Số điện thoại:{' '}
-            <strong>{phone ? phone : '1123123123232132123'}</strong>
+            Số điện thoại: <strong>{phone}</strong>
           </Typography>
         </Box>
       </Box>
