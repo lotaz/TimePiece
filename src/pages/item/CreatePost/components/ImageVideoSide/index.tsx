@@ -6,10 +6,14 @@ import {
   IconButton,
   Card,
   CardMedia,
-  CardActions
+  CardActions,
+  Radio,
+  RadioGroup,
+  FormControlLabel
 } from '@mui/material'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 import DeleteIcon from '@mui/icons-material/Delete'
+import YesNoSelection from '@/components/Controls/YesNoSelection'
 
 interface ImageSideProps {
   handleUploadFile: (files: Blob[]) => void
@@ -50,6 +54,8 @@ const ImageList: FC<{
 
 const ImageSide: FC<ImageSideProps> = ({ handleUploadFile }) => {
   const [images, setImages] = useState<string[]>([])
+  const [appraisalImages, setAppraisalImages] = useState<string[]>([])
+  const [hasAppraisal, setHasAppraisal] = useState<boolean>(false)
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
@@ -69,6 +75,24 @@ const ImageSide: FC<ImageSideProps> = ({ handleUploadFile }) => {
     ])
   }
 
+  const handleAddAppraisal = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    if (files) {
+      const newImages = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      )
+      setAppraisalImages((prevImages) => [...prevImages, ...newImages])
+      handleUploadFile(Array.from(files))
+    }
+  }
+
+  const handleRemoveAppraisal = (index: number) => {
+    setAppraisalImages((prevImages) => [
+      ...prevImages.slice(0, index),
+      ...prevImages.slice(index + 1)
+    ])
+  }
+
   useEffect(() => {
     return () => {
       images.forEach((image) => URL.revokeObjectURL(image))
@@ -77,21 +101,37 @@ const ImageSide: FC<ImageSideProps> = ({ handleUploadFile }) => {
 
   return (
     <Box>
-      <Typography variant="h6" component="label" gutterBottom>
-        Images
-      </Typography>
       <Grid container spacing={2}>
+        <Grid
+          item
+          xs={12}
+          component={'div'}
+          sx={{
+            textAlign: 'left',
+            marginLeft: 10
+          }}
+        >
+          <Typography
+            sx={{
+              fontWeight: 'bold',
+              fontSize: 26
+            }}
+            variant="h6"
+          >
+            Hình ảnh sản phẩm
+          </Typography>
+        </Grid>
         <Grid item xs={12}>
           {images.length < 6 && (
             <Box
               sx={{
                 border: '2px dashed #D9D9D9',
                 borderRadius: 2,
-                padding: 3,
+                padding: 8,
                 textAlign: 'center',
                 bgcolor: '#f5f5f5',
                 cursor: 'pointer',
-                marginX: 20,
+                marginX: 16,
                 position: 'relative'
               }}
             >
@@ -110,12 +150,100 @@ const ImageSide: FC<ImageSideProps> = ({ handleUploadFile }) => {
               />
               <AddAPhotoIcon sx={{ fontSize: 50 }} />
               <Typography variant="body1" sx={{ marginTop: 1 }}>
-                Upload 1 to 6 images
+                Đăng từ 01 đến 06 ảnh
               </Typography>
             </Box>
           )}
           <ImageList images={images} handleRemoveImage={handleRemoveImage} />
         </Grid>
+        <Grid
+          item
+          xs={12}
+          component={'div'}
+          sx={{
+            textAlign: 'left',
+            marginLeft: 10
+          }}
+        >
+          <Typography
+            sx={{
+              fontWeight: 'bold',
+              fontSize: 26
+            }}
+            variant="h6"
+          >
+            Giấy thẩm định
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          component={'div'}
+          sx={{
+            textAlign: 'center'
+          }}
+        >
+          <RadioGroup
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              flexDirection: 'row'
+            }}
+            value={hasAppraisal}
+            onChange={(e) => setHasAppraisal(e.target.value === 'true')}
+          >
+            <FormControlLabel
+              value={'true'}
+              control={<Radio />}
+              label="Có giấy thẩm định"
+            />
+            <FormControlLabel
+              value={'false'}
+              control={<Radio />}
+              label="Không có giấy thẩm định"
+            />
+          </RadioGroup>
+        </Grid>
+        {hasAppraisal && (
+          <Grid item xs={12}>
+            {appraisalImages?.length !== 1 && (
+              <Box
+                sx={{
+                  border: '2px dashed #D9D9D9',
+                  borderRadius: 2,
+                  padding: 8,
+                  textAlign: 'center',
+                  bgcolor: '#f5f5f5',
+                  cursor: 'pointer',
+                  marginX: 16,
+                  position: 'relative'
+                }}
+              >
+                <input
+                  accept="image/*"
+                  type="file"
+                  multiple
+                  style={{
+                    opacity: 0,
+                    position: 'absolute',
+                    width: '100%',
+                    height: '100%',
+                    cursor: 'pointer'
+                  }}
+                  onChange={handleAddAppraisal}
+                />
+                <AddAPhotoIcon sx={{ fontSize: 50 }} />
+                <Typography variant="body1" sx={{ marginTop: 1 }}>
+                  Giấy thẩm định
+                </Typography>
+              </Box>
+            )}
+            <ImageList
+              images={images}
+              handleRemoveImage={handleRemoveAppraisal}
+            />
+          </Grid>
+        )}
       </Grid>
     </Box>
   )

@@ -42,7 +42,7 @@ const ItemDetailUser = ({
       setIsOpen(false)
       toast.success('Đặt hàng thành công', {
         onClose() {
-          navigate('/')
+          navigate('/post/manage-order/buy')
         }
       })
     }

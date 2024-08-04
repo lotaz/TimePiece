@@ -1,9 +1,8 @@
 import React from 'react'
-import { Avatar, Box, Card, Typography } from '@mui/material'
+import { Box, Card, Tooltip, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import StyledImage from '@/components/StyledImage'
-import moment from 'moment'
-import { formatDate, stringAvatar } from '@/common/utils'
+import { formatDate } from '@/common/utils'
 
 interface Watch {
   id: number
@@ -11,11 +10,10 @@ interface Watch {
   name: string
   price: number
   status: string
-  userAvatar: string | null
-  userId: number
   sellerName: string
   area: string | null
   createDate: string
+  isAppraisal: boolean
 }
 
 const CardItem: React.FC<Watch> = ({
@@ -25,10 +23,10 @@ const CardItem: React.FC<Watch> = ({
   imageUrl,
   sellerName,
   area,
-  createDate
+  createDate,
+  isAppraisal = false
 }: Watch) => {
   const navigate = useNavigate()
-  console.log(id)
   return (
     <Card
       component={'div'}
@@ -93,7 +91,7 @@ const CardItem: React.FC<Watch> = ({
           width: '100%'
         }}
       >
-        <Box component={'div'} marginRight={2}>
+        <Box component={'div'}>
           <Typography
             color={'#CA2C2C'} // Updated color to match the image
             fontWeight={'500'}
@@ -108,14 +106,56 @@ const CardItem: React.FC<Watch> = ({
             sx={{
               display: 'flex',
               alignItems: 'center',
-              marginTop: '5px'
+              marginTop: '5px',
+              justifyContent: 'space-between',
+              flexDirection: 'row'
             }}
           >
-            <Typography color={'#757575'} fontSize={'16px'}>
-              {sellerName ? `${sellerName}` : 'Không rõ'}
-            </Typography>
+            <Tooltip title={sellerName ? `${sellerName}` : 'Không rõ'}>
+              <Typography
+                color={'#757575'}
+                fontSize={'14px'}
+                sx={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  maxWidth: '100px',
+                  ':hover': {
+                    maxWidth: '150px'
+                  }
+                }}
+              >
+                {sellerName ? `${sellerName}` : 'Không rõ'}
+              </Typography>
+            </Tooltip>
+            {isAppraisal ? (
+              <Box
+                sx={{
+                  fontSize: '12px',
+                  paddingX: '10px',
+                  paddingY: '5px',
+                  borderRadius: '20px',
+                  backgroundColor: '#40ec1e'
+                }}
+              >
+                Đã thẩm định
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  fontSize: '10px',
+                  paddingX: '8px',
+                  paddingY: '3px',
+                  borderRadius: '20px',
+                  color: '#fff',
+                  backgroundColor: '#ea1717'
+                }}
+              >
+                Chưa thẩm định
+              </Box>
+            )}
           </Box>
-          <Typography color={'#757575'} fontSize={'14px'}>
+          <Typography color={'#757575'} fontSize={'14px'} marginTop={1}>
             {formatDate(createDate)} {area && ` - ${area}`}
           </Typography>
         </Box>

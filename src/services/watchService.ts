@@ -30,6 +30,8 @@ interface CreateWatch {
   address: string
   imageFiles: File[] | string[]
   area: string
+  hasAppraisalCertificate?: boolean | undefined
+  appraisalCertificateFile?: File[] | string[] | undefined
 }
 
 export const createWatchService = async (params: CreateWatch) => {
@@ -56,6 +58,14 @@ export const createWatchService = async (params: CreateWatch) => {
 
     params.imageFiles.forEach((file) => {
       formData.append(`imageFiles`, file)
+    })
+
+    formData.append(
+      'hasAppraisalCertificate',
+      params.hasAppraisalCertificate ? 'true' : 'false'
+    )
+    params.appraisalCertificateFile?.forEach((file) => {
+      formData.append(`appraisalCertificateFile`, file)
     })
 
     const response = await axiosClient.post(AppPath.CREATE_WATCH, formData, {
