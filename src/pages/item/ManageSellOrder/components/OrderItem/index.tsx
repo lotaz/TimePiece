@@ -31,7 +31,6 @@ const StyledButton = styled(Button)(({ theme }) => ({
 const ITEMS_PER_PAGE = 4
 
 const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
-  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const [cancel, setCancel] = useState(false)
   const [page, setPage] = useState(1)

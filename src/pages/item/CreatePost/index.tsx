@@ -40,7 +40,9 @@ const CreatePostPage = () => {
     description: '',
     address: '',
     area: '',
-    images: [] as string[]
+    images: [] as string[],
+    hasAppraisalCertificate: false,
+    appraisalCertificateFile: [] as string[]
   })
 
   const handleChange = (
@@ -84,7 +86,9 @@ const CreatePostPage = () => {
         ?.id as number,
       address: formValues.address,
       area: formValues.area,
-      imageFiles: formValues.images
+      imageFiles: formValues.images,
+      hasAppraisalCertificate: formValues.hasAppraisalCertificate,
+      appraisalCertificateFile: formValues.appraisalCertificateFile
     })
 
     if (data) {
@@ -103,14 +107,6 @@ const CreatePostPage = () => {
         backgroundColor: '#fff'
       }}
     >
-      <Typography
-        fontSize={'26px'}
-        fontWeight={'bold'}
-        gutterBottom
-        textAlign={'left'}
-      >
-        Hình ảnh và video sản phẩm
-      </Typography>
       <Grid container spacing={6} justifyContent={'center'}>
         <Grid item xs={12} md={5}>
           <ImageSide handleUploadFile={handleUploadImage} />

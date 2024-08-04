@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import {
   Box,
   Button,
@@ -16,6 +16,7 @@ import { AppPath } from '@/services/utils'
 import useSWR from 'swr'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import { DateTimePicker, renderTimeViewClock } from '@mui/x-date-pickers'
 
 interface User {
   id: number
@@ -78,10 +79,12 @@ const CreateExpertisePage = () => {
       console.log(values)
       await createAppraisalRequest(form.values)
         .then((res) => {
+          console.log(res)
           toast.success('Gởi yêu cầu thành công')
           naviage('/appraisal/manage-appraisal')
         })
         .catch((err) => {
+          console.log(err)
           toast.error('Gởi yêu cầu thất bại. Vui lòng thử lại sau ít phút')
           naviage('/')
         })
@@ -92,10 +95,10 @@ const CreateExpertisePage = () => {
     if (userInformation) {
       form.setValues({
         ...form.values,
-        name: userInformation.name || '',
-        email: userInformation.email || '',
-        phone: userInformation.phoneNumber || '',
-        address: userInformation.address || ''
+        name: userInformation.name ?? '',
+        email: userInformation.email ?? '',
+        phone: userInformation.phoneNumber ?? '',
+        address: userInformation.address ?? ''
       })
     }
   }, [userInformation])
@@ -171,6 +174,97 @@ const CreateExpertisePage = () => {
             </Grid>
           </Box>
         </Grid>
+        <Grid item xs={12}>
+          <Typography
+            component={'div'}
+            sx={{
+              padding: '10px',
+              width: 'fit-content',
+              backgroundColor: '#434343',
+              paddingRight: '100px',
+              marginLeft: '40px',
+              color: '#fff',
+              fontWeight: '600'
+            }}
+          >
+            Lịch hẹn thẩm định
+          </Typography>
+          <Box>
+            <Typography
+              sx={{
+                textAlign: 'left',
+                fontSize: '16px',
+                marginLeft: '50px',
+                fontWeight: '600'
+              }}
+            >
+              Ngày hẹn - Giờ hẹn
+            </Typography>
+            <Typography
+              sx={{
+                textAlign: 'left',
+                fontSize: '12px',
+                marginLeft: '60px',
+                color: '#6F6F6F'
+              }}
+            >
+              Thời gian mở cửa (không nghỉ trưa) <br />- Thứ 2 - thứ 6: 8h30 -
+              20h00 <br />- Thứ 7 và CN: 8h30 - 18h00 <br /> ****Vui lòng chọn
+              và xác nhận thời gian thẩm định.
+            </Typography>
+            <Box
+              sx={{
+                marginTop: '10px',
+                paddingX: '50px',
+                display: 'flex',
+                justifyContent: 'left'
+              }}
+            >
+              <DateTimePicker
+                label="Chọn ngày và giờ"
+                viewRenderers={{
+                  hours: renderTimeViewClock,
+                  minutes: renderTimeViewClock,
+                  seconds: renderTimeViewClock
+                }}
+                disablePast
+                sx={{
+                  width: '400px'
+                }}
+              />
+            </Box>
+          </Box>
+          <Box marginTop={2}>
+            <Typography
+              sx={{
+                textAlign: 'left',
+                fontSize: '16px',
+                marginLeft: '50px',
+                fontWeight: '600'
+              }}
+            >
+              Địa điểm thẩm định
+            </Typography>
+            <Box>
+              <TextField
+                select
+                label="Địa điểm thẩm định"
+                sx={{
+                  width: '600px',
+                  display: 'flex',
+                  justifyContent: 'left',
+                  marginLeft: '50px'
+                }}
+              >
+                <MenuItem value={'Hà Nội'}>Hà Nội</MenuItem>
+                <MenuItem value={'Hồ Chí Minh'}>Hồ Chí Minh</MenuItem>
+                <MenuItem value={'Đà Nẵng'}>Đà Nẵng</MenuItem>
+                <MenuItem value={'Hải Phòng'}>Hải Phòng</MenuItem>
+                <MenuItem value={'Cần Thơ'}>Cần Thơ</MenuItem>
+              </TextField>
+            </Box>
+          </Box>
+        </Grid>
         <Grid item xs={12} marginLeft={'40px'}>
           <Box>
             <Typography
@@ -181,7 +275,7 @@ const CreateExpertisePage = () => {
                 backgroundColor: '#434343',
                 color: '#fff',
                 fontWeight: '600',
-                paddingRight: '50px'
+                paddingRight: '110px'
               }}
             >
               Thông tin đồng hồ
