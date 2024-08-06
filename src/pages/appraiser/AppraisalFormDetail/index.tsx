@@ -9,6 +9,7 @@ import { convertBooleanToYesNo } from '@/common/utils'
 import WatchImages from '../ViewAppraisalForm/components/WatchImages'
 import { useEffect, useState } from 'react'
 import ConfirmDialog from '@/components/ConfirmDiaglog'
+import moment from 'moment'
 
 export interface Appraisal {
   address?: string
@@ -25,6 +26,8 @@ export interface Appraisal {
   name?: string
   phoneNumber?: string
   referenceCode?: string
+  appointmentDate?: string
+  appraisalLocation?: string
 }
 
 const AppraisalFormDetailPage = () => {
@@ -108,6 +111,84 @@ const AppraisalFormDetailPage = () => {
                   address={appraisal?.address}
                   phone={appraisal?.phoneNumber}
                 />
+              </Box>
+              <Box>
+                <Typography
+                  component={'div'}
+                  sx={{
+                    padding: '16px',
+                    width: '300px',
+                    backgroundColor: '#434343',
+                    textAlign: 'left',
+                    marginTop: '20px',
+                    marginLeft: '40px',
+                    color: '#fff',
+                    fontWeight: '600'
+                  }}
+                >
+                  Thời gian và địa điểm
+                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '20px',
+                    marginLeft: '70px'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row'
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        marginLeft: '40px',
+                        marginTop: '20px',
+                        fontWeight: '600'
+                      }}
+                    >
+                      Thời gian hẹn:
+                    </Box>
+                    <Box
+                      sx={{
+                        marginLeft: '40px',
+                        marginTop: '20px',
+                        fontWeight: '400'
+                      }}
+                    >
+                      {moment(appraisal?.appointmentDate).format(
+                        'DD/MM/YYYY HH:mm'
+                      )}
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row'
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        marginLeft: '40px',
+                        marginTop: '20px',
+                        fontWeight: '600'
+                      }}
+                    >
+                      Địa điểm:
+                    </Box>
+                    <Box
+                      sx={{
+                        marginLeft: '40px',
+                        marginTop: '20px',
+                        fontWeight: '400'
+                      }}
+                    >
+                      {appraisal?.appraisalLocation}
+                    </Box>
+                  </Box>
+                </Box>
               </Box>
               <Box>
                 <Typography

@@ -4,7 +4,8 @@ const CustomerInfo = ({ name, email, phone, address }) => {
   return (
     <Box
       sx={{
-        textAlign: 'left'
+        textAlign: 'left',
+        marginLeft: 6
       }}
     >
       <Box
@@ -18,21 +19,21 @@ const CustomerInfo = ({ name, email, phone, address }) => {
         }}
       >
         <Box>
-          <Typography variant="body2">
+          <Typography>
             Người yêu cầu: <strong>{name}</strong>
           </Typography>
-          <Typography variant="body2" marginTop={2}>
+          <Typography marginTop={2}>
             Email: <strong>{email}</strong>
           </Typography>
         </Box>
         <Box>
-          <Typography variant="body2">
+          <Typography>
             Số điện thoại: <strong>{phone}</strong>
           </Typography>
         </Box>
       </Box>
       <Box sx={{ marginLeft: 2 }}>
-        <Typography variant="body2" sx={{ marginLeft: 6 }}>
+        <Typography sx={{ marginLeft: 6 }}>
           Địa chỉ: <strong>{address}</strong>
         </Typography>
       </Box>

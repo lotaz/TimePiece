@@ -130,7 +130,7 @@ const ManageAppraisalTab = () => {
             aria-label="basic tabs example"
           >
             <StyledTab
-              label={`Đã duyệt  (${appraisal?.filter((item) => item.status === 'wait').length})`}
+              label={`Đợi duyệt  (${appraisal?.filter((item) => item.status === 'wait').length})`}
               {...a11yProps(0)}
             />
             <StyledTab

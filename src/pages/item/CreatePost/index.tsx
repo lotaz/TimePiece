@@ -40,9 +40,8 @@ const CreatePostPage = () => {
     description: '',
     address: '',
     area: '',
-    images: [] as string[],
-    hasAppraisalCertificate: false,
-    appraisalCertificateFile: [] as string[]
+    images: [] as Blob[],
+    appraisalCertificateFile: null as Blob | null
   })
 
   const handleChange = (
@@ -60,7 +59,14 @@ const CreatePostPage = () => {
   const handleUploadImage = (images: Blob[]) => {
     setFormValues((prevValues) => ({
       ...prevValues,
-      images: images as unknown
+      images: images
+    }))
+  }
+
+  const handleUploadAppraisalFile = (data: Blob) => {
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      appraisalCertificateFile: data
     }))
   }
 
@@ -87,7 +93,6 @@ const CreatePostPage = () => {
       address: formValues.address,
       area: formValues.area,
       imageFiles: formValues.images,
-      hasAppraisalCertificate: formValues.hasAppraisalCertificate,
       appraisalCertificateFile: formValues.appraisalCertificateFile
     })
 
@@ -109,7 +114,10 @@ const CreatePostPage = () => {
     >
       <Grid container spacing={6} justifyContent={'center'}>
         <Grid item xs={12} md={5}>
-          <ImageSide handleUploadFile={handleUploadImage} />
+          <ImageSide
+            handleUploadFile={handleUploadImage}
+            handleUploadAppraisalFile={handleUploadAppraisalFile}
+          />
         </Grid>
         <Grid item xs={12} md={5}>
           <Box component={'div'}>

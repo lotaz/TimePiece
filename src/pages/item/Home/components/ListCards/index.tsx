@@ -23,6 +23,8 @@ interface Item {
   userName: string
   area: string | null
   createDate: string
+  hasAppraisalCertificate: boolean
+  appraisalCertificateUrl: string | null
 }
 
 const ListCards: React.FC = () => {
@@ -78,11 +80,10 @@ const ListCards: React.FC = () => {
                     name={item.name}
                     price={item.price}
                     status={item.status}
-                    userAvatar={item.userAvatar}
-                    userId={item.userId}
                     sellerName={item.userName}
                     area={item.area}
                     createDate={item.createDate}
+                    isAppraisal={item?.hasAppraisalCertificate}
                   />
                 </Grid>
               ))}

@@ -39,7 +39,10 @@ export enum Area {
 export enum OrderStatus {
   WAIT = 'wait',
   APPROVED = 'Approved',
-  CANCELED = 'Cancel'
+  CANCELED = 'cancel',
+  DIRECT_PAYMENT = 'Direct payment',
+  PAYMENT_SUCCESS = 'Payment success',
+  COMPLETE = 'complete'
 }
 
 export interface SearchParams {

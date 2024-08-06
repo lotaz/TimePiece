@@ -1,42 +1,37 @@
 import React from 'react'
 import { Box, Button, Divider, Link, Typography, Skeleton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import Zalo from '@/assets/logoZalo.png'
-import Momo from '@/assets/logoMomo.png'
+import vnpay from '@/assets/vnpaylogo.png'
 import thanhtoantructiep from '@/assets/thanhtoantructiep.png'
+import ConfirmDiaglog from '@/components/ConfirmDiaglog'
 
 const methods = [
-  { name: 'ZaloPay', image: Zalo },
-  { name: 'Momo', image: Momo },
-  { name: 'ThanhToanTrucTiep', image: thanhtoantructiep }
+  { name: 'ThanhToanTrucTiep', image: thanhtoantructiep },
+  { name: 'VNPay', image: vnpay }
 ]
 
 interface PaymentMethodProps {
+  orderId?: number
   price: number
-  extraPrice: number
   paymentMethod: string
   handleChangeMethod: (method: string) => void
   isLoading?: boolean
+  handlePayment: (id: number) => void
+  isSubmitting?: boolean
 }
 
 const PaymentMethod: React.FC<PaymentMethodProps> = ({
   price,
-  extraPrice,
   paymentMethod,
   handleChangeMethod,
-  isLoading
+  isLoading,
+  handlePayment,
+  orderId = 0, // Provide a default value for orderId
+  isSubmitting
 }) => {
+  const extraPrice = price * 0.05
   const total = price + extraPrice
-  const navigate = useNavigate()
-
-  const handleSubmit = () => {
-    toast.success(`Đặt hàng thành công với phương thức ${paymentMethod}`, {
-      onClose() {
-        navigate('/')
-      }
-    })
-  }
+  const [open, setOpen] = React.useState(false)
 
   return (
     <Box
@@ -46,6 +41,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
       m={2}
       component={'div'}
       bgcolor={'#FFFFFF'}
+      paddingX={4}
     >
       <Box
         component={'div'}
@@ -85,8 +81,8 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
                   flexDirection={'column'}
                   alignItems={'center'}
                   padding={4}
-                  width={160}
-                  height={150}
+                  width={200}
+                  height={200}
                   marginX={2}
                   border={
                     paymentMethod === item.name
@@ -109,6 +105,8 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
                     }}
                     src={item.image}
                     alt={item.name}
+                    width={100}
+                    height={100}
                   />
                   {item.name === 'ThanhToanTrucTiep' && (
                     <Typography variant="body2" sx={{ mt: 2 }}>
@@ -123,7 +121,8 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
           width={'full'}
           sx={{
             display: 'flex',
-            justifyContent: 'flex-end'
+            justifyContent: 'flex-end',
+            margin: 2
           }}
         >
           <Box
@@ -221,14 +220,25 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
           </Typography>
           <Button
             variant="contained"
-            onClick={handleSubmit}
+            onClick={() => setOpen(true)}
             sx={{
               padding: '10px 60px'
             }}
-            disabled={isLoading}
+            disabled={isLoading || !paymentMethod}
           >
             Đặt hàng
           </Button>
+          <ConfirmDiaglog
+            open={open}
+            onClose={() => setOpen(false)}
+            isLoading={isSubmitting}
+            onConfirm={() => {
+              handlePayment(orderId)
+              setOpen(false)
+            }}
+            title={'Xasc nhận đặt hàng'}
+            description={`Bạn có chắc chắn muốn đặt hàng với giá trị ${total.toLocaleString()} không?`}
+          />
         </Box>
       </Box>
     </Box>

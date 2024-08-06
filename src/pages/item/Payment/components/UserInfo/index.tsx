@@ -43,7 +43,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
           Thanh toán
         </Typography>
       </Box>
-      <Box display="flex" alignItems="center" margin={2}>
+      <Box display="flex" alignItems="center" margin={2} paddingX={4}>
         <LocationOnIcon />
         <Typography
           variant="subtitle1"
@@ -65,7 +65,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
           Thay đổi
         </Link>
       </Box>
-      <Box display="flex" alignItems="center" m={2}>
+      <Box display="flex" alignItems="center" m={2} paddingX={4}>
         {isLoading ? (
           <>
             <Skeleton variant="text" width={100} height={30} />

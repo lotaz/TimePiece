@@ -15,7 +15,6 @@ interface CreateWatch {
   userId: number
   name: string
   watchStatus: string
-  description: string
   price: number
   brandId: number
   yearProduced: number
@@ -28,23 +27,23 @@ interface CreateWatch {
   placeOfProduction: string
   watchTypeId: number
   address: string
-  imageFiles: File[] | string[]
+  imageFiles: Blob[] | string[]
   area: string
   hasAppraisalCertificate?: boolean | undefined
-  appraisalCertificateFile?: File[] | string[] | undefined
+  appraisalCertificateFile?: Blob | string | null
+  description?: string
 }
 
 export const createWatchService = async (params: CreateWatch) => {
   try {
     const formData = new FormData()
 
-    formData.append('userId', params.userId.toString())
+    formData.append('userId', params.userId?.toString())
     formData.append('name', params.name)
     formData.append('watchStatus', params.watchStatus)
-    formData.append('description', params.description)
     formData.append('price', params.price.toString())
-    formData.append('brandId', params.brandId.toString())
-    formData.append('yearProduced', params.yearProduced.toString())
+    formData.append('brandId', params.brandId?.toString())
+    formData.append('yearProduced', params.yearProduced?.toString())
     formData.append('model', params.model)
     formData.append('material', params.material)
     formData.append('watchStrap', params.watchStrap)
@@ -52,7 +51,7 @@ export const createWatchService = async (params: CreateWatch) => {
     formData.append('accessories', params.accessories)
     formData.append('referenceCode', params.referenceCode)
     formData.append('placeOfProduction', params.placeOfProduction)
-    formData.append('watchTypeId', params.watchTypeId.toString())
+    formData.append('watchTypeId', params.watchTypeId?.toString())
     formData.append('address', params.address),
       formData.append('area', params.area)
 
@@ -60,13 +59,20 @@ export const createWatchService = async (params: CreateWatch) => {
       formData.append(`imageFiles`, file)
     })
 
-    formData.append(
-      'hasAppraisalCertificate',
-      params.hasAppraisalCertificate ? 'true' : 'false'
-    )
-    params.appraisalCertificateFile?.forEach((file) => {
-      formData.append(`appraisalCertificateFile`, file)
-    })
+    if (params.description) {
+      formData.append('description', params.description)
+    }
+
+    if (params.appraisalCertificateFile) {
+      formData.append(
+        `appraisalCertificateFile`,
+        params.appraisalCertificateFile
+      )
+
+      if (params.hasAppraisalCertificate) {
+        formData.append('hasAppraisalCertificate', 'true')
+      }
+    }
 
     const response = await axiosClient.post(AppPath.CREATE_WATCH, formData, {
       headers: {

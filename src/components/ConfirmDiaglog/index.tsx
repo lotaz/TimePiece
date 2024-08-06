@@ -5,7 +5,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Button
+  Button,
+  CircularProgress
 } from '@mui/material'
 
 interface ConfirmDialogProps {
@@ -14,6 +15,7 @@ interface ConfirmDialogProps {
   onConfirm: () => void
   title: string
   description: string
+  isLoading?: boolean
 }
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
@@ -21,19 +23,15 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onClose,
   onConfirm,
   title,
-  description
+  description,
+  isLoading = false
 }) => {
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={!isLoading ? onClose : undefined} // Prevent close while loading
       sx={{
         boxShadow: 'none'
-      }}
-      BackdropProps={{
-        sx: {
-          backgroundColor: 'rgba(32, 29, 29, 0.26)'
-        }
       }}
     >
       <DialogTitle>{title}</DialogTitle>
@@ -41,11 +39,17 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         <DialogContentText>{description}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={onClose} color="primary" disabled={isLoading}>
           Hủy
         </Button>
-        <Button onClick={onConfirm} color="primary" variant="contained">
-          Đồng ý
+        <Button
+          onClick={onConfirm}
+          color="primary"
+          variant="contained"
+          disabled={isLoading}
+          startIcon={isLoading && <CircularProgress size={20} />}
+        >
+          {isLoading ? 'Đang xử lý...' : 'Đồng ý'}
         </Button>
       </DialogActions>
     </Dialog>

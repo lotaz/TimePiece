@@ -18,7 +18,6 @@ const WatchInfo = ({
   hasBox,
   hasPapersOrWarranty,
   hasPurchaseReceipt,
-  region,
   age,
   arethereanystickers,
   desiredPrice,
@@ -108,6 +107,7 @@ const WatchInfo = ({
             variant="outlined"
             margin="normal"
             required
+            disabled
             fullWidth
             id="age"
             name="age"
@@ -133,6 +133,7 @@ const WatchInfo = ({
             required
             fullWidth
             id="brand"
+            disabled
             name="brand"
             value={brand}
           />
@@ -155,6 +156,7 @@ const WatchInfo = ({
             margin="normal"
             required
             fullWidth
+            disabled
             id="referenceNumber"
             name="referenceNumber"
             value={referenceNumber}
@@ -176,6 +178,7 @@ const WatchInfo = ({
         <Grid item xs={12} md={4} marginLeft={2}>
           <TextField
             variant="outlined"
+            disabled
             fullWidth
             value={desiredPrice}
             InputProps={{
@@ -202,6 +205,7 @@ const WatchInfo = ({
         <Grid item xs={12} md={4} marginLeft={2}>
           <TextField
             variant="outlined"
+            disabled
             rows={4}
             fullWidth
             multiline

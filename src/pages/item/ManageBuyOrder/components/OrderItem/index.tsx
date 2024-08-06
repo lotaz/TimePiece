@@ -17,10 +17,30 @@ import { updateOrder } from '@/services/orderService'
 import { toast } from 'react-toastify'
 import { OrderStatus } from '@/common/type'
 import { Order } from '../../type'
+import { AppPath } from '@/services/utils'
+import { mutate } from 'swr'
 
 interface OrderProps {
   data: Order[]
   isLoading: boolean
+  useId: number
+}
+
+export const displayOrderStatus = (status: OrderStatus) => {
+  switch (status) {
+    case OrderStatus.WAIT:
+      return 'Đợi duyệt'
+    case OrderStatus.APPROVED:
+      return 'Đã duyệt'
+    case OrderStatus.CANCELED:
+      return 'Đã huỷ'
+    case OrderStatus.DIRECT_PAYMENT:
+      return 'Thanh toán trực tiếp'
+    case OrderStatus.PAYMENT_SUCCESS:
+      return 'Thanh toán thành công'
+    case OrderStatus.COMPLETE:
+      return 'Hoàn thành'
+  }
 }
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -30,7 +50,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 const ITEMS_PER_PAGE = 4
 
-const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
+const OrderItem: FC<OrderProps> = ({ data, isLoading, useId }) => {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const [cancel, setCancel] = useState(false)
@@ -96,6 +116,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
     if (data) {
       toast.success('Duyệt đơn thành công')
       setOpen(false)
+      mutate(AppPath.GET_BUYER_ORDERS(useId))
     }
   }
 
@@ -117,6 +138,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
               <CardMedia
                 component="img"
                 sx={{ width: 100, height: 100, borderRadius: 1 }}
+                onClick={() => navigate(`/item/${item.watch.id}`)}
                 image={item.watch.imageUrl}
                 alt={item.watch.name}
               />
@@ -180,9 +202,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
                       textAlign: 'right'
                     }}
                   >
-                    {item.status === OrderStatus.WAIT
-                      ? 'Đợi duyệt'
-                      : 'Đã duyệt'}
+                    {displayOrderStatus(item.status as OrderStatus)}
                   </Typography>
                 </Box>
                 {item.status === OrderStatus.APPROVED && (

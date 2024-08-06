@@ -15,6 +15,9 @@ import { useLoaderData, useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
 import { AppPath } from '@/services/utils'
 import { Order } from '../ManageBuyOrder/type'
+import { updateOrder } from '@/services/orderService'
+import { OrderStatus } from '@/common/type'
+import { toast } from 'react-toastify'
 
 interface User {
   address: string | null
@@ -37,7 +40,7 @@ const PaymentPage = () => {
 
   const [open, setOpen] = useState(false)
   const [address, setAddress] = useState(userLocal?.address)
-  const [paymentMethod, setPaymentMethod] = useState('ZaloPay')
+  const [paymentMethod, setPaymentMethod] = useState('')
   const [user, setUser] = useState<User>()
   const [order, setOrder] = useState<Order>()
 
@@ -79,6 +82,25 @@ const PaymentPage = () => {
 
   const isLoading = isUserInfoLoading || isOrderInfoLoading
 
+  const handlePayment = async (id) => {
+    if (paymentMethod === 'ThanhToanTrucTiep') {
+      const data = await updateOrder(id, OrderStatus.DIRECT_PAYMENT)
+      if (data) {
+        toast.success('Thanh toán thành công', {
+          onClose: () => {
+            navigate('/')
+          }
+        })
+      }
+    } else {
+      toast.success('Thanh toán thành công', {
+        onClose: () => {
+          navigate('/')
+        }
+      })
+    }
+  }
+
   return (
     <Box maxWidth={1200} marginX={'auto'} width={'inherit'}>
       <Box
@@ -109,10 +131,11 @@ const PaymentPage = () => {
       </Box>
       <Box>
         <PaymentMethod
-          price={100}
-          extraPrice={1231231231213}
+          price={order?.watch.price ?? 0}
           paymentMethod={paymentMethod}
           handleChangeMethod={setPaymentMethod}
+          handlePayment={handlePayment}
+          orderId={order?.id}
         />
       </Box>
       <Modal open={open} onClose={handleClose}>
