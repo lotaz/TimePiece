@@ -13,6 +13,7 @@ const AppraisalItem = ({ appraisal, isLoading }: AppraisalItemProps) => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
+        marginBottom: 2,
         border: '1px solid #a8a1a1',
         borderRadius: 2,
         paddingX: 6,

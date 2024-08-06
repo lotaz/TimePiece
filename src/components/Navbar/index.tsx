@@ -6,7 +6,8 @@ import {
   Button,
   InputBase,
   Toolbar,
-  Typography
+  Typography,
+  Skeleton
 } from '@mui/material'
 import Logo from '@/assets/app-logo.png'
 import SearchIcon from '@mui/icons-material/Search'
@@ -132,7 +133,7 @@ const Navbar = () => {
           <img src={Logo} alt="logo" height={'46px'} />
         </Box>
 
-        <Box sx={{ marginRight: 10 }}>
+        <Box>
           <MenuPopover buttonLabel="Danh mục" />
           <Button
             sx={{
@@ -172,7 +173,9 @@ const Navbar = () => {
           </Button>
         </Box>
         <Box marginRight={10}>
-          {hasAuth ? (
+          {isLoading ? (
+            <Skeleton variant="circular" width={40} height={40} />
+          ) : hasAuth ? (
             <Box>
               <Button color="inherit" onClick={handleMenuOpen}>
                 {userState?.avatar ? (
@@ -180,7 +183,6 @@ const Navbar = () => {
                 ) : (
                   <Avatar {...stringAvatar(user.name)} />
                 )}
-
                 <Typography
                   marginLeft={2}
                   marginRight={1}

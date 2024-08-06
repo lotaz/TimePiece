@@ -12,28 +12,33 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import ConfirmDialog from '@/components/ConfirmDiaglog'
-import { useNavigate } from 'react-router-dom'
 import { updateOrder } from '@/services/orderService'
 import { toast } from 'react-toastify'
 import { OrderStatus } from '@/common/type'
 import { Order } from '@/pages/item/ManageBuyOrder/type'
+import { displayOrderStatus } from '@/pages/item/ManageBuyOrder/components/OrderItem'
+import { mutate } from 'swr'
+import { AppPath } from '@/services/utils'
 
 interface OrderProps {
   data: Order[]
   isLoading: boolean
+  useId: number
 }
 
 const StyledButton = styled(Button)(({ theme }) => ({
   marginLeft: theme.spacing(1),
-  minWidth: '80px'
+  minWidth: '70px'
 }))
 
 const ITEMS_PER_PAGE = 4
 
-const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
+const OrderItem: FC<OrderProps> = ({ data, isLoading, useId }) => {
   const [open, setOpen] = useState(false)
   const [cancel, setCancel] = useState(false)
+  const [complete, setComplete] = useState(false)
   const [page, setPage] = useState(1)
+  const [submitting, setSubmitting] = useState(false)
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -91,10 +96,19 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
   }
 
   const handleOrderAction = async (orderId: number, status: OrderStatus) => {
+    setSubmitting(true)
     const data = await updateOrder(orderId, status)
     if (data) {
-      toast.success('Duyệt đơn thành công')
+      toast.success(
+        status === OrderStatus.COMPLETE
+          ? 'Đã hoàn thành đơn hàng'
+          : 'Thực hiện thành công'
+      )
       setOpen(false)
+      setCancel(false)
+      setComplete(false)
+      setSubmitting(false)
+      mutate(AppPath.GET_SELLER_ORDERS(useId))
     }
   }
 
@@ -179,9 +193,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
                       textAlign: 'right'
                     }}
                   >
-                    {item.status === OrderStatus.WAIT
-                      ? 'Đợi duyệt'
-                      : 'Đã duyệt'}
+                    {displayOrderStatus(item.status as OrderStatus)}
                   </Typography>
                 </Box>
                 {item.status === OrderStatus.WAIT && (
@@ -190,6 +202,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
                       variant="outlined"
                       color="error"
                       onClick={() => setCancel(true)}
+                      disabled={submitting}
                     >
                       Từ chối
                     </StyledButton>
@@ -197,8 +210,21 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
                       variant="contained"
                       color="success"
                       onClick={() => setOpen(true)}
+                      disabled={submitting}
                     >
                       Duyệt
+                    </StyledButton>
+                  </Box>
+                )}
+                {item.status === OrderStatus.DIRECT_PAYMENT && (
+                  <Box component={'div'}>
+                    <StyledButton
+                      variant="contained"
+                      color="success"
+                      onClick={() => setComplete(true)}
+                      disabled={submitting}
+                    >
+                      Đã nhận đuợc tiền
                     </StyledButton>
                   </Box>
                 )}
@@ -210,6 +236,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
                   }
                   title={'Xác nhận duyệt đơn'}
                   description={'Bạn có chắc chắn muốn duyệt đơn mua này ?'}
+                  isLoading={submitting}
                 />
                 <ConfirmDialog
                   open={cancel}
@@ -219,6 +246,17 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading }) => {
                   }
                   title={'Xác nhận huỷ đơn'}
                   description={'Bạn có muốn hủy đơn này ?'}
+                  isLoading={submitting}
+                />
+                <ConfirmDialog
+                  open={complete}
+                  onClose={() => setComplete(false)}
+                  onConfirm={() =>
+                    handleOrderAction(item.id, OrderStatus.COMPLETE)
+                  }
+                  title={'Xác nhận hoàn thành đơn'}
+                  description={'Bạn có muốn hoàn thành đơn này ?'}
+                  isLoading={submitting}
                 />
               </Box>
             </Card>

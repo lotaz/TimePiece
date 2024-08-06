@@ -31,7 +31,7 @@ const WatchInfo: React.FC<WatchInfoProps> = ({
       m={2}
       bgcolor={'#FFFFFF'}
     >
-      <Grid item xs={5} m={2}>
+      <Grid item xs={5} m={2} paddingX={4}>
         <Box display="flex" alignItems="baseline" flexDirection={'column'}>
           <Typography variant="h6" color={'#000000'}>
             Sản phẩm

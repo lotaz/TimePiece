@@ -6,10 +6,12 @@ import {
   MenuItem,
   TextField,
   Typography,
-  Skeleton
+  Skeleton,
+  CircularProgress
 } from '@mui/material'
 import ImageUpload from './components/UploadFile'
 import { useFormik } from 'formik'
+import * as Yup from 'yup'
 import YesNoSelection from '@/components/Controls/YesNoSelection'
 import { createAppraisalRequest } from '@/services/appraisalRequestService'
 import { AppPath } from '@/services/utils'
@@ -18,6 +20,7 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { DateTimePicker, renderTimeViewClock } from '@mui/x-date-pickers'
 
+// User type definition
 interface User {
   id: number
   name: string
@@ -31,33 +34,57 @@ interface User {
   email: string | null
 }
 
+// Constants
 const names = ['10', '20', '30']
 
 const CreateExpertisePage = () => {
-  const naviage = useNavigate()
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
   const [userInformation, setUserInformation] = useState<User | null>(null)
   const [brands, setBrands] = useState<{ id: number; name: string }[]>([])
   const user = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user') as string)
     : null
 
+  // Fetch user info and brands
   const { data, isLoading } = useSWR(AppPath.USER_INFO(user?.id))
   const { data: brandsData, isLoading: isLoadingBrands } = useSWR(
     AppPath.GET_BRANDS
   )
 
+  // Set user info and brands
   useEffect(() => {
     if (data) {
       setUserInformation(data)
     }
 
     if (brandsData) {
-      //map data to brands
       const mapBrand = brandsData.map((brand) => brand.brandName || '')
       setBrands(mapBrand)
     }
   }, [data, brandsData])
 
+  // Form validation schema
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required('Họ và tên là bắt buộc'),
+    email: Yup.string()
+      .email('Email không hợp lệ')
+      .required('Email là bắt buộc'),
+    phone: Yup.string().required('Số điện thoại là bắt buộc'),
+    address: Yup.string().required('Địa chỉ là bắt buộc'),
+    apptDateTime: Yup.date().nullable().required('Ngày hẹn là bắt buộc'),
+    apptLocation: Yup.string().required('Địa điểm thẩm định là bắt buộc'),
+    brand: Yup.string().required('Thương hiệu đồng hồ là bắt buộc'),
+    reference: Yup.string().required('Số tham chiếu là bắt buộc'),
+    hasBox: Yup.string().required('Thông tin hộp là bắt buộc'),
+    hasWarranty: Yup.string().required('Thông tin bảo hành là bắt buộc'),
+    hasInvoice: Yup.string().required('Thông tin hóa đơn là bắt buộc'),
+    hasLabel: Yup.string().required('Thông tin nhãn dán là bắt buộc'),
+    age: Yup.string().required('Tuổi của đồng hồ là bắt buộc'),
+    wanaPrice: Yup.string().required('Giá bán mong muốn là bắt buộc')
+  })
+
+  // Formik form setup
   const form = useFormik({
     initialValues: {
       name: '',
@@ -73,24 +100,29 @@ const CreateExpertisePage = () => {
       wanaPrice: '',
       note: '',
       images: [],
-      address: ''
+      address: '',
+      apptDateTime: null,
+      apptLocation: ''
     },
+    validationSchema,
     onSubmit: async (values) => {
-      console.log(values)
+      setLoading(true)
       await createAppraisalRequest(form.values)
         .then((res) => {
-          console.log(res)
           toast.success('Gởi yêu cầu thành công')
-          naviage('/appraisal/manage-appraisal')
+          navigate('/appraisal/manage-appraisal')
         })
         .catch((err) => {
           console.log(err)
           toast.error('Gởi yêu cầu thất bại. Vui lòng thử lại sau ít phút')
-          naviage('/')
+        })
+        .finally(() => {
+          setLoading(false)
         })
     }
   })
 
+  // Set initial form values based on user information
   useEffect(() => {
     if (userInformation) {
       form.setValues({
@@ -167,6 +199,13 @@ const CreateExpertisePage = () => {
                       onChange={form.handleChange}
                       onBlur={form.handleBlur}
                       name={field.name}
+                      error={
+                        form.touched[field.name] &&
+                        Boolean(form.errors[field.name])
+                      }
+                      helperText={
+                        form.touched[field.name] && form.errors[field.name]
+                      }
                     />
                   )}
                 </Grid>
@@ -228,6 +267,10 @@ const CreateExpertisePage = () => {
                   seconds: renderTimeViewClock
                 }}
                 disablePast
+                value={form.values.apptDateTime}
+                onChange={(date) => {
+                  form.setFieldValue('apptDateTime', date)
+                }}
                 sx={{
                   width: '400px'
                 }}
@@ -248,6 +291,8 @@ const CreateExpertisePage = () => {
             <Box>
               <TextField
                 select
+                onChange={form.handleChange}
+                name="apptLocation"
                 label="Địa điểm thẩm định"
                 sx={{
                   width: '600px',
@@ -255,12 +300,25 @@ const CreateExpertisePage = () => {
                   justifyContent: 'left',
                   marginLeft: '50px'
                 }}
+                error={
+                  form.touched.apptLocation && Boolean(form.errors.apptLocation)
+                }
+                helperText={
+                  form.touched.apptLocation && form.errors.apptLocation
+                }
               >
-                <MenuItem value={'Hà Nội'}>Hà Nội</MenuItem>
-                <MenuItem value={'Hồ Chí Minh'}>Hồ Chí Minh</MenuItem>
-                <MenuItem value={'Đà Nẵng'}>Đà Nẵng</MenuItem>
-                <MenuItem value={'Hải Phòng'}>Hải Phòng</MenuItem>
-                <MenuItem value={'Cần Thơ'}>Cần Thơ</MenuItem>
+                <MenuItem
+                  value={'109 Đinh Tiên Hoàng - P.Đa Kao - Quận 1 - Tp.HCM'}
+                >
+                  109 Đinh Tiên Hoàng - P.Đa Kao - Quận 1 - Tp.HCM
+                </MenuItem>
+                <MenuItem
+                  value={
+                    '58 Nguyễn Cư Trinh - P.Phạm Ngũ Lão - Quận 1 - Tp.HCM'
+                  }
+                >
+                  58 Nguyễn Cư Trinh - P.Phạm Ngũ Lão - Quận 1 - Tp.HCM
+                </MenuItem>
               </TextField>
             </Box>
           </Box>
@@ -364,6 +422,7 @@ const CreateExpertisePage = () => {
                       fullWidth
                       select={item.select}
                       multiline={item.multiline}
+                      minRows={item.multiline ? 4 : 1}
                       InputProps={{
                         startAdornment: item.adornment && (
                           <Typography sx={{ marginRight: 1, fontSize: 15 }}>
@@ -375,6 +434,13 @@ const CreateExpertisePage = () => {
                       value={form.values[item.name]}
                       onChange={form.handleChange}
                       onBlur={form.handleBlur}
+                      error={
+                        form.touched[item.name] &&
+                        Boolean(form.errors[item.name])
+                      }
+                      helperText={
+                        form.touched[item.name] && form.errors[item.name]
+                      }
                     >
                       {item.select &&
                         item.options?.map((option) => (
@@ -438,22 +504,20 @@ const CreateExpertisePage = () => {
         <Button
           sx={{
             paddingX: '40px',
-            color: '#fff',
-            backgroundColor: '#434343',
             borderColor: '#434343',
             marginTop: '30px',
-            marginLeft: '40px',
-            ':hover': {
-              backgroundColor: '#434343'
-            }
+            marginLeft: '40px'
           }}
           size="large"
           variant="outlined"
+          disabled={loading || !form.isValid}
+          startIcon={loading && <CircularProgress size={20} />}
           onClick={() => {
+            setLoading(true)
             form.handleSubmit()
           }}
         >
-          Gởi yêu cầu
+          {loading ? 'Đang xử lý...' : 'Gửi yêu cầu'}
         </Button>
       </Grid>
     </Box>

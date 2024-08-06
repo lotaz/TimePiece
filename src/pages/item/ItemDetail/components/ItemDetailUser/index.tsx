@@ -7,15 +7,17 @@ import { createOrder } from '@/services/orderService'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import ConfirmDialog from '@/components/ConfirmDiaglog'
+import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined'
 
 interface ItemDetailUserProps {
-  sellerId: number
-  sellerName: string
-  sellerPhone: string
-  sellerAvatar: string
+  sellerId?: number
+  sellerName?: string
+  sellerPhone?: string
+  sellerAvatar?: string
   loading: boolean
   feedbacks?: number
   rating: number
+  hasAppraisalCertificate?: boolean
 }
 
 const ItemDetailUser = ({
@@ -25,7 +27,8 @@ const ItemDetailUser = ({
   sellerAvatar,
   loading,
   feedbacks,
-  rating
+  rating,
+  hasAppraisalCertificate
 }: ItemDetailUserProps) => {
   const navigate = useNavigate()
   const user = localStorage.getItem('user')
@@ -33,12 +36,14 @@ const ItemDetailUser = ({
     : null
 
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const data = useLoaderData()
   const { id } = data as { id: string }
 
   const handleCreateOrder = async () => {
     const res = await createOrder({ watchId: Number(id), userId: user?.id })
     if (res) {
+      setIsLoading(false)
       setIsOpen(false)
       toast.success('Đặt hàng thành công', {
         onClose() {
@@ -75,7 +80,14 @@ const ItemDetailUser = ({
           ) : (
             <Box component={'div'} marginLeft={2} marginTop={1}>
               <Typography variant="h6" fontWeight="medium" textAlign={'left'}>
-                <Link to={`/user/seller/${sellerId}`}>{sellerName}</Link>
+                <Link
+                  style={{
+                    color: '#0474d0'
+                  }}
+                  to={`/user/seller/${sellerId}`}
+                >
+                  {sellerName}
+                </Link>
               </Typography>
               <Box
                 sx={{
@@ -171,6 +183,7 @@ const ItemDetailUser = ({
                 variant="outlined"
                 fullWidth
                 onClick={() => setIsOpen(true)}
+                disabled={isLoading}
                 sx={{
                   textTransform: 'none',
                   fontSize: '14px',
@@ -178,6 +191,13 @@ const ItemDetailUser = ({
                   color: 'white',
                   '&:hover': {
                     bgcolor: 'primary.dark'
+                  },
+                  '&:disabled': {
+                    bgcolor: 'grey.500',
+                    color: 'white',
+                    '&:hover': {
+                      bgcolor: 'grey.500'
+                    }
                   }
                 }}
               >
@@ -186,7 +206,11 @@ const ItemDetailUser = ({
               <ConfirmDialog
                 open={isOpen}
                 onClose={() => setIsOpen(false)}
-                onConfirm={handleCreateOrder}
+                isLoading={isLoading}
+                onConfirm={() => {
+                  setIsLoading(true)
+                  handleCreateOrder()
+                }}
                 title={'Xác nhận đặt hàng'}
                 description={
                   'Bạn có chắc chắn muốn đặt hàng sản phẩm này không?'
@@ -212,6 +236,42 @@ const ItemDetailUser = ({
             </Button>
           )}
         </Grid>
+        {!loading && (
+          <Grid item xs={12}>
+            {hasAppraisalCertificate ? (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  zIndex: 1,
+                  gap: 1,
+                  justifyContent: 'center',
+                  bgcolor: '#EEF4FF',
+                  paddingY: 1,
+                  borderRadius: 2
+                }}
+              >
+                <VerifiedUserOutlinedIcon />
+                <Typography>Đã thẩm định</Typography>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  zIndex: 1,
+                  gap: 1,
+                  justifyContent: 'center',
+                  bgcolor: '#ffeeee',
+                  paddingY: 1,
+                  borderRadius: 2
+                }}
+              >
+                <Typography>Chưa thẩm định</Typography>
+              </Box>
+            )}
+          </Grid>
+        )}
       </Grid>
     </Box>
   )

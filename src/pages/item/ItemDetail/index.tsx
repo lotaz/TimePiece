@@ -4,11 +4,22 @@ import ItemDetailUser from './components/ItemDetailUser'
 import { AppPath } from '@/services/utils'
 import useSWR from 'swr'
 import { useLoaderData } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { WatchDetail } from './type'
 
 const ItemDetailPage = () => {
   const { id } = useLoaderData() as { id: number }
+  const [watch, setWatch] = useState<WatchDetail | null>(null)
+  const [listImage, setListImage] = useState<string[]>([])
 
   const { data, isLoading } = useSWR(AppPath.GET_WATCH_BY_ID(id))
+
+  useEffect(() => {
+    if (data) {
+      setWatch(data)
+      setListImage([...data.watchImages, data.appraisalCertificateUrl])
+    }
+  }, [data])
 
   return (
     <Container
@@ -24,19 +35,21 @@ const ItemDetailPage = () => {
         <Grid item xs={12} md={8}>
           <ItemDetail
             watch={data}
-            images={data?.watchImages}
+            images={listImage}
             isLoading={isLoading}
+            appraisalCertificateUrl={watch?.appraisalCertificateUrl}
           />
         </Grid>
         <Grid item xs={12} md={4}>
           <ItemDetailUser
             loading={isLoading}
-            sellerId={data?.userId}
-            sellerName={data?.userName}
-            sellerPhone={data?.userPhoneNumber}
-            sellerAvatar={data?.userAvatar}
+            sellerId={watch?.userId}
+            sellerName={watch?.userName}
+            sellerPhone={watch?.userPhoneNumber}
+            sellerAvatar={watch?.userAvatar}
             feedbacks={10}
-            rating={data?.userRatingScore || 0}
+            rating={watch?.userRatingScore || 0}
+            hasAppraisalCertificate={watch?.hasAppraisalCertificate}
           />
         </Grid>
       </Grid>

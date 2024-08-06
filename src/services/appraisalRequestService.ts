@@ -1,6 +1,7 @@
 import axiosClient from '@/configs/axiosClient'
 import { AppPath } from './utils'
 import { convertYesNoToBoolean } from '@/common/utils'
+import moment from 'moment'
 
 export interface CreateAppraisalRequest {
   name: string
@@ -17,6 +18,8 @@ export interface CreateAppraisalRequest {
   brand: string
   reference: string
   images: Blob[]
+  apptDateTime: string | null
+  apptLocation: string
 }
 
 const createAppraisalRequest = async (req: CreateAppraisalRequest) => {
@@ -44,6 +47,11 @@ const createAppraisalRequest = async (req: CreateAppraisalRequest) => {
     req.images.forEach((file) => {
       form.append(`imageFiles`, file)
     })
+    form.append(
+      'appointmentDate',
+      `${moment(req.apptDateTime).format('DD-MM-YYYY HH:mm:ss')}`
+    )
+    form.append('appraisalLocation', `${req.apptLocation}`)
 
     const response = await axiosClient.post(
       AppPath.CREATE_APPRAISAL_REQUEST,

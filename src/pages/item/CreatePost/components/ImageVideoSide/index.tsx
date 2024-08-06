@@ -13,10 +13,10 @@ import {
 } from '@mui/material'
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
 import DeleteIcon from '@mui/icons-material/Delete'
-import YesNoSelection from '@/components/Controls/YesNoSelection'
 
 interface ImageSideProps {
   handleUploadFile: (files: Blob[]) => void
+  handleUploadAppraisalFile: (file: Blob) => void
 }
 
 const ImageList: FC<{
@@ -52,9 +52,12 @@ const ImageList: FC<{
   )
 }
 
-const ImageSide: FC<ImageSideProps> = ({ handleUploadFile }) => {
+const ImageSide: FC<ImageSideProps> = ({
+  handleUploadFile,
+  handleUploadAppraisalFile
+}) => {
   const [images, setImages] = useState<string[]>([])
-  const [appraisalImages, setAppraisalImages] = useState<string[]>([])
+  const [appraisalImage, setAppraisalImages] = useState<string>()
   const [hasAppraisal, setHasAppraisal] = useState<boolean>(false)
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,20 +80,18 @@ const ImageSide: FC<ImageSideProps> = ({ handleUploadFile }) => {
 
   const handleAddAppraisal = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
+
     if (files) {
       const newImages = Array.from(files).map((file) =>
         URL.createObjectURL(file)
       )
-      setAppraisalImages((prevImages) => [...prevImages, ...newImages])
-      handleUploadFile(Array.from(files))
+      setAppraisalImages(newImages[0])
+      handleUploadAppraisalFile(files[0])
     }
   }
 
-  const handleRemoveAppraisal = (index: number) => {
-    setAppraisalImages((prevImages) => [
-      ...prevImages.slice(0, index),
-      ...prevImages.slice(index + 1)
-    ])
+  const handleRemoveAppraisal = () => {
+    setAppraisalImages('')
   }
 
   useEffect(() => {
@@ -98,6 +99,12 @@ const ImageSide: FC<ImageSideProps> = ({ handleUploadFile }) => {
       images.forEach((image) => URL.revokeObjectURL(image))
     }
   }, [images])
+
+  useEffect(() => {
+    if (!hasAppraisal) {
+      setAppraisalImages('')
+    }
+  }, [appraisalImage, hasAppraisal])
 
   return (
     <Box>
@@ -206,7 +213,7 @@ const ImageSide: FC<ImageSideProps> = ({ handleUploadFile }) => {
         </Grid>
         {hasAppraisal && (
           <Grid item xs={12}>
-            {appraisalImages?.length !== 1 && (
+            {!appraisalImage && (
               <Box
                 sx={{
                   border: '2px dashed #D9D9D9',
@@ -239,7 +246,7 @@ const ImageSide: FC<ImageSideProps> = ({ handleUploadFile }) => {
               </Box>
             )}
             <ImageList
-              images={images}
+              images={appraisalImage ? [appraisalImage] : []}
               handleRemoveImage={handleRemoveAppraisal}
             />
           </Grid>

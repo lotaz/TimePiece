@@ -14,7 +14,7 @@ export interface User {
 }
 
 export interface Watch {
-  address: string
+  id: number
   createDate: string
   endDate: string | null
   imageUrl: string
@@ -26,6 +26,7 @@ export interface Watch {
   status: string | null
   typePost: string | null
   type: string | null
+  address?: string
 }
 
 // Updated Order Interface
