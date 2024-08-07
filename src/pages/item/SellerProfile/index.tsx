@@ -6,13 +6,15 @@ import useSWR from 'swr'
 import InfoTab from './components/InfoTab'
 import ContentTab from './components/ContentTab'
 
-interface Seller {
+export interface Seller {
   id: number
   name: string
   address: string
   avatar: string
   phoneNumber: string
   dateCreate: string
+  ratingScore?: number
+  feedbacks?: number
 }
 
 const SellerProfilePage = () => {
@@ -31,12 +33,12 @@ const SellerProfilePage = () => {
     <Box
       component={'div'}
       sx={{
-        marginX: 16,
+        marginX: 10,
         marginTop: 12,
         marginBottom: 4,
         display: 'flex',
         flexDirection: 'row',
-        gap: 10,
+        gap: '4vw',
         minHeight: 'calc(100vh - 340px)'
       }}
     >
