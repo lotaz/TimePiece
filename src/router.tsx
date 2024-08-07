@@ -19,6 +19,7 @@ import ManageSellOrder from './pages/item/ManageSellOrder'
 import ManageBuyOrder from './pages/item/ManageBuyOrder'
 import SellerProfilePage from './pages/item/SellerProfile'
 import ManageAppraisal from './pages/user/ManageAppraisal'
+import RatingPage from './pages/user/Rating'
 
 const Root = () => (
   <UserLayout>
@@ -77,6 +78,14 @@ const router = createBrowserRouter([
           {
             path: 'seller/:id',
             element: <SellerProfilePage />,
+            loader: async ({ params }) => {
+              const { id } = params
+              return { id }
+            }
+          },
+          {
+            path: 'seller/:id/rating',
+            element: <RatingPage />,
             loader: async ({ params }) => {
               const { id } = params
               return { id }

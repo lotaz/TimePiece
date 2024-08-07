@@ -15,6 +15,7 @@ interface Watch {
   status: string
   watchImage: string | null
   watchstatus: string | null
+  hasAppraisalCertificate: boolean
 }
 
 interface ListWatchesProps {
@@ -45,6 +46,7 @@ const ListWatches = ({ watch, isLoading }: ListWatchesProps) => {
                 <CardItem
                   id={item.id}
                   name={item?.name}
+                  isAppraisal={item.hasAppraisalCertificate}
                   price={item.price}
                   imageUrl={
                     item.imageUrl
@@ -52,8 +54,6 @@ const ListWatches = ({ watch, isLoading }: ListWatchesProps) => {
                       : 'https://res.cloudinary.com/dtxbcgpot/image/upload/v1719167161/scndrdzsuky8d6ti0r2b.jpg'
                   }
                   status={item.status}
-                  userAvatar={item.sellerImage}
-                  userId={item.sellerId}
                   sellerName={item?.sellerName}
                   area={item.area}
                   createDate={item.createDate}

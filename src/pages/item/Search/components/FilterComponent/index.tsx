@@ -6,9 +6,8 @@ import {
   Slider,
   Button,
   Popover,
-  RadioGroup,
+  Checkbox,
   FormControlLabel,
-  Radio,
   Skeleton
 } from '@mui/material'
 import useSWR from 'swr'
@@ -16,19 +15,18 @@ import { AppPath } from '@/services/utils'
 import { Area, ProductStatus } from '@/common/type'
 
 interface FilterProps {
-  area: string
-  brand: string
+  area: string[]
+  brand: string[]
   maxPrice: number | undefined
   minPrice: number | undefined
-  status: string
-  type: string
-  condition: string
-  isLoading: boolean
-  onFilterChange: (name: string, value: string | number | number[]) => void
+  status: string[]
+  type: string[]
+  condition: string[]
+
+  onFilterChange: (name: string, value: string[] | number | number[]) => void
 }
 
 const FilterComponent = ({
-  isLoading,
   area,
   brand,
   maxPrice,
@@ -51,18 +49,26 @@ const FilterComponent = ({
     status: null | HTMLElement
     type: null | HTMLElement
     condition: null | HTMLElement
-    price: null | HTMLElement // Add the 'price' property
+    price: null | HTMLElement
   }>({
     area: null,
     brand: null,
     status: null,
     type: null,
     condition: null,
-    price: null // Initialize the 'price' property
+    price: null
   })
 
-  const { data: brandsRes, isLoading: loadBrand } = useSWR(AppPath.GET_BRANDS)
-  const { data: typesRes, isLoading: loadTypes } = useSWR(AppPath.GET_TYPES)
+  const { data: brandsRes, isLoading: loadBrand } = useSWR(AppPath.GET_BRANDS, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateOnMount: false
+  })
+  const { data: typesRes, isLoading: loadTypes } = useSWR(AppPath.GET_TYPES, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    revalidateOnMount: false
+  })
 
   useEffect(() => {
     if (brandsRes) {
@@ -106,7 +112,7 @@ const FilterComponent = ({
 
   const handleFilterChange = (
     name: string,
-    value: string | number | number[]
+    value: string[] | number | number[]
   ) => {
     onFilterChange(name, value)
   }
@@ -144,10 +150,26 @@ const FilterComponent = ({
     })
   }
 
-  const handleRadioChange =
+  const handleCheckboxChange =
     (name: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      handleFilterChange(name, event.target.value)
-      handleClose(name)()
+      const value = event.target.value
+      const currentValues = (
+        name === 'area'
+          ? area
+          : name === 'brand'
+            ? brand
+            : name === 'status'
+              ? status
+              : name === 'type'
+                ? type
+                : name === 'condition'
+                  ? condition
+                  : []
+      ) as string[]
+      const newValues = currentValues.includes(value)
+        ? currentValues.filter((v) => v !== value)
+        : [...currentValues, value]
+      handleFilterChange(name, newValues)
     }
 
   const renderPopover = (name: string, options: string[]) => (
@@ -166,48 +188,54 @@ const FilterComponent = ({
     >
       <Box p={2} width="200px">
         <Typography variant="subtitle1">{`Chọn ${name}`}</Typography>
-        <RadioGroup
-          value={(() => {
-            switch (name) {
-              case 'area':
-                return area
-              case 'brand':
-                return brand
-              case 'status':
-                return status
-              case 'type':
-                return type
-              case 'condition':
-                return condition
-              default:
-                return ''
-            }
-          })()}
-          onChange={handleRadioChange(name)}
-        >
-          {isLoading ||
-          (name === 'brand' && loadBrand) ||
-          (name === 'type' && loadTypes)
-            ? [1, 2, 3].map((idx) => (
-                <FormControlLabel
-                  key={idx}
-                  value=""
-                  control={<Skeleton width={40} height={40} />}
-                  label={<Skeleton width="100%" />}
-                />
-              ))
-            : options.map((option) => (
-                <FormControlLabel
-                  key={option}
-                  value={option}
-                  control={<Radio />}
-                  label={option}
-                />
-              ))}
-        </RadioGroup>
+        {options.length === 0 && (
+          <Typography variant="body2" color="textSecondary">
+            Không có dữ liệu
+          </Typography>
+        )}
+        {(name === 'brand' && loadBrand) || (name === 'type' && loadTypes)
+          ? [1, 2].map((idx) => (
+              <FormControlLabel
+                key={idx}
+                value=""
+                control={<Skeleton width={40} height={40} />}
+                label={<Skeleton width="100%" />}
+              />
+            ))
+          : options.map((option) => (
+              <FormControlLabel
+                key={option}
+                control={
+                  <Checkbox
+                    checked={(name === 'area'
+                      ? area
+                      : name === 'brand'
+                        ? brand
+                        : name === 'status'
+                          ? status
+                          : name === 'type'
+                            ? type
+                            : name === 'condition'
+                              ? condition
+                              : []
+                    ).includes(option)}
+                    onChange={handleCheckboxChange(name)}
+                    value={option}
+                  />
+                }
+                label={option}
+              />
+            ))}
       </Box>
     </Popover>
   )
+
+  const renderButtonLabel = (name: string, values: string[]) => {
+    if (values.length === 0) {
+      return filterOptions.find((option) => option.name === name)?.label
+    }
+    return values.join(', ')
+  }
 
   return (
     <Box my={2}>
@@ -217,7 +245,6 @@ const FilterComponent = ({
         justifyContent="space-around"
         my={2}
       >
-        <Typography>Sắp xếp theo</Typography>
         {filterOptions.map((filter) => (
           <Button
             key={filter.name}
@@ -225,12 +252,26 @@ const FilterComponent = ({
             variant="outlined"
             onClick={handleClick(filter.name)}
             sx={{
-              width: '120px',
+              width: '200px',
               textTransform: 'none',
-              borderRadius: '20px'
+              borderRadius: '20px',
+              margin: '0 20px'
             }}
           >
-            {filter.label}
+            {renderButtonLabel(
+              filter.name,
+              filter.name === 'area'
+                ? area
+                : filter.name === 'brand'
+                  ? brand
+                  : filter.name === 'status'
+                    ? status
+                    : filter.name === 'type'
+                      ? type
+                      : filter.name === 'condition'
+                        ? condition
+                        : []
+            )}
           </Button>
         ))}
         <Button
@@ -238,7 +279,7 @@ const FilterComponent = ({
           variant="outlined"
           onClick={handleClick('price')}
           sx={{
-            width: '120px',
+            width: '200px',
             textTransform: 'none',
             borderRadius: '20px'
           }}

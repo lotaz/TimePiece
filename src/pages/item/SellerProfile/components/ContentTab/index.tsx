@@ -28,6 +28,7 @@ interface Item {
   userName: string
   area: string | null
   createDate: string
+  hasAppraisalCertificate: boolean
 }
 
 const ContentTab: React.FC<ContentTabProps> = ({ sellerId }) => {
@@ -59,7 +60,7 @@ const ContentTab: React.FC<ContentTabProps> = ({ sellerId }) => {
   return (
     <Box
       sx={{
-        width: '50vw',
+        width: '60vw',
         bgcolor: 'white',
         borderRadius: '8px',
         height: 'fit-content'
@@ -97,16 +98,15 @@ const ContentTab: React.FC<ContentTabProps> = ({ sellerId }) => {
                 </Grid>
               ))
             : displayedProducts.map((item) => (
-                <Grid item xs={4} key={item.id}>
+                <Grid item md={4} key={item.id}>
                   <CardItem
                     id={item.id}
                     imageUrl={item.imageUrl}
                     name={item.name}
                     price={item.price}
                     status={item.status}
-                    userAvatar={item.userAvatar}
-                    userId={item.userId}
                     sellerName={item.userName}
+                    isAppraisal={item.hasAppraisalCertificate}
                     area={item.area}
                     createDate={item.createDate}
                   />

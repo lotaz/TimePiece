@@ -96,24 +96,32 @@ const ItemDetailUser = ({
                   justifyContent: 'flex-start'
                 }}
               >
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  textAlign={'left'}
-                  marginRight={2}
+                <Link
+                  to={`/user/seller/${sellerId}/rating`}
+                  style={{
+                    textDecoration: 'none',
+                    color: 'black'
+                  }}
                 >
-                  <Box component="span" sx={{ color: 'gold' }}>
-                    {'★'.repeat(Math.floor(rating)) +
-                      '☆'.repeat(5 - Math.floor(rating))}
-                  </Box>
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  textAlign={'left'}
-                >
-                  {feedbacks} đánh giá
-                </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    textAlign={'left'}
+                    marginRight={2}
+                  >
+                    <Box component="span" sx={{ color: 'gold' }}>
+                      {'★'.repeat(Math.floor(rating)) +
+                        '☆'.repeat(5 - Math.floor(rating))}
+                    </Box>
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    textAlign={'left'}
+                  >
+                    {feedbacks} đánh giá
+                  </Typography>
+                </Link>
               </Box>
             </Box>
           )}

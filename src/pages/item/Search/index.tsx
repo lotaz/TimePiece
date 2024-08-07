@@ -17,13 +17,13 @@ const SearchPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(12)
   const [filters, setFilters] = useState({
-    area: '',
-    brand,
+    area: [],
+    brand: [],
     maxPrice: undefined,
     minPrice: undefined,
-    status: '',
-    type,
-    condition: ''
+    status: [],
+    type: [],
+    condition: []
   })
 
   const handleFilterChange = (name, value) => {
@@ -87,7 +87,6 @@ const SearchPage = () => {
           status={filters.status}
           type={filters.type}
           condition={filters.condition}
-          isLoading={isLoading}
           onFilterChange={handleFilterChange}
         />
       </Box>
