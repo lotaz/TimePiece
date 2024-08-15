@@ -57,7 +57,9 @@ export const AppPath = {
   GET_FEEDBACKS_BY_WATCH_ID: (id) => `/api/feedbacks/watch/${id}`,
   GET_APPRAISAL_BUY_USER: ({ id, page, size }) =>
     `/api/appraisal-requests/findByUser?userId=${id}&page=${page}&size=${size}`,
-  GET_FEEDBACKS_BY_SELLER_ID: (id) => `/api/feedbacks/seller/${id}`
+  GET_FEEDBACKS_BY_SELLER_ID: (id) => `/api/feedbacks/seller/${id}`,
+  GET_CONVERSATION: (id) => `/api/conversations/user/${id}`,
+  GET_MESSAGES: (id) => `/api/messages/${id}/messages`
 }
 
 export const fetcher = (url) => axiosClient.get(url).then((res) => res.data)

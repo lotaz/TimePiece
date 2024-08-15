@@ -20,6 +20,7 @@ import ManageBuyOrder from './pages/item/ManageBuyOrder'
 import SellerProfilePage from './pages/item/SellerProfile'
 import ManageAppraisal from './pages/user/ManageAppraisal'
 import RatingPage from './pages/user/Rating'
+import ChattingPage from './pages/user/Chatting'
 
 const Root = () => (
   <UserLayout>
@@ -89,6 +90,17 @@ const router = createBrowserRouter([
             loader: async ({ params }) => {
               const { id } = params
               return { id }
+            }
+          },
+          {
+            path: 'coversation',
+            element: <ChattingPage />,
+            loader: async ({ request }) => {
+              const url = new URL(request.url)
+              const conversationId =
+                url.searchParams.get('conversationId') ?? ''
+
+              return { conversationId }
             }
           }
         ]
@@ -166,6 +178,14 @@ const router = createBrowserRouter([
       {
         path: ':id/view-appraisal-form',
         element: <ViewAppraisalFormPage />
+      },
+      {
+        path: ':id/coversation/:conversationId',
+        element: <ChattingPage />,
+        loader: async ({ params }) => {
+          const { id, conversationId } = params
+          return { id, conversationId }
+        }
       }
     ]
   },

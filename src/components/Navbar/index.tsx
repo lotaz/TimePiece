@@ -165,7 +165,7 @@ const Navbar = () => {
           <Button color="inherit">
             <NotificationsNoneOutlinedIcon fontSize="large" />
           </Button>
-          <Button color="inherit">
+          <Button color="inherit" href="/user/coversation">
             <QuestionAnswerIcon fontSize="large" />
           </Button>
           <Button color="inherit" href="/post/manage-post">
