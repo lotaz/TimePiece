@@ -6,12 +6,14 @@ import useSWR from 'swr'
 import { AppPath } from '@/services/utils'
 import useDebounce from '@/hooks/useDebounce'
 import ChatContent from './components/ChatContent'
+import SockJS from 'sockjs-client/dist/sockjs.js'
+import { Stomp } from '@stomp/stompjs'
 
 const ChattingPage = () => {
   const user = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user') as string)
     : null
-
+  const token = localStorage.getItem('token')
   const [conversations, setConversations] = useState<ConversationType[]>([])
   const [filteredConversations, setFilteredConversations] = useState<
     ConversationType[]
@@ -50,6 +52,42 @@ const ChattingPage = () => {
       setFilteredConversations(conversations)
     }
   }, [conversations, debouncedSearch])
+
+  useEffect(() => {
+    if (user && token) {
+      const sock = new SockJS(`https://timepiece.onrender.com/ws`)
+      const client = Stomp.over(sock)
+
+      client.connect(
+        {
+          Authorization: `Bearer ${token}` // Pass the token in the headers
+        },
+        (frame) => {
+          console.log('Connected: ' + frame)
+          if (selectedConversation) {
+            client.subscribe(
+              `/topic/conversation/${selectedConversation.conversationId}`,
+              (message) => {
+                const data = JSON.parse(message.body)
+                console.log(data)
+              }
+            )
+          }
+        },
+        (error) => {
+          console.error('WebSocket connection error:', error)
+        }
+      )
+
+      return () => {
+        if (client.connected) {
+          client.disconnect(() => {
+            console.log('Disconnected from WebSocket')
+          })
+        }
+      }
+    }
+  }, [selectedConversation, user, token])
 
   return (
     <Container

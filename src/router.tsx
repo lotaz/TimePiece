@@ -93,7 +93,7 @@ const router = createBrowserRouter([
             }
           },
           {
-            path: 'coversation',
+            path: 'conversation',
             element: <ChattingPage />,
             loader: async ({ request }) => {
               const url = new URL(request.url)
@@ -180,7 +180,7 @@ const router = createBrowserRouter([
         element: <ViewAppraisalFormPage />
       },
       {
-        path: ':id/coversation/:conversationId',
+        path: ':id/conversation/:conversationId',
         element: <ChattingPage />,
         loader: async ({ params }) => {
           const { id, conversationId } = params
