@@ -1,4 +1,12 @@
-import { Box, Typography, Grid, Button, Avatar, Skeleton } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Grid,
+  Button,
+  Avatar,
+  Skeleton,
+  CircularProgress
+} from '@mui/material'
 import PhoneIcon from '@mui/icons-material/Phone'
 import ChatIcon from '@mui/icons-material/Chat'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
@@ -8,6 +16,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import ConfirmDialog from '@/components/ConfirmDiaglog'
 import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined'
+import { startConversation } from '@/services/conversationService'
 
 interface ItemDetailUserProps {
   sellerId?: number
@@ -18,6 +27,7 @@ interface ItemDetailUserProps {
   feedbacks?: number
   rating: number
   hasAppraisalCertificate?: boolean
+  watchId?: number
 }
 
 const ItemDetailUser = ({
@@ -28,7 +38,8 @@ const ItemDetailUser = ({
   loading,
   feedbacks,
   rating,
-  hasAppraisalCertificate
+  hasAppraisalCertificate,
+  watchId
 }: ItemDetailUserProps) => {
   const navigate = useNavigate()
   const user = localStorage.getItem('user')
@@ -37,6 +48,8 @@ const ItemDetailUser = ({
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [loadingCreateConversation, setLoadingCreateConversation] =
+    useState(false)
   const data = useLoaderData()
   const { id } = data as { id: string }
 
@@ -57,6 +70,22 @@ const ItemDetailUser = ({
     navigate('/authenticate/login')
   }
 
+  const handleCreateConversation = async () => {
+    try {
+      const res = await startConversation({
+        senderId: user.id as number,
+        recipientId: sellerId as number,
+        watchId: watchId as number
+      })
+      if (res) {
+        navigate(`/user/conversation?conversationId=${res.conversationId}`)
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error('Không thể tạo cuộc trò chuyện')
+    }
+  }
+
   return (
     <Box sx={{ padding: 2 }} component={'div'} id={`${id}`}>
       <Grid container spacing={2}>
@@ -66,7 +95,7 @@ const ItemDetailUser = ({
           ) : (
             <Avatar
               alt="Seller Avatar Image"
-              src={sellerAvatar || 'https://via.placeholder.com/100'} // Replace with actual image URL
+              src={sellerAvatar ?? 'https://via.placeholder.com/100'} // Replace with actual image URL
               sx={{ width: 80, height: 80 }}
             />
           )}
@@ -158,8 +187,22 @@ const ItemDetailUser = ({
                   }
                 }
               }}
-              startIcon={<ChatIcon />}
-              disabled={!user}
+              startIcon={
+                loadingCreateConversation ? (
+                  <CircularProgress size={20} color="inherit" />
+                ) : (
+                  <ChatIcon />
+                )
+              }
+              onClick={() => {
+                if (user) {
+                  setLoadingCreateConversation(true)
+                  handleCreateConversation()
+                } else {
+                  handleOpenLogin()
+                }
+              }}
+              disabled={!user || loadingCreateConversation}
             >
               Chat với người bán
             </Button>

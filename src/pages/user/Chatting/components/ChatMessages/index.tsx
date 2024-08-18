@@ -13,11 +13,15 @@ interface ChatMessagesProps {
 const ChatMessages = ({ conversationId, currentUserId }: ChatMessagesProps) => {
   const [messages, setMessages] = useState<Message[]>([])
 
-  const { data, isLoading } = useSWR(AppPath.GET_MESSAGES(conversationId), {
-    onSuccess: (data) => {
-      setMessages(data)
+  // Conditionally run the useSWR hook only if conversationId is available
+  const { data, isLoading } = useSWR(
+    conversationId ? AppPath.GET_MESSAGES(conversationId) : null,
+    {
+      onSuccess: (data) => {
+        setMessages(data)
+      }
     }
-  })
+  )
 
   useEffect(() => {
     if (data) {

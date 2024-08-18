@@ -42,13 +42,14 @@ const ItemDetailPage = () => {
         </Grid>
         <Grid item xs={12} md={4}>
           <ItemDetailUser
+            watchId={watch?.id}
             loading={isLoading}
             sellerId={watch?.userId}
             sellerName={watch?.userName}
             sellerPhone={watch?.userPhoneNumber}
             sellerAvatar={watch?.userAvatar}
             feedbacks={10}
-            rating={watch?.userRatingScore || 0}
+            rating={watch?.userRatingScore ?? 0}
             hasAppraisalCertificate={watch?.hasAppraisalCertificate}
           />
         </Grid>
