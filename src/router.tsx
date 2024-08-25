@@ -21,6 +21,7 @@ import SellerProfilePage from './pages/item/SellerProfile'
 import ManageAppraisal from './pages/user/ManageAppraisal'
 import RatingPage from './pages/user/Rating'
 import ChattingPage from './pages/user/Chatting'
+import RenewPackagePage from './pages/item/RenewPackage'
 
 const Root = () => (
   <UserLayout>
@@ -136,6 +137,14 @@ const router = createBrowserRouter([
           {
             path: 'manage-order/sell',
             element: <ManageSellOrder />
+          },
+          {
+            path: 'renew-package/:id',
+            element: <RenewPackagePage />,
+            loader: async ({ params }) => {
+              const { id } = params
+              return { id }
+            }
           }
         ]
       }

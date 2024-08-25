@@ -70,7 +70,8 @@ const ChattingSideBar = ({
         flexDirection: 'column',
         bgcolor: '#fff',
         minWidth: '16vw',
-        minHeight: 'calc(100vh - 340px)',
+        minHeight: 'calc(100vh - 30vh)',
+        maxHeight: 'calc(100vh - 26vh)',
         borderRight: '1px solid #f0f0f0'
       }}
     >

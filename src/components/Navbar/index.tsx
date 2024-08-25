@@ -173,7 +173,7 @@ const Navbar = () => {
           </Button>
         </Box>
         <Box marginRight={10}>
-          {isLoading ? (
+          {isLoading && !useState ? (
             <Skeleton variant="circular" width={40} height={40} />
           ) : hasAuth ? (
             <Box>

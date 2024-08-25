@@ -138,8 +138,11 @@ const ImageSide: FC<ImageSideProps> = ({
                 textAlign: 'center',
                 bgcolor: '#f5f5f5',
                 cursor: 'pointer',
-                marginX: 16,
-                position: 'relative'
+                width: '20vw',
+                height: '24vh',
+                position: 'relative',
+                justifyContent: 'center',
+                marginX: 'auto'
               }}
             >
               <input
@@ -222,8 +225,11 @@ const ImageSide: FC<ImageSideProps> = ({
                   textAlign: 'center',
                   bgcolor: '#f5f5f5',
                   cursor: 'pointer',
-                  marginX: 16,
-                  position: 'relative'
+                  position: 'relative',
+                  width: '20vw',
+                  height: '24vh',
+                  justifyContent: 'center',
+                  marginX: 'auto'
                 }}
               >
                 <input

@@ -17,6 +17,7 @@ import { toast } from 'react-toastify'
 import ConfirmDialog from '@/components/ConfirmDiaglog'
 import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined'
 import { startConversation } from '@/services/conversationService'
+import { WatchStatus } from '@/common/type'
 
 interface ItemDetailUserProps {
   sellerId?: number
@@ -28,6 +29,7 @@ interface ItemDetailUserProps {
   rating: number
   hasAppraisalCertificate?: boolean
   watchId?: number
+  status?: string
 }
 
 const ItemDetailUser = ({
@@ -39,7 +41,8 @@ const ItemDetailUser = ({
   feedbacks,
   rating,
   hasAppraisalCertificate,
-  watchId
+  watchId,
+  status
 }: ItemDetailUserProps) => {
   const navigate = useNavigate()
   const user = localStorage.getItem('user')
@@ -85,6 +88,9 @@ const ItemDetailUser = ({
       toast.error('Không thể tạo cuộc trò chuyện')
     }
   }
+
+  const isOnwer = user.id === sellerId
+  const isShow = status === WatchStatus.SHOW
 
   return (
     <Box sx={{ padding: 2 }} component={'div'} id={`${id}`}>
@@ -155,59 +161,63 @@ const ItemDetailUser = ({
             </Box>
           )}
         </Grid>
-        <Grid item xs={5}>
-          {loading ? (
-            <Skeleton variant="rectangular" width="100%" height={40} />
-          ) : (
-            <Button variant="outlined" fullWidth startIcon={<PhoneIcon />}>
-              {sellerPhone}
-            </Button>
-          )}
-        </Grid>
-        <Grid item xs={7}>
-          {loading ? (
-            <Skeleton variant="rectangular" width="100%" height={40} />
-          ) : (
-            <Button
-              variant="outlined"
-              fullWidth
-              sx={{
-                textTransform: 'none',
-                fontSize: '14px',
-                bgcolor: 'primary.main',
-                color: 'white',
-                '&:hover': {
-                  bgcolor: 'primary.dark'
-                },
-                '&:disabled': {
-                  bgcolor: 'grey.500',
+        {!isOnwer && (
+          <Grid item xs={5}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={40} />
+            ) : (
+              <Button variant="outlined" fullWidth startIcon={<PhoneIcon />}>
+                {sellerPhone}
+              </Button>
+            )}
+          </Grid>
+        )}
+        {!isOnwer && (
+          <Grid item xs={7}>
+            {loading ? (
+              <Skeleton variant="rectangular" width="100%" height={40} />
+            ) : (
+              <Button
+                variant="outlined"
+                fullWidth
+                sx={{
+                  textTransform: 'none',
+                  fontSize: '14px',
+                  bgcolor: 'primary.main',
                   color: 'white',
                   '&:hover': {
-                    bgcolor: 'grey.500'
+                    bgcolor: 'primary.dark'
+                  },
+                  '&:disabled': {
+                    bgcolor: 'grey.500',
+                    color: 'white',
+                    '&:hover': {
+                      bgcolor: 'grey.500'
+                    }
                   }
+                }}
+                startIcon={
+                  loadingCreateConversation ? (
+                    <CircularProgress size={20} color="inherit" />
+                  ) : (
+                    <ChatIcon />
+                  )
                 }
-              }}
-              startIcon={
-                loadingCreateConversation ? (
-                  <CircularProgress size={20} color="inherit" />
-                ) : (
-                  <ChatIcon />
-                )
-              }
-              onClick={() => {
-                if (user) {
-                  setLoadingCreateConversation(true)
-                  handleCreateConversation()
-                } else {
-                  handleOpenLogin()
-                }
-              }}
-              disabled={!user || loadingCreateConversation}
-            >
-              Chat với người bán
-            </Button>
-          )}
-        </Grid>
+                onClick={() => {
+                  if (user) {
+                    setLoadingCreateConversation(true)
+                    handleCreateConversation()
+                  } else {
+                    handleOpenLogin()
+                  }
+                }}
+                disabled={!user || loadingCreateConversation}
+              >
+                Chat với người bán
+              </Button>
+            )}
+          </Grid>
+        )}
         <Grid item xs={12}>
           {loading ? (
             <Skeleton variant="rectangular" width="100%" height={40} />
@@ -228,7 +238,7 @@ const ItemDetailUser = ({
             >
               Đăng nhập để đặt hàng
             </Button>
-          ) : sellerId !== user.id ? (
+          ) : !isOnwer && isShow ? (
             <>
               <Button
                 variant="outlined"
