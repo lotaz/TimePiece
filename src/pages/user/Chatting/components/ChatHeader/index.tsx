@@ -3,11 +3,11 @@ import { ConversationType } from '../../type'
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined'
 
 interface ChatHeaderProps {
-  coversation: ConversationType | null
+  conversation: ConversationType | null
   loading: boolean
 }
 
-const ChatHeader = ({ coversation, loading }: ChatHeaderProps) => {
+const ChatHeader = ({ conversation, loading }: ChatHeaderProps) => {
   return (
     <Box
       sx={{
@@ -33,7 +33,7 @@ const ChatHeader = ({ coversation, loading }: ChatHeaderProps) => {
           {loading ? (
             <Skeleton variant="circular" width={40} height={40} />
           ) : (
-            <Avatar src={coversation?.recipientAvatar} />
+            <Avatar src={conversation?.recipientAvatar} />
           )}
           <Box
             sx={{
@@ -53,7 +53,7 @@ const ChatHeader = ({ coversation, loading }: ChatHeaderProps) => {
                     fontSize: '16px'
                   }}
                 >
-                  {coversation?.recipientName}
+                  {conversation?.recipientName}
                 </Typography>
                 <Typography
                   sx={{
@@ -61,7 +61,7 @@ const ChatHeader = ({ coversation, loading }: ChatHeaderProps) => {
                     color: '#969696'
                   }}
                 >
-                  {coversation?.roleRecipient === 'User'
+                  {conversation?.roleRecipient === 'User'
                     ? 'Người dùng'
                     : 'Thẩm định viên'}
                 </Typography>
@@ -99,7 +99,7 @@ const ChatHeader = ({ coversation, loading }: ChatHeaderProps) => {
           <>
             <Box>
               <img
-                src={coversation?.watchImage}
+                src={conversation?.watchImage}
                 width={'80px'}
                 height={'80px'}
                 alt=""
@@ -112,7 +112,7 @@ const ChatHeader = ({ coversation, loading }: ChatHeaderProps) => {
                   fontSize: '18px'
                 }}
               >
-                {coversation?.watchName}
+                {conversation?.watchName}
               </Typography>
               <Typography
                 sx={{
@@ -122,7 +122,7 @@ const ChatHeader = ({ coversation, loading }: ChatHeaderProps) => {
                   fontWeight: 'bold'
                 }}
               >
-                {coversation?.watchPrice ?? 0}đ
+                {conversation?.watchPrice ?? 0}đ
               </Typography>
             </Box>
           </>

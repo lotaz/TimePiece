@@ -59,7 +59,10 @@ export const AppPath = {
     `/api/appraisal-requests/findByUser?userId=${id}&page=${page}&size=${size}`,
   GET_FEEDBACKS_BY_SELLER_ID: (id) => `/api/feedbacks/seller/${id}`,
   GET_CONVERSATION: (id) => `/api/conversations/user/${id}`,
-  GET_MESSAGES: (id) => `/api/messages/${id}/messages`
+  GET_MESSAGES: (id) => `/api/messages/${id}/messages`,
+  START_CONVERSATION: '/api/conversations/start',
+  PAYMENT_VNPAY: (orderID) => `/payment/vn-pay?orderId=${orderID}`,
+  GET_RENEWAL_PACKAGE: '/api/renewal-packages/GetAllRenewalPakage'
 }
 
 export const fetcher = (url) => axiosClient.get(url).then((res) => res.data)

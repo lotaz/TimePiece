@@ -6,6 +6,7 @@ import { AppPath } from '@/services/utils'
 import useSWR from 'swr'
 
 export interface Product {
+  id: number
   address: string
   createDate: string
   imageUrl: string

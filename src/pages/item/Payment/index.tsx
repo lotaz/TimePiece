@@ -18,6 +18,8 @@ import { Order } from '../ManageBuyOrder/type'
 import { updateOrder } from '@/services/orderService'
 import { OrderStatus } from '@/common/type'
 import { toast } from 'react-toastify'
+import { paymentVNPay } from '@/services/paymentService'
+import RatingModal from '@/components/Rating'
 
 interface User {
   address: string | null
@@ -43,6 +45,7 @@ const PaymentPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('')
   const [user, setUser] = useState<User>()
   const [order, setOrder] = useState<Order>()
+  const [openRating, setOpenRating] = useState(false)
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -88,16 +91,15 @@ const PaymentPage = () => {
       if (data) {
         toast.success('Thanh toán thành công', {
           onClose: () => {
-            navigate('/')
+            setOpenRating(true)
           }
         })
       }
-    } else {
-      toast.success('Thanh toán thành công', {
-        onClose: () => {
-          navigate('/')
-        }
-      })
+    } else if (paymentMethod === 'VNPay') {
+      const data = await paymentVNPay(id)
+      //open payment link at current tab
+      const paymentLink = data.paymentUrl
+      window.location.href = paymentLink
     }
   }
 
@@ -116,6 +118,11 @@ const PaymentPage = () => {
           phone={user?.phoneNumber ?? ''}
           address={user?.address ?? address}
           onChange={handleChange}
+        />
+        <RatingModal
+          open={openRating}
+          onClose={() => setOpenRating(false)}
+          orderId={id ?? 0}
         />
       </Box>
       <Box>

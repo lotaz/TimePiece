@@ -5,6 +5,13 @@ export enum Role {
   ADMIN = 'Admin'
 }
 
+export enum WatchStatus {
+  SOLD = 'SOLD',
+  SHOW = 'SHOW',
+  HIDDEN = 'HIDDEN',
+  CANCEL = 'CANCEL'
+}
+
 export interface Pagination {
   page: number
   size: number

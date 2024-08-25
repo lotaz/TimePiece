@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Grid, Typography, Button } from '@mui/material'
+import { Box, Grid, Typography, Button, CircularProgress } from '@mui/material'
 import useSWR from 'swr'
 import SelectInput from '@/components/Controls/SelectInput'
 import TextInput from '@/components/Controls/TextInput'
@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 const statusOptions = ['Đã sử dụng', 'Mới', 'Cũ']
 
 const CreatePostPage = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const navigator = useNavigate()
   const user = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user') as string)
@@ -71,34 +72,39 @@ const CreatePostPage = () => {
   }
 
   const handleSubmit = async () => {
-    console.log(formValues)
-    const data = await createWatchService({
-      userId: user?.id,
-      name: formValues.postName,
-      watchStatus: formValues.statusProduct,
-      description: formValues.description,
-      price: parseInt(formValues.price),
-      brandId: brands?.find((brand) => brand.brandName === formValues.brand)
-        ?.id as number,
-      yearProduced: parseInt(formValues.productYear),
-      model: formValues.models,
-      material: formValues.materialCase,
-      watchStrap: formValues.materialStrap,
-      size: formValues.size,
-      accessories: formValues.statusProduct,
-      referenceCode: formValues.modelsNumber,
-      placeOfProduction: formValues.madeBy,
-      watchTypeId: types?.find((type) => type.typeName === formValues.type)
-        ?.id as number,
-      address: formValues.address,
-      area: formValues.area,
-      imageFiles: formValues.images,
-      appraisalCertificateFile: formValues.appraisalCertificateFile
-    })
+    setIsLoading(true)
+    try {
+      const data = await createWatchService({
+        userId: user?.id,
+        name: formValues.postName,
+        watchStatus: formValues.statusProduct,
+        description: formValues.description,
+        price: parseInt(formValues.price),
+        brandId: brands?.find((brand) => brand.brandName === formValues.brand)
+          ?.id as number,
+        yearProduced: parseInt(formValues.productYear),
+        model: formValues.models,
+        material: formValues.materialCase,
+        watchStrap: formValues.materialStrap,
+        size: formValues.size,
+        accessories: formValues.statusProduct,
+        referenceCode: formValues.modelsNumber,
+        placeOfProduction: formValues.madeBy,
+        watchTypeId: types?.find((type) => type.typeName === formValues.type)
+          ?.id as number,
+        area: formValues.area,
+        imageFiles: formValues.images,
+        appraisalCertificateFile: formValues.appraisalCertificateFile
+      })
 
-    if (data) {
-      toast.success('Đăng bài thành công')
-      navigator('/')
+      if (data) {
+        toast.success('Đăng bài thành công')
+        setIsLoading(false)
+        navigator('/post/manage-post')
+      }
+    } catch (error) {
+      setIsLoading(false)
+      toast.error('Đăng bài khônng thành công')
     }
   }
 
@@ -339,22 +345,15 @@ const CreatePostPage = () => {
               name="area"
               options={Object.values(Area)}
             />
-            <TextInput
-              label="Địa chỉ cụ thể"
-              type="text"
-              placeholder="Nhập địa chỉ"
-              value={formValues.address}
-              onChange={handleChange}
-              isRequired={true}
-              isDisabled={false}
-              fullWidth={true}
-              name="address"
-            />
             <Button
               variant="contained"
               component="button"
+              disabled={isLoading}
               color="primary"
               onClick={handleSubmit}
+              startIcon={
+                isLoading && <CircularProgress size={20} color="inherit" />
+              }
             >
               Đăng bài
             </Button>

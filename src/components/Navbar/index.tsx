@@ -165,7 +165,7 @@ const Navbar = () => {
           <Button color="inherit">
             <NotificationsNoneOutlinedIcon fontSize="large" />
           </Button>
-          <Button color="inherit" href="/user/coversation">
+          <Button color="inherit" href="/user/conversation">
             <QuestionAnswerIcon fontSize="large" />
           </Button>
           <Button color="inherit" href="/post/manage-post">
@@ -173,7 +173,7 @@ const Navbar = () => {
           </Button>
         </Box>
         <Box marginRight={10}>
-          {isLoading ? (
+          {isLoading && !useState ? (
             <Skeleton variant="circular" width={40} height={40} />
           ) : hasAuth ? (
             <Box>

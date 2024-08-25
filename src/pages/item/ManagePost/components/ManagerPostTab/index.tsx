@@ -53,7 +53,8 @@ const ManagerPostTab: React.FC<ManagerPostTabProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            p: 4
+            px: 4,
+            py: 2
           }}
         >
           <Box display="flex" alignItems="center" flex="1">
@@ -84,8 +85,8 @@ const ManagerPostTab: React.FC<ManagerPostTabProps> = ({
               variant="contained"
               sx={{
                 backgroundColor: '#434343',
-                width: '200px',
-                height: '50px',
+                width: '10vw',
+                height: '5vh',
                 '&:hover': {
                   backgroundColor: '#333333'
                 }

@@ -100,7 +100,7 @@ const SearchPage = () => {
           marginY: '20px'
         }}
       >
-        {totalPages > 1 && !isLoading && (
+        {totalPages > 1 && watches && (
           <Pagination
             count={totalPages}
             page={currentPage}
