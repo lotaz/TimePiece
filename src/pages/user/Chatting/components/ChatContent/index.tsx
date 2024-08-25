@@ -2,19 +2,31 @@ import { Box, Typography, Skeleton } from '@mui/material'
 import ChatHeader from '../ChatHeader'
 import ChatMessages from '../ChatMessages'
 import ChatInput from '../ChatInput'
-import { ConversationType } from '../../type'
+import { ConversationType, Message } from '../../type'
 
 interface ChatContentProps {
   conversation: ConversationType | null
   loading: boolean
   userId: number
+  handleSendMessage: (messageText: string) => void
+  messages: Message[]
+  isLoading: boolean
 }
 
-const ChatContent = ({ conversation, loading, userId }: ChatContentProps) => {
+const ChatContent = ({
+  conversation,
+  loading,
+  userId,
+  handleSendMessage,
+  messages,
+  isLoading
+}: ChatContentProps) => {
   return (
     <Box
       sx={{
-        minWidth: 'calc(100vw - 50vw)'
+        minWidth: 'calc(100vw - 50vw)',
+        minHeight: 'calc(100vh - 30vh)',
+        maxHeight: 'calc(100vh - 26vh)'
       }}
     >
       {loading ? (
@@ -46,10 +58,11 @@ const ChatContent = ({ conversation, loading, userId }: ChatContentProps) => {
         <Box>
           <ChatHeader conversation={conversation} loading={loading} />
           <ChatMessages
-            conversationId={conversation?.conversationId}
             currentUserId={userId}
+            messages={messages}
+            loading={isLoading}
           />
-          <ChatInput />
+          <ChatInput handleSendMessage={handleSendMessage} />
         </Box>
       ) : (
         <Box
@@ -62,7 +75,7 @@ const ChatContent = ({ conversation, loading, userId }: ChatContentProps) => {
           }}
         >
           <Typography variant="h6" color="textSecondary">
-            Không có cuộc trò chuyện nào
+            No conversation selected
           </Typography>
         </Box>
       )}

@@ -11,3 +11,21 @@ export const paymentVNPay = async (orderId: string) => {
     throw error
   }
 }
+
+interface PaymentPostWatch {
+  watchId?: number
+  renewalPackageId?: number
+}
+
+export const paymentPostWatch = async (req: PaymentPostWatch) => {
+  try {
+    const res = await axiosClient.get(
+      `payment/vn-pay/postWatch?watchId=${req.watchId}&renewalPackageId=${req.renewalPackageId}`
+    )
+
+    return res.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}

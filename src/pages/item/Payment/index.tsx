@@ -20,7 +20,6 @@ import { OrderStatus } from '@/common/type'
 import { toast } from 'react-toastify'
 import { paymentVNPay } from '@/services/paymentService'
 import RatingModal from '@/components/Rating'
-import { createFeedback } from '@/services/feedbackService'
 
 interface User {
   address: string | null

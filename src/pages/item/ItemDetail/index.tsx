@@ -51,6 +51,7 @@ const ItemDetailPage = () => {
             feedbacks={10}
             rating={watch?.userRatingScore ?? 0}
             hasAppraisalCertificate={watch?.hasAppraisalCertificate}
+            status={watch?.status}
           />
         </Grid>
       </Grid>

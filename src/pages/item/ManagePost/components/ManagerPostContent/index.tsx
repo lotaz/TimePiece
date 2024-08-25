@@ -3,6 +3,7 @@ import { Box } from '@mui/material'
 import ProductCard from '../PostCard'
 
 interface Product {
+  id: number
   imageUrl: string
   name: string
   price: number
@@ -28,6 +29,7 @@ const ManagerPostContent: React.FC<ManagerPostContentProps> = ({
       {!isLoading &&
         products?.map((product, index) => (
           <ProductCard
+            postId={product.id}
             key={index}
             imageUrl={product.imageUrl}
             name={product.name}

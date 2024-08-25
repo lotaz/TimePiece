@@ -26,7 +26,6 @@ interface CreateWatch {
   referenceCode: string
   placeOfProduction: string
   watchTypeId: number
-  address: string
   imageFiles: Blob[] | string[]
   area: string
   hasAppraisalCertificate?: boolean | undefined
@@ -51,9 +50,7 @@ export const createWatchService = async (params: CreateWatch) => {
     formData.append('accessories', params.accessories)
     formData.append('referenceCode', params.referenceCode)
     formData.append('placeOfProduction', params.placeOfProduction)
-    formData.append('watchTypeId', params.watchTypeId?.toString())
-    formData.append('address', params.address),
-      formData.append('area', params.area)
+    formData.append('area', params.area)
 
     params.imageFiles.forEach((file) => {
       formData.append(`imageFiles`, file)

@@ -1,11 +1,12 @@
 import React from 'react'
 import { Typography, Box, Button, Skeleton } from '@mui/material'
-import ReplaySharpIcon from '@mui/icons-material/ReplaySharp'
 import ArrowCircleUpSharpIcon from '@mui/icons-material/ArrowCircleUpSharp'
 import MoreHorizSharpIcon from '@mui/icons-material/MoreHorizSharp'
 import moment from 'moment'
+import { useNavigate } from 'react-router-dom'
 
 interface PostCardProps {
+  postId: number
   imageUrl: string
   name: string
   price: number
@@ -18,6 +19,7 @@ interface PostCardProps {
 }
 
 const ProductCard: React.FC<PostCardProps> = ({
+  postId,
   imageUrl,
   name,
   price,
@@ -27,6 +29,7 @@ const ProductCard: React.FC<PostCardProps> = ({
   numberDatePost,
   isLoading
 }) => {
+  const navigate = useNavigate()
   return (
     <Box bgcolor={'#FFFFFF'} border={'1px solid #D8D8D8'} marginBottom={2}>
       {/* <Box
@@ -62,7 +65,7 @@ const ProductCard: React.FC<PostCardProps> = ({
           <Skeleton variant="rectangular" width={100} height={100} />
         ) : (
           <Box>
-            <img src={imageUrl} alt={name} width={100} height={100} />
+            <img src={imageUrl} alt={name} width={80} height={80} />
           </Box>
         )}
         <Box textAlign={'left'} paddingX={4}>
@@ -111,8 +114,7 @@ const ProductCard: React.FC<PostCardProps> = ({
           justifyContent: 'space-between',
           padding: '20px',
           bgcolor: '#F7F7F7',
-          textAlign: 'left',
-          paddingX: '40px'
+          textAlign: 'left'
         }}
       >
         <Box
@@ -185,22 +187,6 @@ const ProductCard: React.FC<PostCardProps> = ({
       >
         <Button
           sx={{
-            border: '1px solid #c1c1c1',
-            fontWeight: 600,
-            color: '#000',
-            marginRight: '10px',
-            textTransform: 'none',
-            ':hover': {
-              color: '#000',
-              bgcolor: 'transparent'
-            }
-          }}
-          disabled={isLoading}
-        >
-          <ReplaySharpIcon sx={{ marginRight: '5px' }} /> Gia Hạn Tin
-        </Button>
-        <Button
-          sx={{
             bgcolor: '#1BBE00',
             color: '#FFFFFF',
             ':hover': {
@@ -211,6 +197,7 @@ const ProductCard: React.FC<PostCardProps> = ({
             marginRight: '10px'
           }}
           disabled={isLoading}
+          onClick={() => navigate(`/post/renew-package/${postId}`)}
         >
           <ArrowCircleUpSharpIcon
             sx={{
