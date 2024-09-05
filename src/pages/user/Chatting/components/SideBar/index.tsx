@@ -69,9 +69,8 @@ const ChattingSideBar = ({
         display: 'flex',
         flexDirection: 'column',
         bgcolor: '#fff',
-        minWidth: '16vw',
-        minHeight: 'calc(100vh - 30vh)',
-        maxHeight: 'calc(100vh - 26vh)',
+        width: '24vw',
+        height: 'full',
         borderRight: '1px solid #f0f0f0'
       }}
     >
@@ -94,8 +93,7 @@ const ChattingSideBar = ({
       </Box>
       <Box
         sx={{
-          overflowY: 'auto',
-          height: 'calc(100vh - 28vh)'
+          overflowY: 'auto'
         }}
       >
         {loading

@@ -31,14 +31,14 @@ const Footer = () => {
                 src={Logo}
                 alt="App Logo"
                 style={{
-                  width: '240px',
-                  height: '100%',
+                  width: '14vw',
+                  height: '4vh',
                   objectFit: 'fill'
                 }}
               />
             </Box>
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={4} md={2}>
             <Typography
               variant="h6"
               color="white"
@@ -63,7 +63,7 @@ const Footer = () => {
             <Typography color="white">Chính sách bảo mật</Typography>
             <Typography color="white">Giải quyết tranh chấp </Typography>
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={4} md={2}>
             <Typography
               variant="h6"
               color="white"
@@ -77,7 +77,7 @@ const Footer = () => {
             <Typography color="white">Bán đồng hồ</Typography>
             <Typography color="white">Thẩm định đồng hồ </Typography>
           </Grid>
-          <Grid item xs={6} md={2}>
+          <Grid item xs={4} md={2}>
             <Typography variant="h6" color="white">
               Về Timepiece
             </Typography>

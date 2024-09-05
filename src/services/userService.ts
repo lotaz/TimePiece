@@ -1,14 +1,12 @@
 import axiosClient from '@/configs/axiosClient'
 
 interface UpdateUserProFile {
-  name?: string
-  address?: string
-  avatar?: string
-  phoneNumber?: string
-  status?: string
-  gender?: string
-  birthday?: string
-  citizenID?: string
+  name: string
+  address: string
+  phoneNumber: string
+  gender: string
+  birthday: string
+  citizenID: string
 }
 
 export const updateUserProFileService = async (
@@ -17,7 +15,7 @@ export const updateUserProFileService = async (
 ) => {
   try {
     const response = await axiosClient.put(
-      `/users/${userId}/UpdateUserProfile`,
+      `api/users/${userId}/UpdateUserProfile`,
       params
     )
 
@@ -31,6 +29,24 @@ export const updateUserProFileService = async (
 export const getUserInfoService = async (userId: number) => {
   try {
     const response = await axiosClient.get(`/users/${userId}`)
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+interface ChangePassword {
+  userId: number
+  oldPassword: string
+  newPassword: string
+  confirmNewPassword: string
+}
+
+export const changePasswordService = async (params: ChangePassword) => {
+  try {
+    const response = await axiosClient.post('api/users/change-password', params)
 
     return response.data
   } catch (error) {

@@ -1,6 +1,7 @@
 import { Avatar, Box, Typography, Skeleton } from '@mui/material'
 import { ConversationType } from '../../type'
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined'
+import { stringAvatar } from '@/common/utils'
 
 interface ChatHeaderProps {
   conversation: ConversationType | null
@@ -15,6 +16,7 @@ const ChatHeader = ({ conversation, loading }: ChatHeaderProps) => {
         flexDirection: 'column',
         bgcolor: '#ffffff'
       }}
+      component={'div'}
     >
       <Box
         sx={{
@@ -32,8 +34,10 @@ const ChatHeader = ({ conversation, loading }: ChatHeaderProps) => {
         >
           {loading ? (
             <Skeleton variant="circular" width={40} height={40} />
-          ) : (
+          ) : conversation?.recipientAvatar ? (
             <Avatar src={conversation?.recipientAvatar} />
+          ) : (
+            <Avatar {...stringAvatar(conversation?.recipientName ?? '')} />
           )}
           <Box
             sx={{
@@ -100,8 +104,8 @@ const ChatHeader = ({ conversation, loading }: ChatHeaderProps) => {
             <Box>
               <img
                 src={conversation?.watchImage}
-                width={'80px'}
-                height={'80px'}
+                width={'60px'}
+                height={'60px'}
                 alt=""
               />
             </Box>
