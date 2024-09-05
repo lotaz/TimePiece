@@ -97,6 +97,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, useId }) => {
 
   const handleOrderAction = async (orderId: number, status: OrderStatus) => {
     setSubmitting(true)
+    console.log("Id vua click",orderId)
     const data = await updateOrder(orderId, status)
     if (data) {
       toast.success(

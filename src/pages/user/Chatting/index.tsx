@@ -1,4 +1,4 @@
-import { Container } from '@mui/material'
+import { Box } from '@mui/material'
 import ChattingSideBar from './components/SideBar'
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { ConversationType, Message, MessageRequest } from './type'
@@ -22,6 +22,7 @@ const ChattingPage = () => {
   }, [])
 
   const token = useMemo(() => localStorage.getItem('token'), [])
+  const [conversations, setConversations] = useState<ConversationType[]>([])
   const [filteredConversations, setFilteredConversations] = useState<
     ConversationType[]
   >([])
@@ -30,10 +31,11 @@ const ChattingPage = () => {
     useState<ConversationType | null>(null)
   const [search, setSearch] = useState<string>('')
 
-  useDebounce(search, 150)
+  const debouncedSearch = useDebounce(search, 150)
 
   const { isLoading } = useSWR(AppPath.GET_CONVERSATION(user?.id), {
     onSuccess: (data) => {
+      setConversations(data)
       setFilteredConversations(data)
       setSelectedConversation(data[0])
     }
@@ -134,6 +136,19 @@ const ChattingPage = () => {
     setSearch(e.target.value)
   }, [])
 
+  useEffect(() => {
+    if (debouncedSearch) {
+      const filtered = conversations.filter((conversation) =>
+        conversation.recipientName
+          ?.toLowerCase()
+          .includes(debouncedSearch.toLowerCase())
+      )
+      setFilteredConversations(filtered)
+    } else {
+      setFilteredConversations(conversations)
+    }
+  }, [debouncedSearch, conversations])
+
   const handleSendMessage = useCallback(
     (messageText: string) => {
       if (!messageText.trim() || !selectedConversation || !clientRef.current) {
@@ -165,19 +180,26 @@ const ChattingPage = () => {
           sentAt: new Date().toISOString()
         }
       ])
+
+      // Move selected conversation to the top of the list
+      setFilteredConversations((prevConversations) => [
+        selectedConversation,
+        ...prevConversations.filter(
+          (conv) => conv.conversationId !== selectedConversation.conversationId
+        )
+      ])
     },
     [selectedConversation, user.id, user.name]
   )
 
   return (
-    <Container
-      disableGutters
+    <Box
       component={'div'}
       sx={{
         marginTop: 12,
         marginBottom: 4,
         minHeight: 'calc(100vh - 30vh)',
-        maxHeight: 'calc(100vh - 26vh)',
+        maxHeight: 'calc(100vh - 24vh)',
         display: 'flex',
         direction: 'row',
         justifyContent: 'center'
@@ -199,7 +221,7 @@ const ChattingPage = () => {
         messages={messages}
         isLoading={loadingMessage}
       />
-    </Container>
+    </Box>
   )
 }
 

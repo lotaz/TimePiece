@@ -24,19 +24,16 @@ const ChatContent = ({
   return (
     <Box
       sx={{
-        minWidth: 'calc(100vw - 50vw)',
-        minHeight: 'calc(100vh - 30vh)',
-        maxHeight: 'calc(100vh - 26vh)'
+        minWidth: 'calc(100vw - 50vw)'
       }}
+      component={'div'}
     >
       {loading ? (
         <Box>
-          {/* Skeleton for ChatHeader */}
           <Box sx={{ padding: 2 }}>
             <Skeleton variant="rectangular" width="100%" height={80} />
           </Box>
 
-          {/* Skeleton for ChatMessages */}
           <Box sx={{ padding: 2 }}>
             {Array.from({ length: 6 }).map((_, index) => (
               <Box key={index} sx={{ display: 'flex', mb: 2 }}>
@@ -55,7 +52,15 @@ const ChatContent = ({
           </Box>
         </Box>
       ) : conversation ? (
-        <Box>
+        <Box
+          component={'div'}
+          height={'full'}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: 'calc(100vh - 24vh)'
+          }}
+        >
           <ChatHeader conversation={conversation} loading={loading} />
           <ChatMessages
             currentUserId={userId}
@@ -73,6 +78,7 @@ const ChatContent = ({
             height: 'calc(100vh - 200px)',
             textAlign: 'center'
           }}
+          component={'div'}
         >
           <Typography variant="h6" color="textSecondary">
             No conversation selected
