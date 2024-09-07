@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useCallback } from 'react'
 import {
   Box,
   Typography,
@@ -23,7 +23,7 @@ import { AppPath } from '@/services/utils'
 interface OrderProps {
   data: Order[]
   isLoading: boolean
-  useId: number
+  userId: number
 }
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -33,10 +33,11 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 const ITEMS_PER_PAGE = 4
 
-const OrderItem: FC<OrderProps> = ({ data, isLoading, useId }) => {
-  const [open, setOpen] = useState(false)
-  const [cancel, setCancel] = useState(false)
-  const [complete, setComplete] = useState(false)
+const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
+  const [openDialog, setOpenDialog] = useState<{
+    type: string
+    orderId: number | null
+  }>({ type: '', orderId: null })
   const [page, setPage] = useState(1)
   const [submitting, setSubmitting] = useState(false)
 
@@ -52,143 +53,142 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, useId }) => {
     page * ITEMS_PER_PAGE
   )
 
-  if (isLoading) {
-    return (
-      <Grid container spacing={2}>
-        {Array.from(new Array(ITEMS_PER_PAGE)).map((_, index) => (
-          <Grid item xs={12} key={index}>
-            <Card
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                padding: 2,
-                marginBottom: 1,
-                backgroundColor: '#f5f5f5',
-                borderRadius: 1
-              }}
-            >
-              <Skeleton variant="rectangular" width={100} height={100} />
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  flexGrow: 1,
-                  ml: 2
-                }}
-              >
-                <CardContent
-                  sx={{
-                    flex: '1 0 auto',
-                    padding: '0 !important',
-                    textAlign: 'left'
-                  }}
-                >
-                  <Skeleton width="60%" />
-                  <Skeleton width="40%" />
-                  <Skeleton width="80%" />
-                </CardContent>
-              </Box>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    )
-  }
-
   const handleOrderAction = async (orderId: number, status: OrderStatus) => {
     setSubmitting(true)
-    console.log("Id vua click",orderId)
-    const data = await updateOrder(orderId, status)
-    if (data) {
+    try {
+      await updateOrder(orderId, status)
       toast.success(
         status === OrderStatus.COMPLETE
           ? 'Đã hoàn thành đơn hàng'
           : 'Thực hiện thành công'
       )
-      setOpen(false)
-      setCancel(false)
-      setComplete(false)
+      setOpenDialog({ type: '', orderId: null })
+      mutate(AppPath.GET_SELLER_ORDERS(userId))
+    } catch (error) {
+      toast.error('Thực hiện thất bại')
+    } finally {
       setSubmitting(false)
-      mutate(AppPath.GET_SELLER_ORDERS(useId))
     }
   }
 
-  return (
-    <Box>
-      <Grid container spacing={1}>
-        {paginatedData.map((item) => (
-          <Grid item xs={12} key={item.id}>
-            <Card
+  const renderSkeletons = () => (
+    <Grid container spacing={2}>
+      {Array.from(new Array(ITEMS_PER_PAGE)).map((_, index) => (
+        <Grid item xs={12} key={`skeleton-${index}`}>
+          <Card
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: 2,
+              marginBottom: 1,
+              backgroundColor: '#f5f5f5',
+              borderRadius: 1
+            }}
+          >
+            <Skeleton variant="rectangular" width={100} height={100} />
+            <Box
               sx={{
                 display: 'flex',
-                alignItems: 'center',
-                padding: 2,
-                marginBottom: 1,
-                backgroundColor: '#f5f5f5',
-                borderRadius: 1
+                flexDirection: 'column',
+                flexGrow: 1,
+                ml: 2
               }}
             >
-              <CardMedia
-                component="img"
-                sx={{ width: 100, height: 100, borderRadius: 1 }}
-                image={item.watch.imageUrl}
-                alt={item.watch.name}
-              />
-              <Box
+              <CardContent
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  flexGrow: 1,
-                  ml: 2
+                  flex: '1 0 auto',
+                  padding: '0 !important',
+                  textAlign: 'left'
                 }}
               >
-                <CardContent
+                <Skeleton width="60%" />
+                <Skeleton width="40%" />
+                <Skeleton width="80%" />
+              </CardContent>
+            </Box>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
+  )
+
+  return (
+    <Box>
+      {isLoading ? (
+        renderSkeletons()
+      ) : (
+        <Grid container spacing={1}>
+          {paginatedData.map((item) => (
+            <Grid item xs={12} key={item.id}>
+              <Card
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: 2,
+                  marginBottom: 1,
+                  backgroundColor: '#f5f5f5',
+                  borderRadius: 1
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  sx={{ width: 100, height: 100, borderRadius: 1 }}
+                  image={item.watch.imageUrl}
+                  alt={item.watch.name}
+                />
+                <Box
                   sx={{
-                    flex: '1 0 auto',
-                    padding: '0 !important',
-                    textAlign: 'left'
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flexGrow: 1,
+                    ml: 2
                   }}
                 >
-                  <Typography
-                    component="div"
-                    variant="h6"
-                    sx={{ fontWeight: 'bold' }}
+                  <CardContent
+                    sx={{
+                      flex: '1 0 auto',
+                      padding: '0 !important',
+                      textAlign: 'left'
+                    }}
                   >
-                    {item.watch.name}
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    component="div"
-                    sx={{ fontWeight: 'bold', color: 'red' }}
-                  >
-                    {item.totalPrice.toLocaleString('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND'
-                    })}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="div"
-                  >
-                    {item.seller.address}
-                  </Typography>
-                </CardContent>
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 4,
-                  mr: 2
-                }}
-              >
-                <Box component={'div'}>
+                    <Typography
+                      component="div"
+                      variant="h6"
+                      sx={{ fontWeight: 'bold' }}
+                    >
+                      {item.watch.name}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      component="div"
+                      sx={{ fontWeight: 'bold', color: 'red' }}
+                    >
+                      {item.totalPrice.toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                      })}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="div"
+                    >
+                      {item.seller.address}
+                    </Typography>
+                  </CardContent>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 2,
+                    mr: 2
+                  }}
+                >
                   <Typography
                     variant="body2"
                     color="textSecondary"
                     sx={{
-                      mr: 2,
                       fontWeight: 'bold',
                       fontSize: '16px',
                       textAlign: 'right'
@@ -196,81 +196,49 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, useId }) => {
                   >
                     {displayOrderStatus(item.status as OrderStatus)}
                   </Typography>
-                </Box>
-                {item.status === OrderStatus.WAIT && (
-                  <Box component={'div'}>
-                    <StyledButton
-                      variant="outlined"
-                      color="error"
-                      onClick={() => setCancel(true)}
-                      disabled={submitting}
-                    >
-                      Từ chối
-                    </StyledButton>
+                  {item.status === OrderStatus.WAIT && (
+                    <Box>
+                      <StyledButton
+                        variant="outlined"
+                        color="error"
+                        onClick={() =>
+                          setOpenDialog({ type: 'cancel', orderId: item.id })
+                        }
+                        disabled={submitting}
+                      >
+                        Từ chối
+                      </StyledButton>
+                      <StyledButton
+                        variant="contained"
+                        color="success"
+                        onClick={() =>
+                          setOpenDialog({ type: 'approve', orderId: item.id })
+                        }
+                        disabled={submitting}
+                      >
+                        Duyệt
+                      </StyledButton>
+                    </Box>
+                  )}
+                  {item.status === OrderStatus.DIRECT_PAYMENT && (
                     <StyledButton
                       variant="contained"
                       color="success"
-                      onClick={() => setOpen(true)}
-                      disabled={submitting}
-                    >
-                      Duyệt
-                    </StyledButton>
-                  </Box>
-                )}
-                {item.status === OrderStatus.DIRECT_PAYMENT && (
-                  <Box component={'div'}>
-                    <StyledButton
-                      variant="contained"
-                      color="success"
-                      onClick={() => setComplete(true)}
+                      onClick={() =>
+                        setOpenDialog({ type: 'complete', orderId: item.id })
+                      }
                       disabled={submitting}
                     >
                       Đã nhận đuợc tiền
                     </StyledButton>
-                  </Box>
-                )}
-                <ConfirmDialog
-                  open={open}
-                  onClose={() => setOpen(false)}
-                  onConfirm={() =>
-                    handleOrderAction(item.id, OrderStatus.APPROVED)
-                  }
-                  title={'Xác nhận duyệt đơn'}
-                  description={'Bạn có chắc chắn muốn duyệt đơn mua này ?'}
-                  isLoading={submitting}
-                />
-                <ConfirmDialog
-                  open={cancel}
-                  onClose={() => setCancel(false)}
-                  onConfirm={() =>
-                    handleOrderAction(item.id, OrderStatus.CANCELED)
-                  }
-                  title={'Xác nhận huỷ đơn'}
-                  description={'Bạn có muốn hủy đơn này ?'}
-                  isLoading={submitting}
-                />
-                <ConfirmDialog
-                  open={complete}
-                  onClose={() => setComplete(false)}
-                  onConfirm={() =>
-                    handleOrderAction(item.id, OrderStatus.COMPLETE)
-                  }
-                  title={'Xác nhận hoàn thành đơn'}
-                  description={'Bạn có muốn hoàn thành đơn này ?'}
-                  isLoading={submitting}
-                />
-              </Box>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginTop: 2
-        }}
-      >
+                  )}
+                </Box>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
         <Pagination
           count={Math.ceil(data.length / ITEMS_PER_PAGE)}
           page={page}
@@ -278,6 +246,36 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, useId }) => {
           color="primary"
         />
       </Box>
+      <ConfirmDialog
+        open={openDialog.type === 'approve'}
+        onClose={() => setOpenDialog({ type: '', orderId: null })}
+        onConfirm={() =>
+          handleOrderAction(openDialog.orderId!, OrderStatus.APPROVED)
+        }
+        title="Xác nhận duyệt đơn"
+        description="Bạn có chắc chắn muốn duyệt đơn mua này?"
+        isLoading={submitting}
+      />
+      <ConfirmDialog
+        open={openDialog.type === 'cancel'}
+        onClose={() => setOpenDialog({ type: '', orderId: null })}
+        onConfirm={() =>
+          handleOrderAction(openDialog.orderId!, OrderStatus.CANCELED)
+        }
+        title="Xác nhận huỷ đơn"
+        description="Bạn có muốn hủy đơn này?"
+        isLoading={submitting}
+      />
+      <ConfirmDialog
+        open={openDialog.type === 'complete'}
+        onClose={() => setOpenDialog({ type: '', orderId: null })}
+        onConfirm={() =>
+          handleOrderAction(openDialog.orderId!, OrderStatus.COMPLETE)
+        }
+        title="Xác nhận hoàn thành đơn"
+        description="Bạn có muốn hoàn thành đơn này?"
+        isLoading={submitting}
+      />
     </Box>
   )
 }
