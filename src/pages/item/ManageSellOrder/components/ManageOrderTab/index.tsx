@@ -51,12 +51,12 @@ function a11yProps(index) {
 }
 
 const ManageOrderTab = () => {
-  const [value, setValue] = useState(0)
-  const [orders, setOrders] = useState<Order[]>([])
-
   const user = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user') as string)
     : null
+
+  const [value, setValue] = useState(0)
+  const [orders, setOrders] = useState<Order[]>([])
 
   const { data: sellerOrders, isLoading: isLoadingSeller } = useSWR(
     user ? AppPath.GET_SELLER_ORDERS(user.id) : null
@@ -147,20 +147,20 @@ const ManageOrderTab = () => {
         ) : (
           <>
             <TabPanel value={value} index={0}>
-              <OrderItem data={orders} isLoading={isLoading} useId={user.id} />
+              <OrderItem data={orders} isLoading={isLoading} userId={user.id} />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <OrderItem
                 data={orders.filter((order) => order.status === 'wait')}
                 isLoading={isLoading}
-                useId={user.id}
+                userId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={2}>
               <OrderItem
                 data={orders.filter((order) => order.status === 'Approved')}
                 isLoading={isLoading}
-                useId={user.id}
+                userId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={3}>
@@ -169,7 +169,7 @@ const ManageOrderTab = () => {
                   (order) => order.status === 'Direct payment'
                 )}
                 isLoading={isLoading}
-                useId={user.id}
+                userId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={4}>
@@ -178,14 +178,14 @@ const ManageOrderTab = () => {
                   (order) => order.status === 'Payment success'
                 )}
                 isLoading={isLoading}
-                useId={user.id}
+                userId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={5}>
               <OrderItem
                 data={orders.filter((order) => order.status === 'complete')}
                 isLoading={isLoading}
-                useId={user.id}
+                userId={user.id}
               />
             </TabPanel>
           </>

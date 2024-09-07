@@ -14,7 +14,12 @@ interface SelectInputProps {
   prefix?: string | ReactNode
   suffix?: string | ReactNode
   name: string
-  options: string[]
+  options: Option[]
+}
+
+interface Option {
+  value: string | number
+  label: string
 }
 
 const SelectInput: FC<SelectInputProps> = ({
@@ -43,9 +48,12 @@ const SelectInput: FC<SelectInputProps> = ({
         fullWidth={fullWidth}
         name={name}
         label={label}
+        sx={{
+          textAlign: 'left'
+        }}
         select
         onChange={onChange}
-        value={value}
+        value={options.find((option) => option.value === value)?.value ?? ''}
         placeholder={placeholder}
         required={isRequired}
         disabled={isDisabled}
@@ -58,8 +66,15 @@ const SelectInput: FC<SelectInputProps> = ({
               </MenuItem>
             ))
           : options.map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
+              <MenuItem
+                key={option.value}
+                sx={{
+                  textAlign: 'left'
+                }}
+                value={option.value}
+                selected={option.value === value}
+              >
+                {option.label}
               </MenuItem>
             ))}
       </TextField>
