@@ -62,7 +62,8 @@ export const AppPath = {
   GET_MESSAGES: (id) => `/api/messages/${id}/messages`,
   START_CONVERSATION: '/api/conversations/start',
   PAYMENT_VNPAY: (orderID) => `/payment/vn-pay?orderId=${orderID}`,
-  GET_RENEWAL_PACKAGE: '/api/renewal-packages/GetAllRenewalPakage'
+  GET_RENEWAL_PACKAGE: '/api/renewal-packages/GetAllRenewalPakage',
+  GET_NOTIFICATION: (id) => `/notifications/user/${id}`
 }
 
 export const fetcher = (url) => axiosClient.get(url).then((res) => res.data)

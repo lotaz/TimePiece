@@ -1,20 +1,34 @@
 import SideBar from './components/SideBar'
 import { Box } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import UserInfoTab from './components/UserInfoTab'
 import SettingTab from './components/UserSettingTab'
+import { useNavigate } from 'react-router-dom'
 
 const UserInfo = () => {
+  const navigate = useNavigate()
+  const user = useMemo(() => {
+    return localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user') as string)
+      : null
+  }, [])
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/authenticate/login')
+    }
+  }, [navigate, user])
+
   const [selectedTab, setSelectedTab] = useState('personalInfo')
 
   const tab = () => {
     switch (selectedTab) {
       case 'personalInfo':
-        return <UserInfoTab />
+        return <UserInfoTab userId={user.id} />
       case 'accountSettings':
-        return <SettingTab />
+        return <SettingTab userId={user.id} />
       default:
-        return <UserInfoTab />
+        return <UserInfoTab userId={user.id} />
     }
   }
 

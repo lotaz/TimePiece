@@ -11,6 +11,7 @@ export interface User {
   citizenID: string | null
   dateCreate: string
   gender: string
+  email: string
 }
 
 export interface Watch {
