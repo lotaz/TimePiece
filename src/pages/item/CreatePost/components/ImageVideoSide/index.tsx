@@ -134,12 +134,12 @@ const ImageSide: FC<ImageSideProps> = ({
               sx={{
                 border: '2px dashed #D9D9D9',
                 borderRadius: 2,
-                padding: 6,
+                padding: 8,
                 textAlign: 'center',
                 bgcolor: '#f5f5f5',
                 cursor: 'pointer',
-                width: '18vw',
-                height: '14vh',
+                width: '20vw',
+                height: '24vh',
                 position: 'relative',
                 justifyContent: 'center',
                 marginX: 'auto'
@@ -150,20 +150,18 @@ const ImageSide: FC<ImageSideProps> = ({
                 type="file"
                 multiple
                 style={{
-                  position: 'absolute',
                   opacity: 0,
+                  position: 'absolute',
                   width: '100%',
                   height: '100%',
-                  cursor: 'pointer',
-                  top: 0,
-                  left: 0
+                  cursor: 'pointer'
                 }}
                 onChange={handleImageChange}
               />
-              <Box>
-                <AddAPhotoIcon sx={{ fontSize: 40 }} />
-                <Typography variant="body1">Đăng từ 01 đến 06 ảnh</Typography>
-              </Box>
+              <AddAPhotoIcon sx={{ fontSize: 50 }} />
+              <Typography variant="body1" sx={{ marginTop: 1 }}>
+                Đăng từ 01 đến 06 ảnh
+              </Typography>
             </Box>
           )}
           <ImageList images={images} handleRemoveImage={handleRemoveImage} />
@@ -223,13 +221,13 @@ const ImageSide: FC<ImageSideProps> = ({
                 sx={{
                   border: '2px dashed #D9D9D9',
                   borderRadius: 2,
-                  padding: 6,
+                  padding: 8,
                   textAlign: 'center',
                   bgcolor: '#f5f5f5',
                   cursor: 'pointer',
-                  width: '18vw',
-                  height: '14vh',
                   position: 'relative',
+                  width: '20vw',
+                  height: '24vh',
                   justifyContent: 'center',
                   marginX: 'auto'
                 }}
@@ -247,7 +245,7 @@ const ImageSide: FC<ImageSideProps> = ({
                   }}
                   onChange={handleAddAppraisal}
                 />
-                <AddAPhotoIcon sx={{ fontSize: 40 }} />
+                <AddAPhotoIcon sx={{ fontSize: 50 }} />
                 <Typography variant="body1" sx={{ marginTop: 1 }}>
                   Giấy thẩm định
                 </Typography>
