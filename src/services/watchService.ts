@@ -16,21 +16,21 @@ interface CreateWatch {
   name: string
   watchStatus: string
   price: number
-  description?: string
-  brandId: number | null
+  brandId: number
   yearProduced: number
-  modelId: number | null
-  materialId: number | null
-  watchStrapId: number | null
-  sizeId: number | null
+  model: string
+  material: string
+  watchStrap: string
+  size: string
   accessories: string
   referenceCode: string
   placeOfProduction: string
-  watchTypeId: number | null
+  watchTypeId: number
   imageFiles: Blob[] | string[]
   area: string
   hasAppraisalCertificate?: boolean | undefined
   appraisalCertificateFile?: Blob | string | null
+  description?: string
 }
 
 export const createWatchService = async (params: CreateWatch) => {
@@ -41,24 +41,12 @@ export const createWatchService = async (params: CreateWatch) => {
     formData.append('name', params.name)
     formData.append('watchStatus', params.watchStatus)
     formData.append('price', params.price.toString())
-    formData.append(
-      'brandId',
-      params.brandId !== null ? params.brandId.toString() : ''
-    )
+    formData.append('brandId', params.brandId?.toString())
     formData.append('yearProduced', params.yearProduced?.toString())
-    formData.append(
-      'watchTypeId',
-      params.watchTypeId !== null ? params.watchTypeId.toString() : ''
-    )
-    formData.append(
-      'modelId',
-      params.modelId !== null ? params.modelId.toString() : ''
-    )
-    formData.append('materialId', params.materialId?.toString() ?? '')
-    if (params.watchStrapId !== null) {
-      formData.append('watchStrapId', params.watchStrapId.toString())
-    }
-    formData.append('sizeId', params.sizeId?.toString() ?? '')
+    formData.append('model', params.model)
+    formData.append('material', params.material)
+    formData.append('watchStrap', params.watchStrap)
+    formData.append('size', params.size)
     formData.append('accessories', params.accessories)
     formData.append('referenceCode', params.referenceCode)
     formData.append('placeOfProduction', params.placeOfProduction)

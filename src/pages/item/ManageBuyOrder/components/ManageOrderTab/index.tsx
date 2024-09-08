@@ -148,21 +148,21 @@ const ManageOrderTab = () => {
               <OrderItem
                 data={orders}
                 isLoading={isLoadingBuyer}
-                userId={user.id}
+                useId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <OrderItem
                 data={orders.filter((order) => order.status === 'wait')}
                 isLoading={isLoadingBuyer}
-                userId={user.id}
+                useId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={2}>
               <OrderItem
                 data={orders.filter((order) => order.status === 'Approved')}
                 isLoading={isLoadingBuyer}
-                userId={user.id}
+                useId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={3}>
@@ -171,7 +171,7 @@ const ManageOrderTab = () => {
                   (order) => order.status === 'Direct payment'
                 )}
                 isLoading={isLoadingBuyer}
-                userId={user.id}
+                useId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={4}>
@@ -180,14 +180,14 @@ const ManageOrderTab = () => {
                   (order) => order.status === 'Payment success'
                 )}
                 isLoading={isLoadingBuyer}
-                userId={user.id}
+                useId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={5}>
               <OrderItem
                 data={orders.filter((order) => order.status === 'complete')}
                 isLoading={isLoadingBuyer}
-                userId={user.id}
+                useId={user.id}
               />
             </TabPanel>
           </>

@@ -6,7 +6,7 @@ export const AppPath = {
   REGISTER: '/auth/register',
   CREATE_APPRAISAL_REPORT: '/api/appraisal-report/create',
   CREATE_APPRAISAL_REQUEST: '/api/appraisal-requests/create',
-  CREATE_WATCH: '/api/watches/createNewWatch',
+  CREATE_WATCH: '/api/watches',
   GET_APPRAISAL_REQUESTS: '/api/appraisal-requests/getAllList',
   GET_APPRAISAL_REQUESTS_BY_ID: '/api/appraisal-requests',
   GET_BRANDS: '/api/brands/getAll',
@@ -63,8 +63,7 @@ export const AppPath = {
   START_CONVERSATION: '/api/conversations/start',
   PAYMENT_VNPAY: (orderID) => `/payment/vn-pay?orderId=${orderID}`,
   GET_RENEWAL_PACKAGE: '/api/renewal-packages/GetAllRenewalPakage',
-  GET_NOTIFICATION: (id) => `/notifications/user/${id}`,
-  GET_WATCHES_MODEL: '/model'
+  GET_NOTIFICATION: (id) => `/notifications/user/${id}`
 }
 
 export const fetcher = (url) => axiosClient.get(url).then((res) => res.data)
