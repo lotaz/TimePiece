@@ -81,11 +81,12 @@ const Navbar = () => {
     useState<null | HTMLElement>(null)
   const navigate = useNavigate()
   const [userState, setUserState] = useState<User>()
-  const token = localStorage.getItem('token')
-  const user = localStorage.getItem('user')
-    ? JSON.parse(localStorage.getItem('user') as string)
-    : null
-
+  const token = useMemo(() => localStorage.getItem('token'), [])
+  const user = useMemo(() => {
+    return localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user') as string)
+      : null
+  }, [])
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [listNotification, setListNotification] = useState<INotification[]>([])
@@ -130,7 +131,7 @@ const Navbar = () => {
     }
   }, [userInfo])
 
-  user
+  const hasAuth = user
 
   const clientRef = useRef<CompatClient | null>(null)
   const reconnectAttemptsRef = useRef<number>(0)
@@ -254,23 +255,9 @@ const Navbar = () => {
           </Search>
         </Box>
         <Box>
-          <Badge
-            color="error"
-            variant="dot"
-            invisible={!newNotification}
-            overlap="circular"
-          >
-            <Button color="inherit" onClick={handleNotificationClick}>
-              <NotificationsNoneOutlinedIcon fontSize="large" />
-            </Button>
-          </Badge>
-          <NotificationModal
-            open={openNotification}
-            anchorEl={notificationAnchorEl}
-            handleClose={() => setOpenNotification(false)}
-            notifications={listNotification}
-            setNewNotification={setNewNotification}
-          />
+          <Button color="inherit">
+            <NotificationsNoneOutlinedIcon fontSize="large" />
+          </Button>
           <Button color="inherit" href="/user/conversation">
             <QuestionAnswerIcon fontSize="large" />
           </Button>
@@ -281,7 +268,7 @@ const Navbar = () => {
         <Box marginRight={10}>
           {isLoading && !useState ? (
             <Skeleton variant="circular" width={40} height={40} />
-          ) : user ? (
+          ) : hasAuth ? (
             <Box>
               <Button color="inherit" onClick={handleMenuOpen}>
                 {userState?.avatar ? (
