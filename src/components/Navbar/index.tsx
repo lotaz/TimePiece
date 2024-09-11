@@ -255,23 +255,9 @@ const Navbar = () => {
           </Search>
         </Box>
         <Box>
-          <Badge
-            color="error"
-            variant="dot"
-            invisible={!newNotification}
-            overlap="circular"
-          >
-            <Button color="inherit" onClick={handleNotificationClick}>
-              <NotificationsNoneOutlinedIcon fontSize="large" />
-            </Button>
-          </Badge>
-          <NotificationModal
-            open={openNotification}
-            anchorEl={notificationAnchorEl}
-            handleClose={() => setOpenNotification(false)}
-            notifications={listNotification}
-            setNewNotification={setNewNotification}
-          />
+          <Button color="inherit">
+            <NotificationsNoneOutlinedIcon fontSize="large" />
+          </Button>
           <Button color="inherit" href="/user/conversation">
             <QuestionAnswerIcon fontSize="large" />
           </Button>

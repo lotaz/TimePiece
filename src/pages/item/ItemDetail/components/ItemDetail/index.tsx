@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   Container,
   Typography,
@@ -21,8 +21,8 @@ interface IWatch {
   createDate?: string
   description?: string
   id?: number
-  material?: string
-  model?: string
+  materialName?: string
+  modelName?: string
   name?: string
   placeOfProduction?: string
   price?: number
@@ -32,7 +32,7 @@ interface IWatch {
   updateDate?: string
   userId?: number
   watchStatus?: string
-  watchStrap?: string
+  watchStrapName?: string
   watchTypeName?: string
   yearProduced?: number
 }
@@ -122,7 +122,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({
                 <ListItemText
                   primary="Mẫu mã"
                   primaryTypographyProps={{ fontWeight: 600 }}
-                  secondary={watch.model}
+                  secondary={watch.modelName}
                 />
               )}
             </ListItem>
@@ -146,7 +146,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({
                 <ListItemText
                   primary="Chất liệu vỏ"
                   primaryTypographyProps={{ fontWeight: 600 }}
-                  secondary={watch.material}
+                  secondary={watch.materialName}
                 />
               )}
             </ListItem>
@@ -158,7 +158,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({
                 <ListItemText
                   primary="Chất liệu dây đeo"
                   primaryTypographyProps={{ fontWeight: 600 }}
-                  secondary={watch.watchStrap}
+                  secondary={watch.watchStrapName}
                 />
               )}
             </ListItem>

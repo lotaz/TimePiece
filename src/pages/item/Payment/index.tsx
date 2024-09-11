@@ -20,6 +20,7 @@ import { OrderStatus } from '@/common/type'
 import { toast } from 'react-toastify'
 import { paymentVNPay } from '@/services/paymentService'
 import RatingModal from '@/components/Rating'
+import { isLocal } from '@/configs/config'
 
 interface User {
   address: string | null
@@ -96,7 +97,7 @@ const PaymentPage = () => {
         })
       }
     } else if (paymentMethod === 'VNPay') {
-      const data = await paymentVNPay(id)
+      const data = await paymentVNPay(id, isLocal)
       //open payment link at current tab
       const paymentLink = data.paymentUrl
       window.location.href = paymentLink
@@ -110,7 +111,7 @@ const PaymentPage = () => {
           display: 'flex',
           flexDirection: 'column',
           gap: 2,
-          marginTop: '80px'
+          marginTop: '10vh'
         }}
       >
         <UserInfo
@@ -136,7 +137,11 @@ const PaymentPage = () => {
           isLoading={isLoading}
         />
       </Box>
-      <Box>
+      <Box
+        sx={{
+          mb: 4
+        }}
+      >
         <PaymentMethod
           price={order?.watch.price ?? 0}
           paymentMethod={paymentMethod}

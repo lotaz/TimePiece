@@ -12,9 +12,9 @@ export interface WatchDetail {
   price: number
   brandName: string
   yearProduced: number
-  model: string
-  material: string
-  watchStrap: string
+  modelName: string
+  materialName: string
+  watchStrapName: string
   size: string
   accessories: string
   referenceCode: string

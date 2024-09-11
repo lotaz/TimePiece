@@ -49,7 +49,8 @@ export enum OrderStatus {
   CANCELED = 'cancel',
   DIRECT_PAYMENT = 'Direct payment',
   PAYMENT_SUCCESS = 'Payment success',
-  COMPLETE = 'complete'
+  COMPLETE = 'complete',
+  DELIVERED = 'delivered'
 }
 
 export interface SearchParams {
