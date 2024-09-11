@@ -31,3 +31,14 @@ export const updateOrder = async (orderId: number, status: string) => {
     throw error
   }
 }
+
+export const completeOrder = async (orderId: number) => {
+  try {
+    const response = await axiosClient.put(AppPath.COMPLETE_ORDER(orderId))
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}

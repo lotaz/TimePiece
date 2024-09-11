@@ -1,9 +1,9 @@
 import axiosClient from '@/configs/axiosClient'
 import { AppPath } from './utils'
 
-export const paymentVNPay = async (orderId: string) => {
+export const paymentVNPay = async (orderId: string, mode) => {
   try {
-    const res = await axiosClient.get(AppPath.PAYMENT_VNPAY(orderId))
+    const res = await axiosClient.get(AppPath.PAYMENT_VNPAY(orderId, mode))
 
     return res.data
   } catch (error) {

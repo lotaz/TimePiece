@@ -13,6 +13,8 @@ import OrderItem from '../OrderItem'
 import useSWR from 'swr'
 import { AppPath } from '@/services/utils'
 import { Order } from '../../type'
+import { useSearchParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   fontWeight: 'bold',
@@ -54,6 +56,12 @@ const ManageOrderTab = () => {
   const [value, setValue] = useState(0)
   const [orders, setOrders] = useState<Order[]>([])
 
+  // Initialize the useSearchParams hook
+  const [searchParams] = useSearchParams()
+
+  // Get the paymentStatus query parameter
+  const paymentStatus = searchParams.get('paymentStatus')
+
   const user = localStorage.getItem('user')
     ? JSON.parse(localStorage.getItem('user') as string)
     : null
@@ -71,6 +79,15 @@ const ManageOrderTab = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
+
+  useEffect(() => {
+    if (paymentStatus === 'success') {
+      toast.success('Thanh toán thành công')
+    } else if (paymentStatus === 'failed') {
+      toast.error('Thanh toán thất bại')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div
@@ -148,21 +165,21 @@ const ManageOrderTab = () => {
               <OrderItem
                 data={orders}
                 isLoading={isLoadingBuyer}
-                useId={user.id}
+                userId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <OrderItem
                 data={orders.filter((order) => order.status === 'wait')}
                 isLoading={isLoadingBuyer}
-                useId={user.id}
+                userId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={2}>
               <OrderItem
                 data={orders.filter((order) => order.status === 'Approved')}
                 isLoading={isLoadingBuyer}
-                useId={user.id}
+                userId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={3}>
@@ -171,7 +188,7 @@ const ManageOrderTab = () => {
                   (order) => order.status === 'Direct payment'
                 )}
                 isLoading={isLoadingBuyer}
-                useId={user.id}
+                userId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={4}>
@@ -180,14 +197,14 @@ const ManageOrderTab = () => {
                   (order) => order.status === 'Payment success'
                 )}
                 isLoading={isLoadingBuyer}
-                useId={user.id}
+                userId={user.id}
               />
             </TabPanel>
             <TabPanel value={value} index={5}>
               <OrderItem
                 data={orders.filter((order) => order.status === 'complete')}
                 isLoading={isLoadingBuyer}
-                useId={user.id}
+                userId={user.id}
               />
             </TabPanel>
           </>
