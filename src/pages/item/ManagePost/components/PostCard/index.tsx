@@ -1,9 +1,9 @@
 import React from 'react'
 import { Typography, Box, Button, Skeleton } from '@mui/material'
 import ArrowCircleUpSharpIcon from '@mui/icons-material/ArrowCircleUpSharp'
-import MoreHorizSharpIcon from '@mui/icons-material/MoreHorizSharp'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
+import PostMenu from '../PostMenu'
 
 interface PostCardProps {
   postId: number
@@ -30,6 +30,17 @@ const ProductCard: React.FC<PostCardProps> = ({
   isLoading
 }) => {
   const navigate = useNavigate()
+
+  const handleEdit = () => {
+    console.log('Edit post clicked')
+    // Add your edit functionality here
+  }
+
+  const handleDelete = () => {
+    console.log('Delete post clicked')
+    // Add your delete functionality here
+  }
+
   return (
     <Box bgcolor={'#FFFFFF'} border={'1px solid #D8D8D8'} marginBottom={2}>
       {/* <Box
@@ -61,58 +72,45 @@ const ProductCard: React.FC<PostCardProps> = ({
           padding: '20px'
         }}
       >
-        {isLoading ? (
-          <Skeleton variant="rectangular" width={100} height={100} />
-        ) : (
-          <Box>
-            <img src={imageUrl} alt={name} width={80} height={80} />
-          </Box>
-        )}
+        <Box>
+          <img src={imageUrl} alt={name} width={80} height={80} />
+        </Box>
+
         <Box textAlign={'left'} paddingX={4}>
-          {isLoading ? (
-            <>
-              <Skeleton width="80%" />
-              <Skeleton width="60%" />
-              <Skeleton width="40%" />
-            </>
-          ) : (
-            <>
-              <Typography
-                sx={{
-                  fontSize: '20px',
-                  fontWeight: 600
-                }}
-              >
-                {name}
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: '20px',
-                  fontWeight: 600,
-                  color: '#CA2C2C'
-                }}
-              >
-                {price.toLocaleString('vi-VN', {
-                  style: 'currency',
-                  currency: 'VND'
-                })}
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: '14px'
-                }}
-              >
-                {address}
-              </Typography>
-            </>
-          )}
+          <>
+            <Typography
+              sx={{
+                fontSize: '16px'
+              }}
+            >
+              {name}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: '16px',
+                color: '#CA2C2C'
+              }}
+            >
+              {price.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+              })}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: '14px'
+              }}
+            >
+              {address}
+            </Typography>
+          </>
         </Box>
       </Box>
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          padding: '20px',
+          padding: '10px',
           bgcolor: '#F7F7F7',
           textAlign: 'left'
         }}
@@ -123,19 +121,14 @@ const ProductCard: React.FC<PostCardProps> = ({
             borderRight: '1px solid #c1c1c1'
           }}
         >
-          <Typography>Phương thức đăng tin</Typography>
-          {isLoading ? (
-            <Skeleton width="80%" />
-          ) : (
-            <Typography
-              sx={{
-                fontWeight: 600,
-                fontSize: '14px'
-              }}
-            >
-              {typePost}
-            </Typography>
-          )}
+          <Typography
+            sx={{
+              fontWeight: 600,
+              fontSize: '14px'
+            }}
+          >
+            {typePost}
+          </Typography>
         </Box>
         <Box
           sx={{
@@ -143,19 +136,14 @@ const ProductCard: React.FC<PostCardProps> = ({
             borderRight: '1px solid #c1c1c1'
           }}
         >
-          <Typography>Số ngày đăng tin</Typography>
-          {isLoading ? (
-            <Skeleton width="80%" />
-          ) : (
-            <Typography
-              sx={{
-                fontWeight: 600,
-                fontSize: '14px'
-              }}
-            >
-              {numberDatePost} ngày
-            </Typography>
-          )}
+          <Typography
+            sx={{
+              fontWeight: 600,
+              fontSize: '14px'
+            }}
+          >
+            {numberDatePost} ngày
+          </Typography>
         </Box>
         <Box
           sx={{
@@ -179,13 +167,14 @@ const ProductCard: React.FC<PostCardProps> = ({
       </Box>
       <Box
         sx={{
-          padding: '20px',
+          padding: '10px',
           bg: '#FFFFFF',
           display: 'flex',
           justifyContent: 'flex-end'
         }}
       >
         <Button
+          variant="contained"
           sx={{
             bgcolor: '#1BBE00',
             color: '#FFFFFF',
@@ -194,7 +183,8 @@ const ProductCard: React.FC<PostCardProps> = ({
               bgcolor: '#1BBE00'
             },
             textTransform: 'none',
-            marginRight: '10px'
+            marginRight: '10px',
+            height: '40px'
           }}
           disabled={isLoading}
           onClick={() => navigate(`/post/renew-package/${postId}`)}
@@ -208,11 +198,16 @@ const ProductCard: React.FC<PostCardProps> = ({
         </Button>
         <Button
           sx={{
-            border: '1px solid #c1c1c1'
+            border: '1px solid #c1c1c1',
+            height: '40px',
+            ':hover': {
+              border: '1px solid #c1c1c1',
+              bgcolor: '#F7F7F7'
+            }
           }}
           disabled={isLoading}
         >
-          <MoreHorizSharpIcon />
+          <PostMenu key={postId} onEdit={handleEdit} onDelete={handleDelete} />
         </Button>
       </Box>
     </Box>

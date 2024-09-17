@@ -85,8 +85,8 @@ const ManagerPostTab: React.FC<ManagerPostTabProps> = ({
               variant="contained"
               sx={{
                 backgroundColor: '#434343',
-                width: '10vw',
-                height: '5vh',
+                width: '8vw',
+                height: '2.5vh',
                 '&:hover': {
                   backgroundColor: '#333333'
                 }

@@ -124,8 +124,9 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
               <Card
                 sx={{
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   padding: 2,
+                  justifyContent: 'space-between',
                   marginBottom: 1,
                   backgroundColor: '#f5f5f5',
                   borderRadius: 1
@@ -172,7 +173,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                         color="textSecondary"
                         component="div"
                       >
-                        {item.buyer.name}
+                        Người mua: {item.buyer.name}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -189,7 +190,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: 2,
+                    gap: 4,
                     mr: 2
                   }}
                 >

@@ -40,10 +40,10 @@ const UserInfoTab = (props: UserInfoTabProps) => {
         // Update initial values when user data is successfully loaded
         setInitialValues({
           fullName: data.name || '',
-          address: data.address || '',
+          address: data.address ?? '',
           phone: data.phoneNumber || '',
           email: '', // Assuming the email is not part of the user data; adjust as needed
-          idNumber: data.citizenID || '',
+          idNumber: data.citizenID ?? '',
           gender: data.gender || 'Nam',
           birthDate: data.birthday || '2000-01-01'
         })
@@ -84,10 +84,10 @@ const UserInfoTab = (props: UserInfoTabProps) => {
     if (user) {
       formik.setValues({
         fullName: user.name || '',
-        address: user.address || '',
+        address: user.address ?? '',
         phone: user.phoneNumber || '',
         email: '', // Assuming the email is not part of the user data; adjust as needed
-        idNumber: user.citizenID || '',
+        idNumber: user.citizenID ?? '',
         gender: user.gender || 'Nam',
         birthDate: user.birthday || '2000-01-01'
       })

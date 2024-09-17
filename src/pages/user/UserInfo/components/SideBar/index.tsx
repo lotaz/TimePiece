@@ -6,50 +6,93 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Skeleton,
   Typography
 } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person'
 import SettingsIcon from '@mui/icons-material/Settings'
+import { User } from '@/pages/item/ManageBuyOrder/type'
+import { AppPath } from '@/services/utils'
+import useSWR from 'swr'
 
 interface SideBarProps {
   selectedTab: string
   handleTabChange: (tab: string) => void
+  userId: number
 }
 
-const SideBar = ({ selectedTab, handleTabChange }: SideBarProps) => {
+const SideBar = ({ selectedTab, handleTabChange, userId }: SideBarProps) => {
+  const [user, setUser] = useState<User | null>(null)
+
+  const { isLoading } = useSWR<User>(AppPath.USER_INFO(userId), {
+    onSuccess: (data) => {
+      // Update initial values when user data is successfully loaded
+      setUser(data)
+    }
+  })
+
   return (
     <Box
       sx={{ width: 250, bgcolor: 'background.paper', height: 'fit-content' }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          p: 2
-        }}
-      >
-        <Avatar
-          src="path/to/avatar/image" // Replace with your avatar image path
-          alt="User Avatar"
-          sx={{ width: 60, height: 60 }}
-        />
+      {!isLoading ? (
         <Box
           sx={{
             display: 'flex',
-            flexDirection: 'column',
-            textAlign: 'left',
-            marginLeft: 2
+            flexDirection: 'row',
+            alignItems: 'center',
+            p: 2
           }}
         >
-          <Typography variant="h6" component="div">
-            Thắng fake 2
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Đánh giá
-          </Typography>
+          <Avatar
+            src="path/to/avatar/image" // Replace with your avatar image path
+            alt="User Avatar"
+            sx={{ width: 60, height: 60 }}
+          />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              textAlign: 'left',
+              marginLeft: 2
+            }}
+          >
+            <Typography component="div">{user?.name}</Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              textAlign={'left'}
+              marginRight={2}
+            >
+              <Box component="span" sx={{ color: 'gold' }}>
+                {'★'.repeat(Math.floor(user?.ratingScore ?? 0)) +
+                  '☆'.repeat(5 - Math.floor(user?.ratingScore ?? 0))}
+              </Box>
+            </Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              textAlign={'left'}
+            >
+              {user?.feedbacks} đánh giá
+            </Typography>
+          </Box>
         </Box>
-      </Box>
+      ) : (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 2
+          }}
+        >
+          <Skeleton variant="circular" width={60} height={60} />
+          <Box>
+            <Skeleton variant="text" width={100} height={40} />
+            <Skeleton variant="text" width={100} height={40} />
+          </Box>
+        </Box>
+      )}
       <List>
         <ListItemButton
           selected={selectedTab === 'personalInfo'}

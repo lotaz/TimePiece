@@ -44,7 +44,11 @@ const UserInfo = () => {
         minHeight: 'calc(100vh - 340px)'
       }}
     >
-      <SideBar selectedTab={selectedTab} handleTabChange={setSelectedTab} />
+      <SideBar
+        selectedTab={selectedTab}
+        handleTabChange={setSelectedTab}
+        userId={user.id}
+      />
       <Box>{tab()}</Box>
     </Box>
   )

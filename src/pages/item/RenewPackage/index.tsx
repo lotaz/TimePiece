@@ -24,7 +24,9 @@ const RenewPackagePage = () => {
 
   const [order, setOrder] = useState<Order>()
   const [selectedMethod, setSelectedMethod] = useState('')
-  const [selectedPackage, setSelectedPackage] = useState<IRenewPackage>()
+  const [selectedPackage, setSelectedPackage] = useState<IRenewPackage | null>(
+    null
+  )
   const [totalPrice, setTotalPrice] = useState(0)
   const [loading, setLoading] = useState(false)
 
@@ -35,10 +37,12 @@ const RenewPackagePage = () => {
   })
 
   useEffect(() => {
-    if (selectedMethod === 'vnpay') {
+    if (selectedPackage && selectedMethod === 'vnpay') {
       setTotalPrice(
-        Number(selectedPackage?.price) * 0.05 + Number(selectedPackage?.price)
+        Number(selectedPackage.price) * 0.05 + Number(selectedPackage.price)
       )
+    } else {
+      setTotalPrice(Number(selectedPackage?.price || 0))
     }
   }, [selectedMethod, selectedPackage])
 
@@ -52,7 +56,6 @@ const RenewPackagePage = () => {
 
       if (data) {
         setLoading(false)
-        //open payment link at current tab
         const paymentLink = data.paymentUrl
         window.location.href = paymentLink
       }
@@ -79,7 +82,7 @@ const RenewPackagePage = () => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          width: 'calc(100vw - 40vw)',
+          width: 'calc(100vw - 20vw)',
           paddingX: '40px',
           bgcolor: '#FFFFFF'
         }}
@@ -122,7 +125,7 @@ const RenewPackagePage = () => {
               display: 'flex',
               flexDirection: 'column',
               padding: '20px 0',
-              width: '20vw'
+              width: '30vw'
             }}
           >
             <Box
@@ -132,14 +135,14 @@ const RenewPackagePage = () => {
                 flexDirection: 'row'
               }}
             >
-              <Typography
-                variant={'h6'}
-                sx={{ fontWeight: 600, mr: 2, color: '#9A9A9A' }}
-              >
+              <Typography sx={{ fontSize: '20px', mr: 2, color: '#9A9A9A' }}>
                 Tổng tiền:
               </Typography>
-              <Typography variant={'h6'} sx={{ fontWeight: 600 }}>
-                {Number(selectedPackage?.price).toLocaleString()}đ
+              <Typography sx={{ fontSize: '20px' }}>
+                {selectedPackage
+                  ? Number(selectedPackage.price).toLocaleString()
+                  : '0'}
+                đ
               </Typography>
             </Box>
             <Box
@@ -150,12 +153,15 @@ const RenewPackagePage = () => {
               }}
             >
               <Typography
-                variant={'h6'}
-                sx={{ fontWeight: 600, mr: 2, color: '#9A9A9A' }}
+                sx={{
+                  fontSize: '20px',
+                  mr: 2,
+                  color: '#9A9A9A'
+                }}
               >
                 Tổng thanh toán:
               </Typography>
-              <Typography variant={'h6'} sx={{ fontWeight: 600 }}>
+              <Typography sx={{ fontSize: '20px' }}>
                 {totalPrice.toLocaleString()}đ
               </Typography>
             </Box>

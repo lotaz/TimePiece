@@ -12,6 +12,8 @@ export interface User {
   dateCreate: string
   gender: string
   email: string
+  ratingScore?: number | null
+  feedbacks?: number | null
 }
 
 export interface Watch {
@@ -41,4 +43,8 @@ export interface Order {
   seller: User
   watch: Watch
   role: Role
+  buyeraddress?: string
+  paymentMethod?: string
+  rating?: number
+  reviewed?: boolean
 }

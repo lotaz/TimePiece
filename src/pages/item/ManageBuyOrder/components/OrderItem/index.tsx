@@ -19,6 +19,7 @@ import { OrderStatus } from '@/common/type'
 import { Order } from '../../type'
 import { AppPath } from '@/services/utils'
 import { mutate } from 'swr'
+import RatingModal from '@/components/Rating'
 
 interface OrderProps {
   data: Order[]
@@ -39,7 +40,7 @@ export const displayOrderStatus = (status: OrderStatus) => {
     case OrderStatus.PAYMENT_SUCCESS:
       return 'Thanh toán thành công'
     case OrderStatus.COMPLETE:
-      return 'Hoàn thành'
+      return 'Hoàn tất giao dịch'
     case OrderStatus.DELIVERED:
       return 'Đã giao hàng'
     default:
@@ -57,6 +58,7 @@ const ITEMS_PER_PAGE = 4
 
 const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
   const navigate = useNavigate()
+  const [feedback, setFeedback] = useState(false)
   const [dialogState, setDialogState] = useState<{
     type: 'approve' | 'cancel' | '' | 'complete'
     orderId: number | null
@@ -147,7 +149,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
               <Card
                 sx={{
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   padding: 2,
                   marginBottom: 1,
                   backgroundColor: '#f5f5f5',
@@ -195,7 +197,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                       color="textSecondary"
                       component="div"
                     >
-                      {item.seller.name}
+                      Người bán: {item.seller.name}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -249,7 +251,25 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                       Đã nhận hàng
                     </StyledButton>
                   )}
+                  {item.status === OrderStatus.COMPLETE && !item.reviewed && (
+                    <Button
+                      sx={{
+                        textTransform: 'none',
+                        ':hover': {
+                          backgroundColor: 'transparent'
+                        }
+                      }}
+                      onClick={() => setFeedback(true)}
+                    >
+                      Đánh giá
+                    </Button>
+                  )}
                 </Box>
+                <RatingModal
+                  open={feedback}
+                  onClose={() => setFeedback(false)}
+                  orderId={item.id}
+                />
               </Card>
             </Grid>
           ))}
