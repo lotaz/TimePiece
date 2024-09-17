@@ -18,7 +18,7 @@ export interface IRenewPackage {
 }
 
 interface RenewPackageProps {
-  selectedPackage?: IRenewPackage
+  selectedPackage?: IRenewPackage | null
   setSelectedPackage: (pakage: IRenewPackage) => void
 }
 

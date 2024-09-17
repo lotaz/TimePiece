@@ -57,7 +57,7 @@ const PaymentMethod = ({
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  padding: '20px 40px',
+                  padding: '40px',
                   width: '12vw',
                   height: '12vh',
                   borderRadius: '8px',

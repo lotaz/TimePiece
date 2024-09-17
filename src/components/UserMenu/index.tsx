@@ -77,7 +77,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ anchorEl, isOpen, setOpen }) => {
         <LibraryBooksIcon style={{ marginRight: 16 }} />
         Lịch sử thẩm định
       </MenuItem>
-      <MenuItem onClick={handleClose}>
+      <MenuItem
+        onClick={() => {
+          navigate('/user/wallet')
+          handleClose()
+        }}
+      >
         <AccountBalanceWalletIcon style={{ marginRight: 16 }} />
         Ví tiền
       </MenuItem>

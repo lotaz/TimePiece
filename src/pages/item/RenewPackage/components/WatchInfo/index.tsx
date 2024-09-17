@@ -21,7 +21,7 @@ const WatchInfo = ({
         display: 'flex',
         flexDirection: 'row',
         gap: '20px',
-        padding: '20px 0',
+        padding: '20px 40px',
         borderBottom: '1px solid #e0e0e0'
       }}
     >

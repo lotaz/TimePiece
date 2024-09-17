@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box } from '@mui/material'
 import ProductCard from '../PostCard'
+import LoadingComponent from '@/components/Loading'
 
 interface Product {
   id: number
@@ -26,7 +27,9 @@ const ManagerPostContent: React.FC<ManagerPostContentProps> = ({
 }) => {
   return (
     <Box marginTop={2} marginBottom={8}>
-      {!isLoading &&
+      {isLoading ? (
+        <LoadingComponent type="rectangular" count={5} />
+      ) : (
         products?.map((product, index) => (
           <ProductCard
             postId={product.id}
@@ -41,7 +44,8 @@ const ManagerPostContent: React.FC<ManagerPostContentProps> = ({
             isLoading={isLoading}
             mutate={mutate}
           />
-        ))}
+        ))
+      )}
     </Box>
   )
 }
