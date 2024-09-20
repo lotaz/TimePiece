@@ -1,13 +1,9 @@
 import React, { useEffect } from 'react'
 import { Box, Button, Divider, Link, Typography, Skeleton } from '@mui/material'
-import vnpay from '@/assets/vnpaylogo.png'
 import thanhtoantructiep from '@/assets/thanhtoantructiep.png'
 import ConfirmDiaglog from '@/components/ConfirmDiaglog'
 
-const methods = [
-  { name: 'ThanhToanTrucTiep', image: thanhtoantructiep },
-  { name: 'VNPay', image: vnpay }
-]
+const methods = [{ name: 'ThanhToanTrucTiep', image: thanhtoantructiep }]
 
 interface PaymentMethodProps {
   orderId?: number

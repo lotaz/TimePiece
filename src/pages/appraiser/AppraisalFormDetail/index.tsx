@@ -35,7 +35,7 @@ const AppraisalFormDetailPage = () => {
   const [appraisal, setAppraisal] = useState<Appraisal>()
   const navigate = useNavigate()
   const { id } = useParams()
-  const { data, error, isLoading } = useSWR(
+  const { data, isLoading } = useSWR(
     `${AppPath.GET_APPRAISAL_REQUESTS_BY_ID}/${id}`
   )
 
@@ -49,11 +49,12 @@ const AppraisalFormDetailPage = () => {
     <AppraiserLayout>
       <Box
         component={'div'}
-        marginTop={20}
+        marginTop={16}
         bgcolor={'#fff'}
-        marginX={20}
         marginBottom={10}
-        paddingY={5}
+        paddingY={4}
+        marginX={'auto'}
+        maxWidth={1000}
       >
         <Typography
           variant="h4"
@@ -63,7 +64,7 @@ const AppraisalFormDetailPage = () => {
         >
           Yêu cầu thẩm định
         </Typography>
-        <Box marginTop={2} bgcolor={'#fff'} padding={8}>
+        <Box marginTop={2} bgcolor={'#fff'} padding={4}>
           {isLoading ? (
             <>
               <Skeleton variant="text" width={300} height={40} />
@@ -94,7 +95,7 @@ const AppraisalFormDetailPage = () => {
                 <Typography
                   component={'div'}
                   sx={{
-                    padding: '16px',
+                    padding: '10px',
                     width: '300px',
                     backgroundColor: '#434343',
                     textAlign: 'left',
@@ -105,18 +106,20 @@ const AppraisalFormDetailPage = () => {
                 >
                   Thông tin của khách hàng
                 </Typography>
-                <CustomerInfo
-                  name={appraisal?.name}
-                  email={appraisal?.email}
-                  address={appraisal?.address}
-                  phone={appraisal?.phoneNumber}
-                />
+                <Box marginLeft={'20px'}>
+                  <CustomerInfo
+                    name={appraisal?.name}
+                    email={appraisal?.email}
+                    address={appraisal?.address}
+                    phone={appraisal?.phoneNumber}
+                  />
+                </Box>
               </Box>
               <Box>
                 <Typography
                   component={'div'}
                   sx={{
-                    padding: '16px',
+                    padding: '10px',
                     width: '300px',
                     backgroundColor: '#434343',
                     textAlign: 'left',
@@ -131,9 +134,8 @@ const AppraisalFormDetailPage = () => {
                 <Box
                   sx={{
                     display: 'flex',
-                    flexDirection: 'row',
-                    gap: '20px',
-                    marginLeft: '70px'
+                    flexDirection: 'column',
+                    marginLeft: '20px'
                   }}
                 >
                   <Box
@@ -153,7 +155,7 @@ const AppraisalFormDetailPage = () => {
                     </Box>
                     <Box
                       sx={{
-                        marginLeft: '40px',
+                        marginLeft: '6px',
                         marginTop: '20px',
                         fontWeight: '400'
                       }}
@@ -180,7 +182,7 @@ const AppraisalFormDetailPage = () => {
                     </Box>
                     <Box
                       sx={{
-                        marginLeft: '40px',
+                        marginLeft: '6px',
                         marginTop: '20px',
                         fontWeight: '400'
                       }}
@@ -194,7 +196,7 @@ const AppraisalFormDetailPage = () => {
                 <Typography
                   component={'div'}
                   sx={{
-                    padding: '16px',
+                    padding: '10px',
                     width: '300px',
                     backgroundColor: '#434343',
                     textAlign: 'left',
@@ -229,7 +231,7 @@ const AppraisalFormDetailPage = () => {
                 <Typography
                   component={'div'}
                   sx={{
-                    padding: '16px',
+                    padding: '10px',
                     width: '300px',
                     backgroundColor: '#434343',
                     textAlign: 'left',

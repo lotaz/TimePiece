@@ -123,14 +123,6 @@ const ManageOrderTab = () => {
               label={`Giao dịch trực tiếp (${isLoadingSeller ? '' : orders.filter((order) => order.status === 'Direct payment').length})`}
               {...a11yProps(3)}
             />
-            <StyledTab
-              label={`Đã cọc (${isLoadingSeller ? '' : orders.filter((order) => order.status === 'Payment success').length})`}
-              {...a11yProps(4)}
-            />
-            <StyledTab
-              label={`Hoàn tất giao dịch (${isLoadingSeller ? '' : orders.filter((order) => order.status === 'complete').length})`}
-              {...a11yProps(5)}
-            />
           </Tabs>
         </Box>
       </Box>
@@ -168,22 +160,6 @@ const ManageOrderTab = () => {
                 data={orders.filter(
                   (order) => order.status === 'Direct payment'
                 )}
-                isLoading={isLoading}
-                userId={user.id}
-              />
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-              <OrderItem
-                data={orders.filter(
-                  (order) => order.status === 'Payment success'
-                )}
-                isLoading={isLoading}
-                userId={user.id}
-              />
-            </TabPanel>
-            <TabPanel value={value} index={5}>
-              <OrderItem
-                data={orders.filter((order) => order.status === 'complete')}
                 isLoading={isLoading}
                 userId={user.id}
               />

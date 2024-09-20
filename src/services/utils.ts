@@ -1,6 +1,5 @@
 import { SearchParams } from '@/common/type'
 import axiosClient from '@/configs/axiosClient'
-import { boolean } from 'yup'
 
 export const AppPath = {
   LOGIN: '/auth/login',
@@ -72,7 +71,8 @@ export const AppPath = {
   TRANSACTIONS: '/api/transactions',
   DEPOSIT_REQUEST: (userId) => `/api/wallet/${userId}/balance`,
   DEPOSIT: (amount, userId, isLocal) =>
-    `/api/wallet/vn-pay?amount=${amount}&userId=${userId}&isLocal=${isLocal}`
+    `/api/wallet/vn-pay?amount=${amount}&userId=${userId}&isLocal=${isLocal}`,
+  GET_CANCEL_REASON: `/api/cancel-reason/all`
 }
 
 export const fetcher = (url) => axiosClient.get(url).then((res) => res.data)

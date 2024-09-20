@@ -9,17 +9,11 @@ import {
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { getVietnameseStatus } from '@/common/utils'
-
-interface Request {
-  date: string
-  code: string
-  brand: string
-  status: string
-  id: number
-}
+import { RequestAppraisal } from '../../type'
+import moment from 'moment'
 
 interface ListRequestProps {
-  requests: Request[]
+  requests: RequestAppraisal[]
   currentPage: number
   totalPages: number
   onPageChange: (event: React.ChangeEvent<unknown>, page: number) => void
@@ -81,11 +75,11 @@ const ListRequest: React.FC<ListRequestProps> = ({
                       fontWeight: 'bold'
                     }}
                   >
-                    Yêu cầu thẩm định đồng hồ ngày {request.date}
+                    Yêu cầu thẩm định đồng hồ ngày{' '}
+                    {moment(request.createDate).format('DD/MM/YYYY')}
                   </Typography>
                   <Typography variant="body2">
-                    Mã yêu cầu: <strong>{request.code}</strong> | Thương hiệu
-                    đồng hồ: <strong>{request.brand}</strong>
+                    Thương hiệu đồng hồ: <strong>{request.brand}</strong>
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={4} style={{ textAlign: 'right' }}>
@@ -98,7 +92,9 @@ const ListRequest: React.FC<ListRequestProps> = ({
                   >
                     {getVietnameseStatus(request?.status)}
                   </Typography>
-                  <Typography variant="body2">{request.date}</Typography>
+                  <Typography variant="body2">
+                    {moment(request.updateDate).format('DD/MM/YYYY')}
+                  </Typography>
                 </Grid>
               </Grid>
             </Paper>

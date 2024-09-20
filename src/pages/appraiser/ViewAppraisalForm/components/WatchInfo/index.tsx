@@ -26,12 +26,12 @@ const WatchInfo = ({
   brand
 }: WatchInfoProps) => {
   return (
-    <Box component={'div'} marginTop={'10px'} marginLeft={10}>
+    <Box component={'div'} marginTop={'10px'} marginLeft={4}>
       <Grid container spacing={6} gap={1}>
         <Grid item xs={12} md={6}>
           <Typography
             textAlign={'left'}
-            fontSize={18}
+            fontSize={16}
             marginTop={1}
             marginLeft={4}
           >
@@ -44,7 +44,7 @@ const WatchInfo = ({
       </Grid>
       <Grid container spacing={6} gap={1} marginTop={1}>
         <Grid item xs={12} md={6}>
-          <Typography textAlign={'left'} fontSize={18} marginLeft={4}>
+          <Typography textAlign={'left'} fontSize={16} marginLeft={4}>
             Bạn có giấy tờ gốc của đồng hồ hoặc thẻ bảo hành không?
           </Typography>
         </Grid>
@@ -59,7 +59,7 @@ const WatchInfo = ({
         <Grid item xs={12} md={6}>
           <Typography
             textAlign={'left'}
-            fontSize={18}
+            fontSize={16}
             marginTop={1}
             marginLeft={4}
           >
@@ -77,7 +77,7 @@ const WatchInfo = ({
         <Grid item xs={12} md={6}>
           <Typography
             textAlign={'left'}
-            fontSize={18}
+            fontSize={16}
             marginTop={1}
             marginLeft={4}
           >
@@ -95,7 +95,7 @@ const WatchInfo = ({
         <Grid item xs={12} md={6}>
           <Typography
             textAlign={'left'}
-            fontSize={18}
+            fontSize={16}
             marginTop={4}
             marginLeft={4}
           >
@@ -119,7 +119,7 @@ const WatchInfo = ({
         <Grid item xs={12} md={6}>
           <Typography
             textAlign={'left'}
-            fontSize={18}
+            fontSize={16}
             marginTop={4}
             marginLeft={4}
           >
@@ -143,7 +143,7 @@ const WatchInfo = ({
         <Grid item xs={12} md={6}>
           <Typography
             textAlign={'left'}
-            fontSize={18}
+            fontSize={16}
             marginTop={4}
             marginLeft={4}
           >
@@ -168,7 +168,7 @@ const WatchInfo = ({
         <Grid item xs={12} md={6}>
           <Typography
             textAlign={'left'}
-            fontSize={18}
+            fontSize={16}
             marginTop={1}
             marginLeft={4}
           >
@@ -195,7 +195,7 @@ const WatchInfo = ({
         <Grid item xs={12} md={6}>
           <Typography
             textAlign={'left'}
-            fontSize={18}
+            fontSize={16}
             marginTop={1}
             marginLeft={4}
           >

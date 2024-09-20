@@ -19,6 +19,7 @@ import { Order } from '@/pages/item/ManageBuyOrder/type'
 import { displayOrderStatus } from '@/pages/item/ManageBuyOrder/components/OrderItem'
 import { mutate } from 'swr'
 import { AppPath } from '@/services/utils'
+import RejectModal from '../RejectModal'
 
 interface OrderProps {
   data: Order[]
@@ -41,6 +42,13 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
   }>({ type: '', orderId: null })
   const [page, setPage] = useState(1)
   const [submitting, setSubmitting] = useState(false)
+  const [openRejectModal, setOpenRejectModal] = useState<{
+    isOpen: boolean
+    orderId: number | null
+  }>({
+    isOpen: false,
+    orderId: null
+  })
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -212,7 +220,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                         variant="outlined"
                         color="error"
                         onClick={() =>
-                          setOpenDialog({ type: 'cancel', orderId: item.id })
+                          setOpenRejectModal({ isOpen: true, orderId: item.id })
                         }
                         disabled={submitting}
                       >
@@ -226,7 +234,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                         }
                         disabled={submitting}
                       >
-                        Duyệt
+                        Bán cho người này
                       </StyledButton>
                     </Box>
                   )}
@@ -268,16 +276,6 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
         isLoading={submitting}
       />
       <ConfirmDialog
-        open={openDialog.type === 'cancel'}
-        onClose={() => setOpenDialog({ type: '', orderId: null })}
-        onConfirm={() =>
-          handleOrderAction(openDialog.orderId!, OrderStatus.CANCELED)
-        }
-        title="Xác nhận huỷ đơn"
-        description="Bạn có muốn hủy đơn này?"
-        isLoading={submitting}
-      />
-      <ConfirmDialog
         open={openDialog.type === 'complete'}
         onClose={() => setOpenDialog({ type: '', orderId: null })}
         onConfirm={() =>
@@ -296,6 +294,14 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
         title="Xác nhận gởi hàng thành công"
         description="Bạn có muốn xác nhận gởi đơn hàng này?"
         isLoading={submitting}
+      />
+      <RejectModal
+        userId={userId}
+        orderId={openRejectModal.orderId}
+        isOpen={openRejectModal.isOpen}
+        onClose={() => {
+          setOpenRejectModal({ isOpen: false, orderId: null })
+        }}
       />
     </Box>
   )

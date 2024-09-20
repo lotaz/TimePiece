@@ -42,3 +42,16 @@ export const completeOrder = async (orderId: number) => {
     throw error
   }
 }
+
+export const rejectOrder = async (reasonId: number, orderId: number) => {
+  try {
+    const response = await axiosClient.post('/orders/cancel', {
+      reasonId: reasonId,
+      orderId: orderId
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}

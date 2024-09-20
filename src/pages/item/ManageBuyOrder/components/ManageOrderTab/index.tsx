@@ -13,8 +13,6 @@ import OrderItem from '../OrderItem'
 import useSWR from 'swr'
 import { AppPath } from '@/services/utils'
 import { Order } from '../../type'
-import { useSearchParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
 
 const StyledTab = styled(Tab)(({ theme }) => ({
   fontWeight: 'bold',
@@ -123,14 +121,6 @@ const ManageOrderTab = () => {
               label={`Giao dịch trực tiếp (${isLoadingBuyer ? '' : orders.filter((order) => order.status === 'Direct payment').length})`}
               {...a11yProps(3)}
             />
-            <StyledTab
-              label={`Đã cọc (${isLoadingBuyer ? '' : orders.filter((order) => order.status === 'Payment success').length})`}
-              {...a11yProps(4)}
-            />
-            <StyledTab
-              label={`Hoàn tất giao dịch (${isLoadingBuyer ? '' : orders.filter((order) => order.status === 'complete').length})`}
-              {...a11yProps(5)}
-            />
           </Tabs>
         </Box>
       </Box>
@@ -172,22 +162,6 @@ const ManageOrderTab = () => {
                 data={orders.filter(
                   (order) => order.status === 'Direct payment'
                 )}
-                isLoading={isLoadingBuyer}
-                userId={user.id}
-              />
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-              <OrderItem
-                data={orders.filter(
-                  (order) => order.status === 'Payment success'
-                )}
-                isLoading={isLoadingBuyer}
-                userId={user.id}
-              />
-            </TabPanel>
-            <TabPanel value={value} index={5}>
-              <OrderItem
-                data={orders.filter((order) => order.status === 'complete')}
                 isLoading={isLoadingBuyer}
                 userId={user.id}
               />
