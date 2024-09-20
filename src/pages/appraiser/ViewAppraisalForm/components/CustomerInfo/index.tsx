@@ -12,29 +12,28 @@ const CustomerInfo = ({ name, email, phone, address }) => {
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          padding: 2,
-          marginX: 6,
+          paddingY: 1,
           textAlign: 'left',
           borderRadius: 1
         }}
       >
         <Box>
           <Typography>
-            Người yêu cầu: <strong>{name}</strong>
+            <strong>Người yêu cầu</strong>: {name}
           </Typography>
           <Typography marginTop={2}>
-            Email: <strong>{email}</strong>
+            <strong>Email</strong>: {email}
           </Typography>
         </Box>
         <Box>
-          <Typography>
-            Số điện thoại: <strong>{phone}</strong>
+          <Typography sx={{ marginRight: 20 }}>
+            <strong>Số điện thoại</strong>: {phone}
           </Typography>
         </Box>
       </Box>
-      <Box sx={{ marginLeft: 2 }}>
-        <Typography sx={{ marginLeft: 6 }}>
-          Địa chỉ: <strong>{address}</strong>
+      <Box>
+        <Typography>
+          <strong>Địa chỉ</strong>: {address}
         </Typography>
       </Box>
     </Box>

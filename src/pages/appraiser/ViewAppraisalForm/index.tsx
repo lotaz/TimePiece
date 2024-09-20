@@ -180,7 +180,7 @@ const ViewAppraisalFormPage = () => {
                 <Typography
                   component={'div'}
                   sx={{
-                    padding: '16px',
+                    padding: '15px',
                     width: '300px',
                     backgroundColor: '#434343',
                     textAlign: 'left',
