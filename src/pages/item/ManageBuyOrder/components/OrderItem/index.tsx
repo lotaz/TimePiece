@@ -20,6 +20,7 @@ import { Order } from '../../type'
 import { AppPath } from '@/services/utils'
 import { mutate } from 'swr'
 import RatingModal from '@/components/Rating'
+import moment from 'moment'
 
 interface OrderProps {
   data: Order[]
@@ -197,7 +198,8 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                       color="textSecondary"
                       component="div"
                     >
-                      Người bán: {item.seller.name}
+                      Người bán: {item.seller.name} -{' '}
+                      {moment(item.orderDate).format('DD/MM/YYYY')}
                     </Typography>
                     <Typography
                       variant="body2"
