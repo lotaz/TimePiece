@@ -183,7 +183,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                         component="div"
                       >
                         Người mua: {item.buyer.name} -{' '}
-                        {moment(item.orderDate).format('DD/MM/YYYY')}
+                        {moment(item.orderDate).format('DD/MM/YYYY HH:mm:ss')}
                       </Typography>
                       <Typography
                         variant="body2"
