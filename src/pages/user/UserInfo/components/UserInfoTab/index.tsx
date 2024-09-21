@@ -44,7 +44,7 @@ const UserInfoTab = (props: UserInfoTabProps) => {
           phone: data.phoneNumber || '',
           email: data.email, // Assuming the email is not part of the user data; adjust as needed
           idNumber: data.citizenID ?? '',
-          gender: data.gender || 'Nam',
+          gender: data.gender || 'male',
           birthDate: data.birthday || '2000-01-01'
         })
       }
@@ -223,9 +223,9 @@ const UserInfoTab = (props: UserInfoTabProps) => {
             row
             sx={{ mt: 2 }}
           >
-            <FormControlLabel value="Nam" control={<Radio />} label="Nam" />
-            <FormControlLabel value="Nữ" control={<Radio />} label="Nữ" />
-            <FormControlLabel value="Khác" control={<Radio />} label="Khác" />
+            <FormControlLabel value="male" control={<Radio />} label="Nam" />
+            <FormControlLabel value="female" control={<Radio />} label="Nữ" />
+            <FormControlLabel value="order" control={<Radio />} label="Khác" />
           </RadioGroup>
           <TextField
             fullWidth
