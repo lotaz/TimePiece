@@ -197,9 +197,17 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                       variant="body2"
                       color="textSecondary"
                       component="div"
+                      fontWeight={200}
                     >
-                      Người bán: {item.seller.name} -{' '}
-                      {moment(item.orderDate).format('DD/MM/YYYY HH:mm:ss')}
+                      <strong>Người bán:</strong> {item.seller.name} -{' '}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="div"
+                      fontWeight={200}
+                    >
+                      <strong>Ngày đặt hàng:</strong> {moment(item.orderDate).format('DD/MM/YYYY HH:mm:ss')}
                     </Typography>
                     <Typography
                       variant="body2"
