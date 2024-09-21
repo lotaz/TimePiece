@@ -199,7 +199,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                       component="div"
                       fontWeight={200}
                     >
-                      <strong>Người bán:</strong> {item.seller.name} -{' '}
+                      <strong>Người bán:</strong> {item.seller.name} 
                     </Typography>
                     <Typography
                       variant="body2"
