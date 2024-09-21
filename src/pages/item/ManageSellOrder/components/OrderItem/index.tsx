@@ -20,6 +20,7 @@ import { displayOrderStatus } from '@/pages/item/ManageBuyOrder/components/Order
 import { mutate } from 'swr'
 import { AppPath } from '@/services/utils'
 import RejectModal from '../RejectModal'
+import moment from 'moment'
 
 interface OrderProps {
   data: Order[]
@@ -181,7 +182,8 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                         color="textSecondary"
                         component="div"
                       >
-                        Người mua: {item.buyer.name}
+                        Người mua: {item.buyer.name} -{' '}
+                        {moment(item.orderDate).format('DD/MM/YYYY')}
                       </Typography>
                       <Typography
                         variant="body2"
