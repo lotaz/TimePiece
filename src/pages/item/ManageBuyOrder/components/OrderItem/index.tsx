@@ -214,7 +214,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                       color="textSecondary"
                       component="div"
                     >
-                      {item.seller.address}
+                      Địa chỉ: {item.seller.address}
                     </Typography>
                   </CardContent>
                 </Box>
