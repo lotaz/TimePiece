@@ -42,7 +42,7 @@ const UserInfoTab = (props: UserInfoTabProps) => {
           fullName: data.name || '',
           address: data.address ?? '',
           phone: data.phoneNumber || '',
-          email: '', // Assuming the email is not part of the user data; adjust as needed
+          email: data.email, // Assuming the email is not part of the user data; adjust as needed
           idNumber: data.citizenID ?? '',
           gender: data.gender || 'Nam',
           birthDate: data.birthday || '2000-01-01'
@@ -86,7 +86,7 @@ const UserInfoTab = (props: UserInfoTabProps) => {
         fullName: user.name || '',
         address: user.address ?? '',
         phone: user.phoneNumber || '',
-        email: '', // Assuming the email is not part of the user data; adjust as needed
+        email: user.email, // Assuming the email is not part of the user data; adjust as needed
         idNumber: user.citizenID ?? '',
         gender: user.gender || 'Nam',
         birthDate: user.birthday || '2000-01-01'

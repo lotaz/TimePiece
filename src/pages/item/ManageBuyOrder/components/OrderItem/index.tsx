@@ -253,7 +253,7 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                       Đã nhận hàng
                     </StyledButton>
                   )}
-                  {item.status === OrderStatus.COMPLETE && !item.reviewed && (
+                  {item.status === OrderStatus.COMPLETE && item.reviewed && (
                     <Button
                       sx={{
                         textTransform: 'none',
