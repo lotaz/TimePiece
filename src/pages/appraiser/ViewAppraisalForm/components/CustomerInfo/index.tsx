@@ -31,11 +31,11 @@ const CustomerInfo = ({ name, email, phone, address }) => {
           </Typography>
         </Box>
       </Box>
-      <Box>
+      {/* <Box>
         <Typography>
           <strong>Địa chỉ</strong>: {address}
         </Typography>
-      </Box>
+      </Box> */}
     </Box>
   )
 }
