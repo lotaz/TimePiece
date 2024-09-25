@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Typography, Box, Button, Skeleton } from '@mui/material'
 import ArrowCircleUpSharpIcon from '@mui/icons-material/ArrowCircleUpSharp'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 import PostMenu from '../PostMenu'
+import { changeStatusWatchService } from '@/services/watchService'
+import { toast } from 'react-toastify'
+import { mutate } from 'swr'
+import { AppPath } from '@/services/utils'
+import { Product } from '../..'
 
 interface PostCardProps {
   postId: number
@@ -16,6 +21,7 @@ interface PostCardProps {
   createDate?: string
   isLoading?: boolean
   mutate?: (key?: string) => void
+  product: Product
 }
 
 const ProductCard: React.FC<PostCardProps> = ({
@@ -27,18 +33,30 @@ const ProductCard: React.FC<PostCardProps> = ({
   createDate,
   typePost,
   numberDatePost,
-  isLoading
+  isLoading,
+  product
 }) => {
   const navigate = useNavigate()
-
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const user = localStorage.getItem('user')
+    ? JSON.parse(localStorage.getItem('user') as string)
+    : null
   const handleEdit = () => {
     console.log('Edit post clicked')
     // Add your edit functionality here
   }
 
-  const handleDelete = () => {
-    console.log('Delete post clicked')
-    // Add your delete functionality here
+  const handleDelete = async () => {
+    setIsSubmitting(true)
+    try {
+      await changeStatusWatchService(postId, 'DELETED')
+      toast.success('Xoá thành công')
+      mutate(AppPath.GET_WATCH_BY_USER(user.id))
+    } catch (error) {
+      toast.error('Xoá thất bại')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -118,13 +136,21 @@ const ProductCard: React.FC<PostCardProps> = ({
         <Box
           sx={{
             width: '30%',
-            borderRight: '1px solid #c1c1c1'
+            borderRight: '1px solid #c1c1c1',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center'
           }}
         >
           <Typography
+            component={'div'}
             sx={{
               fontWeight: 600,
-              fontSize: '14px'
+              fontSize: '14px',
+              marginLeft: '30px',
+              p: '10px 40px',
+              backgroundColor: '#fbdd8a',
+              borderRadius: '20px'
             }}
           >
             {typePost}
@@ -133,16 +159,23 @@ const ProductCard: React.FC<PostCardProps> = ({
         <Box
           sx={{
             width: '30%',
-            borderRight: '1px solid #c1c1c1'
+            borderRight: '1px solid #c1c1c1',
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center'
           }}
         >
           <Typography
+            component={'div'}
             sx={{
               fontWeight: 600,
-              fontSize: '14px'
+              fontSize: '14px',
+              p: '10px 40px',
+              backgroundColor: '#8ac4fb',
+              borderRadius: '20px'
             }}
           >
-            {numberDatePost} ngày
+            Ngày buff {numberDatePost} ngày
           </Typography>
         </Box>
         <Box
@@ -207,7 +240,12 @@ const ProductCard: React.FC<PostCardProps> = ({
           }}
           disabled={isLoading}
         >
-          <PostMenu key={postId} onEdit={handleEdit} onDelete={handleDelete} />
+          <PostMenu
+            key={postId}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            product={product}
+          />
         </Button>
       </Box>
     </Box>

@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 import ConfirmDialog from '@/components/ConfirmDiaglog'
 import moment from 'moment'
 
-export interface Appraisal {
+export interface AppraisalType {
   address?: string
   age?: number
   areThereAnyStickers?: boolean
@@ -23,6 +23,7 @@ export interface Appraisal {
   hasPapersOrWarranty?: boolean
   hasPurchaseReceipt?: boolean
   imageUrls?: string[]
+  status: string
   name?: string
   phoneNumber?: string
   referenceCode?: string
@@ -32,7 +33,7 @@ export interface Appraisal {
 
 const AppraisalFormDetailPage = () => {
   const [show, setShow] = useState(false)
-  const [appraisal, setAppraisal] = useState<Appraisal>()
+  const [appraisal, setAppraisal] = useState<AppraisalType>()
   const navigate = useNavigate()
   const { id } = useParams()
   const { data, isLoading } = useSWR(
@@ -55,6 +56,7 @@ const AppraisalFormDetailPage = () => {
         paddingY={4}
         marginX={'auto'}
         maxWidth={1000}
+        minWidth={800}
       >
         <Typography
           variant="h4"
@@ -248,21 +250,23 @@ const AppraisalFormDetailPage = () => {
             </>
           )}
         </Box>
-        <Button
-          sx={{
-            bgcolor: '#434343',
-            color: '#fff',
-            padding: '10px 20px',
-            ':hover': {
+        {appraisal?.status === 'wait' && (
+          <Button
+            sx={{
               bgcolor: '#434343',
-              opacity: 0.8,
-              cursor: 'pointer'
-            }
-          }}
-          onClick={() => setShow(true)}
-        >
-          NHẬN YÊU CẦU
-        </Button>
+              color: '#fff',
+              padding: '10px 20px',
+              ':hover': {
+                bgcolor: '#434343',
+                opacity: 0.8,
+                cursor: 'pointer'
+              }
+            }}
+            onClick={() => setShow(true)}
+          >
+            NHẬN YÊU CẦU
+          </Button>
+        )}
         <ConfirmDialog
           open={show}
           onClose={() => setShow(false)}

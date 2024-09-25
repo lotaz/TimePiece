@@ -8,7 +8,7 @@ import useAuth from '@/stores/authStore'
 
 const pages = [
   { title: 'Yêu cầu thẩm định', href: '/appraiser/dashboard' },
-  { title: 'Lịch sử thẩm định', href: '#' },
+  { title: 'Lịch sử thẩm định', href: '/appraiser/history' },
   { title: 'Tin nhắn', href: '#' }
 ]
 

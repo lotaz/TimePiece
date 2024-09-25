@@ -83,4 +83,107 @@ const getDetailAppraisalRequest = async (id: string) => {
   }
 }
 
-export { createAppraisalRequest, getDetailAppraisalRequest }
+interface CompleteAppraisalRequest {
+  id: number // appraisalRequestId
+  pdfUrl: string
+}
+
+const completeAppraisalRequest = async (req: CompleteAppraisalRequest) => {
+  try {
+    const data = await axiosClient.post(
+      `/api/appraisal-requests/complete-request/${req.id}?pdfUrl=${req.pdfUrl}`
+    )
+
+    return data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+interface RatingAppraisalRequest {
+  id: string
+  rating: number
+}
+
+const ratingAppraisalRequest = async (req: RatingAppraisalRequest) => {
+  try {
+    const data = await axiosClient.post(
+      `/api/appraisal-request/${req.id}/feedback?ratingScore=${req.rating}`
+    )
+
+    return data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+interface CreateAppraisalPaper {
+  brandId: number | null
+  modelId: number | null
+  materialId: number | null
+  watchStrapId: number | null
+  sizeId: number | null
+  referenceCode: string | null
+  watchTypeId: number | null
+  yearProduced: string | null
+  watchStatus: string | null
+  accessories: string | null
+  origin: string | null
+  userId: number | null
+  commentValue: string | null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  imageFiles: any[]
+  isAuthentic: boolean
+}
+
+const createAppraisal = async (req: CreateAppraisalPaper) => {
+  const form = new FormData()
+
+  // Append only if value is not null
+  if (req.brandId !== null) form.append('brandId', `${req.brandId}`)
+  if (req.modelId !== null) form.append('modelId', `${req.modelId}`)
+  if (req.materialId !== null) form.append('materialId', `${req.materialId}`)
+  if (req.watchStrapId !== null)
+    form.append('watchStrapId', `${req.watchStrapId}`)
+  if (req.sizeId !== null) form.append('sizeId', `${req.sizeId}`)
+  if (req.referenceCode !== null)
+    form.append('referenceCode', `${req.referenceCode}`)
+  if (req.watchTypeId !== null) form.append('watchTypeId', `${req.watchTypeId}`)
+  if (req.yearProduced !== null)
+    form.append('yearProduced', `${req.yearProduced}`)
+  if (req.watchStatus !== null) form.append('watchStatus', `${req.watchStatus}`)
+  if (req.accessories !== null) form.append('accessories', `${req.accessories}`)
+  if (req.origin !== null) form.append('origin', `${req.origin}`)
+  if (req.userId !== null) form.append('userId', `${req.userId}`)
+  if (req.commentValue !== null)
+    form.append('commentValue', `${req.commentValue}`)
+
+  // Append boolean value
+  form.append('isAuthentic', `${req.isAuthentic}`)
+
+  // Append images if they exist
+  req.imageFiles.forEach((file) => {
+    form.append('imageFiles', file)
+  })
+
+  try {
+    const data = await axiosClient.post('/api/appraisal-report/create', form, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    return data.data
+  } catch (error) {
+    console.error('Error during appraisal creation:', error)
+    throw error
+  }
+}
+
+export {
+  createAppraisalRequest,
+  getDetailAppraisalRequest,
+  completeAppraisalRequest,
+  ratingAppraisalRequest,
+  createAppraisal
+}

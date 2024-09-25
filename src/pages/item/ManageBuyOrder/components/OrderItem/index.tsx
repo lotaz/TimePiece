@@ -197,25 +197,27 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                       variant="body2"
                       color="textSecondary"
                       component="div"
-                      fontWeight={200}
                     >
-                      <strong>Người bán:</strong> {item.seller.name} 
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="div"
-                      fontWeight={200}
-                    >
-                      <strong>Ngày đặt hàng:</strong> {moment(item.orderDate).format('DD/MM/YYYY HH:mm:ss')}
+                      Người bán: {item.seller.name} -{' '}
+                      {moment(item.orderDate).format('DD/MM/YYYY')}
                     </Typography>
                     <Typography
                       variant="body2"
                       color="textSecondary"
                       component="div"
                     >
-                      Địa chỉ: {item.seller.address}
+                      {item.seller.address}
                     </Typography>
+                    {item.cancelReason && (
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="div"
+                        sx={{ color: 'red', mt: 1 }}
+                      >
+                        {item.cancelReason}
+                      </Typography>
+                    )}
                   </CardContent>
                 </Box>
                 <Box

@@ -47,4 +47,5 @@ export interface Order {
   paymentMethod?: string
   rating?: number
   reviewed?: boolean
+  cancelReason?: string
 }

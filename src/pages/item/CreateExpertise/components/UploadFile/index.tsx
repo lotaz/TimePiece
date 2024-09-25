@@ -54,7 +54,7 @@ const ImageUpload = ({ onFileChange, files }: ImageUploadProps) => {
           />
           <label htmlFor="upload-image" style={{ flex: 1 }}>
             <Button variant="outlined" component="span">
-              Choose files to upload .
+              Choose files to upload
             </Button>
           </label>
         </Box>

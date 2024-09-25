@@ -95,3 +95,15 @@ export const createWatchService = async (params: CreateWatch) => {
     throw error
   }
 }
+
+export const changeStatusWatchService = async (id: number, status: string) => {
+  try {
+    const response = await axiosClient.put(
+      `/api/watches/${id}/status?status=${status}`
+    )
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}

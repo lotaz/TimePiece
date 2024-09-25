@@ -72,7 +72,9 @@ export const AppPath = {
   DEPOSIT_REQUEST: (userId) => `/api/wallet/${userId}/balance`,
   DEPOSIT: (amount, userId, isLocal) =>
     `/api/wallet/vn-pay?amount=${amount}&userId=${userId}&isLocal=${isLocal}`,
-  GET_CANCEL_REASON: `/api/cancel-reason/all`
+  GET_CANCEL_REASON: `/api/cancel-reason/all`,
+  GET_APPRAISAL_REQUESTS_BY_USER: ({ userId, page, size }) =>
+    `/api/appraisal-requests/findByUser?userId=${userId}&page=${page}&size=${size}`
 }
 
 export const fetcher = (url) => axiosClient.get(url).then((res) => res.data)
