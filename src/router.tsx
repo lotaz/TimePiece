@@ -24,6 +24,7 @@ import ChattingPage from './pages/user/Chatting'
 import RenewPackagePage from './pages/item/RenewPackage'
 import WalletPage from './pages/user/Wallet'
 import NotificationHandler from './components/Notify'
+import HistoryAppraisal from './pages/appraiser/HistoryAppraisal'
 
 const Root = () => (
   <UserLayout>
@@ -182,6 +183,10 @@ const router = createBrowserRouter([
       {
         path: 'dashboard',
         element: <RequestAppraiserPage />
+      },
+      {
+        path: 'history',
+        element: <HistoryAppraisal />
       },
       {
         path: ':id',

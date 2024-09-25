@@ -45,6 +45,7 @@ const AppraiserMenu = ({ isOpen, setOpen, anchorEl }: AppraiserMenuProps) => {
       <MenuItem
         onClick={() => {
           localStorage.removeItem('token')
+          localStorage.removeItem('user')
           window.location.href = '/authenticate/login'
         }}
       >

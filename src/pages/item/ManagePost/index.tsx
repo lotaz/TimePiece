@@ -13,7 +13,7 @@ export interface Product {
   name: string
   price: number
   size: string
-  status: 'SHOW' | 'HIDDEN' | 'SOLD'
+  status: 'SHOW' | 'CANCEL' | 'SOLD' | 'DELETED'
   typePost: string
   numberDatePost: number
 }
@@ -69,7 +69,9 @@ const ManagePostPage = () => {
           hiddenTotal={
             products.filter(
               (product) =>
-                product.status === 'HIDDEN' || product.status === 'SOLD'
+                product.status === 'CANCEL' ||
+                product.status === 'SOLD' ||
+                product.status === 'DELETED'
             ).length
           }
         />
@@ -94,7 +96,11 @@ const ManagePostPage = () => {
         {tab === 1 && (
           <ManagerPostContent
             products={products.filter((product) => {
-              return product.status === 'HIDDEN' || product.status === 'SOLD'
+              return (
+                product.status === 'CANCEL' ||
+                product.status === 'SOLD' ||
+                product.status === 'DELETED'
+              )
             })}
             isLoading={isLoaded}
             mutate={mutate}

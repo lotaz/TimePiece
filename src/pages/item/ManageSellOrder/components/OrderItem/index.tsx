@@ -136,7 +136,6 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                   alignItems: 'flex-start',
                   padding: 2,
                   justifyContent: 'space-between',
-                  marginBottom: 1,
                   backgroundColor: '#f5f5f5',
                   borderRadius: 1
                 }}
@@ -182,22 +181,26 @@ const OrderItem: FC<OrderProps> = ({ data, isLoading, userId }) => {
                         color="textSecondary"
                         component="div"
                       >
-                        Người mua: {item.buyer.name} 
+                        Người mua: {item.buyer.name} -{' '}
+                        {moment(item.orderDate).format('DD/MM/YYYY')}
                       </Typography>
                       <Typography
                         variant="body2"
                         color="textSecondary"
                         component="div"
                       >
-                        Ngày đặt hàng: {moment(item.orderDate).format('DD/MM/YYYY HH:mm:ss')}
+                        {item.seller.address}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="div"
-                      >
-                        Địa chỉ: {item.seller.address}
-                      </Typography>
+                      {item.cancelReason && (
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="div"
+                          sx={{ color: 'red', mt: 1 }}
+                        >
+                          {item.cancelReason}
+                        </Typography>
+                      )}
                     </Box>
                   </CardContent>
                 </Box>

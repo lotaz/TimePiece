@@ -100,9 +100,6 @@ const RejectModal: React.FC<RejectModalProps> = ({
           <CircularProgress />
         ) : (
           <FormControl fullWidth>
-            <FormHelperText>
-              Lý do từ chối sẽ được gửi đến người mua
-            </FormHelperText>
             <Select
               labelId="reject-reason-label"
               value={selectedReason}
@@ -115,7 +112,9 @@ const RejectModal: React.FC<RejectModalProps> = ({
                 </MenuItem>
               ))}
             </Select>
-            
+            <FormHelperText>
+              Lý do từ chối sẽ được gửi đến người mua
+            </FormHelperText>
           </FormControl>
         )}
       </DialogContent>

@@ -12,6 +12,8 @@ interface Product {
   typePost: string
   numberDatePost: number
   createDate: string
+  size: string
+  status: 'SHOW' | 'CANCEL' | 'SOLD' | 'DELETED'
 }
 
 interface ManagerPostContentProps {
@@ -32,6 +34,7 @@ const ManagerPostContent: React.FC<ManagerPostContentProps> = ({
       ) : (
         products?.map((product, index) => (
           <ProductCard
+            product={product}
             postId={product.id}
             key={index}
             imageUrl={product.imageUrl}
